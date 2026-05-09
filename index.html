@@ -7,129 +7,137 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-:root{
-  --bg:#f7f6f3;--surface:#fff;--surface2:#f2f1ed;--surface3:#eae9e4;
-  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
-  --text:#18180f;--muted:#72726a;--hint:#ababA3;
-  --green:#2d7d1a;--gbg:#eaf4e6;--gbd:rgba(45,125,26,0.2);
-  --amber:#8a5200;--abg:#fff4e0;--abd:rgba(138,82,0,0.2);
-  --red:#b52a2a;--rbg:#fdf0f0;--rbd:rgba(181,42,42,0.2);
-  --blue:#1a5fa8;--bbg:#eef4fd;
-  --radius:12px;--rsm:8px;
-  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface2: #f2f1ed;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #18180f;
+  --muted: #72726a;
+  --hint: #ababA3;
+  --green: #2d7d1a;
+  --green-bg: #eaf4e6;
+  --green-border: rgba(45,125,26,0.2);
+  --amber: #8a5200;
+  --amber-bg: #fff4e0;
+  --amber-border: rgba(138,82,0,0.2);
+  --red: #b52a2a;
+  --red-bg: #fdf0f0;
+  --red-border: rgba(181,42,42,0.2);
+  --blue: #1a5fa8;
+  --blue-bg: #eef4fd;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* HEADER */
-.header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;min-height:58px;}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand-icon{width:32px;height:32px;border-radius:8px;background:var(--text);display:flex;align-items:center;justify-content:center;font-size:15px;}
-.brand-name{font-size:14px;font-weight:600;}
-.brand-sub{font-size:10px;color:var(--muted);}
-.hright{display:flex;align-items:center;gap:8px;}
-.live-badge{display:flex;align-items:center;gap:5px;background:var(--gbg);border:0.5px solid var(--gbd);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--green);font-family:var(--mono);}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
-.rbtn{background:var(--text);color:#fff;border:none;border-radius:var(--rsm);padding:6px 13px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;}
-.rbtn svg{width:12px;height:12px;}
-#last-updated{font-size:10px;color:var(--hint);font-family:var(--mono);}
+.header {
+  background: var(--surface); border-bottom: 0.5px solid var(--border);
+  padding: 0 28px; display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px; min-height: 64px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--text); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.brand-name { font-size: 15px; font-weight: 600; }
+.brand-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.live-badge { display: flex; align-items: center; gap: 5px; background: var(--green-bg); border: 0.5px solid var(--green-border); border-radius: 20px; padding: 5px 11px; font-size: 11px; color: var(--green); font-family: var(--mono); }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.35} }
+.refresh-btn { background: var(--text); color: #fff; border: none; border-radius: var(--radius-sm); padding: 7px 14px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: var(--sans); display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
+.refresh-btn:hover { opacity: 0.82; }
+.refresh-btn svg { width: 13px; height: 13px; }
+#last-updated { font-size: 11px; color: var(--hint); font-family: var(--mono); }
 
-/* MAIN TABS */
-.main-tabs{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 24px;display:flex;}
-.mtab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--sans);margin-bottom:-0.5px;display:flex;align-items:center;gap:6px;transition:color 0.15s;}
-.mtab:hover{color:var(--text);}
-.mtab.active{color:var(--text);border-bottom-color:var(--text);}
+.tabs-bar { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 0 28px; display: flex; gap: 0; }
+.tab-btn { padding: 13px 22px; font-size: 13px; font-weight: 500; color: var(--muted); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; font-family: var(--sans); transition: color 0.15s; margin-bottom: -0.5px; display: flex; align-items: center; gap: 7px; }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
 
-/* SUB TABS */
-.sub-tabs{background:var(--surface2);border-bottom:0.5px solid var(--border);padding:0 20px;display:flex;gap:2px;overflow-x:auto;}
-.stab{padding:8px 14px;font-size:11px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;border-radius:6px 6px 0 0;font-family:var(--sans);white-space:nowrap;transition:all 0.15s;}
-.stab:hover{color:var(--text);background:rgba(0,0,0,0.04);}
-.stab.active{color:var(--text);background:var(--surface);border:0.5px solid var(--border);border-bottom:1px solid var(--surface);}
+.panel { display: none; }
+.panel.active { display: block; }
+.main { padding: 24px 28px; max-width: 1300px; margin: 0 auto; }
+.section-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); font-family: var(--mono); margin: 0 0 12px; }
 
-/* PANELS */
-.mpanel{display:none;}.mpanel.active{display:block;}
-.spanel{display:none;}.spanel.active{display:block;}
-.main{padding:18px 22px;max-width:1300px;margin:0 auto;}
-.sec{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);font-family:var(--mono);margin:0 0 10px;}
+.loader { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 999; transition: opacity 0.4s; }
+.loader.hidden { opacity: 0; pointer-events: none; }
+.spinner { width: 30px; height: 30px; border: 2px solid var(--border2); border-top-color: var(--text); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-size: 12px; color: var(--muted); font-family: var(--mono); }
 
-/* LOADER */
-.loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:999;transition:opacity 0.4s;}
-.loader.hidden{opacity:0;pointer-events:none;}
-.spinner{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin 0.7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-size:12px;color:var(--muted);font-family:var(--mono);}
-.err{background:var(--rbg);border:0.5px solid var(--rbd);color:var(--red);border-radius:var(--rsm);padding:10px 14px;font-size:12px;margin-bottom:14px;display:none;}
+.error-bar { background: var(--red-bg); border: 0.5px solid var(--red-border); color: var(--red); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 12px; margin-bottom: 16px; display: none; }
 
-/* KPI */
-.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
-.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rsm);padding:14px;}
-.kpi.bl{border-left:3px solid var(--blue);}.kpi.gl{border-left:3px solid var(--green);}.kpi.rl{border-left:3px solid var(--red);}.kpi.al{border-left:3px solid var(--amber);}
-.kl{font-size:11px;color:var(--muted);margin-bottom:5px;}.kv{font-size:20px;font-weight:600;letter-spacing:-0.02em;}.ks{font-size:10px;color:var(--hint);margin-top:2px;font-family:var(--mono);}
-.kg{color:var(--green);}.ka{color:var(--amber);}.kr{color:var(--red);}
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 10px; margin-bottom: 24px; }
+.kpi { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
+.kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.kpi-val { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.kpi-sub { font-size: 10px; color: var(--hint); margin-top: 3px; font-family: var(--mono); }
+.kpi-green { color: var(--green); }
+.kpi-amber { color: var(--amber); }
+.kpi-red { color: var(--red); }
 
-/* STOCK CARDS */
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px;}
-.sc{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;}
-.sc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
-.sc.ok::before{background:var(--green);}.sc.low::before{background:var(--amber);}.sc.out::before{background:var(--red);}
-.sp{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
-.sv{font-size:26px;font-weight:600;letter-spacing:-0.02em;}
-.sv.ok{color:var(--text);}.sv.low{color:var(--amber);}.sv.out{color:var(--red);}
-.su{font-size:12px;font-weight:400;color:var(--muted);margin-left:3px;}
-.srows{margin-top:10px;display:flex;flex-direction:column;gap:3px;}
-.sr{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono);}
-.srl{color:var(--hint);}.srv{color:var(--muted);}
-.srv.p{color:var(--green);}.srv.n{color:var(--red);}
-.sdiv{height:0.5px;background:var(--border);margin:4px 0;}
+.stock-section { margin-bottom: 28px; }
+.stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 10px; }
+.stock-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px; position: relative; overflow: hidden; }
+.stock-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.stock-card.ok::before { background: var(--green); }
+.stock-card.low::before { background: var(--amber); }
+.stock-card.out::before { background: var(--red); }
+.card-product { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); }
+.card-stock { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+.card-stock.ok { color: var(--text); }
+.card-stock.low { color: var(--amber); }
+.card-stock.out { color: var(--red); }
+.card-unit { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 3px; }
+.card-rows { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.card-row { display: flex; justify-content: space-between; font-size: 11px; font-family: var(--mono); }
+.card-row-label { color: var(--hint); }
+.card-row-val { color: var(--muted); }
+.card-row-val.pos { color: var(--green); }
+.card-row-val.neg { color: var(--red); }
+.card-divider { height: 0.5px; background: var(--border); margin: 5px 0; }
 
-/* FILTER BAR */
-.filter-bar{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
-.filter-bar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
-.filter-bar select,.filter-bar input{background:var(--surface2);border:0.5px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);font-family:var(--sans);outline:none;cursor:pointer;}
-.filter-bar select:focus,.filter-bar input:focus{border-color:var(--text);}
-.filter-bar input{min-width:160px;}
-.clear-btn{background:none;border:0.5px solid var(--border2);border-radius:6px;padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--sans);}
-.clear-btn:hover{color:var(--text);border-color:var(--text);}
-.result-count{font-size:11px;color:var(--hint);font-family:var(--mono);margin-left:auto;}
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+@media(max-width:640px){ .charts-row { grid-template-columns: 1fr; } }
+.chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.chart-sub { font-size: 10px; color: var(--muted); margin-bottom: 12px; font-family: var(--mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; font-size: 11px; color: var(--muted); }
+.legend span { display: flex; align-items: center; gap: 5px; }
+.ldot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
-/* CHARTS */
-.crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
-.crow.full{grid-template-columns:1fr;}
-@media(max-width:640px){.crow{grid-template-columns:1fr;}}
-.cc{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;}
-.ct{font-size:13px;font-weight:600;margin-bottom:2px;}.cs{font-size:10px;color:var(--muted);margin-bottom:10px;font-family:var(--mono);}
-.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--muted);}
-.leg span{display:flex;align-items:center;gap:4px;}.ld{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.table-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hint); text-align: left; padding: 0 12px 10px; border-bottom: 0.5px solid var(--border); }
+td { padding: 9px 12px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+.tag { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; font-family: var(--mono); }
+.tag-grain { background: var(--amber-bg); color: var(--amber); }
+.tag-flour { background: var(--green-bg); color: var(--green); }
+.tag-grocery { background: var(--blue-bg); color: var(--blue); }
+.tag-ok { background: var(--green-bg); color: var(--green); }
+.tag-low { background: var(--amber-bg); color: var(--amber); }
+.tag-out { background: var(--red-bg); color: var(--red); }
+.num { font-family: var(--mono); font-weight: 500; }
+.num-green { color: var(--green); font-family: var(--mono); }
+.num-red { color: var(--red); font-family: var(--mono); }
+.num-amber { color: var(--amber); font-family: var(--mono); }
 
-/* TABLES */
-.tw{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:18px;overflow:hidden;}
-.tw table{width:100%;border-collapse:collapse;font-size:12px;}
-.tw th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint);text-align:left;padding:10px 12px;border-bottom:0.5px solid var(--border);background:var(--surface2);cursor:pointer;white-space:nowrap;user-select:none;}
-.tw th:hover{color:var(--text);}
-.tw th.sort-asc::after{content:' ↑';}.tw th.sort-desc::after{content:' ↓';}
-.tw td{padding:8px 12px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
-.tw tr:last-child td{border-bottom:none;}.tw tr:hover td{background:var(--surface2);}
-.num{font-family:var(--mono);font-weight:500;}.ng{color:var(--green);font-family:var(--mono);}.nr{color:var(--red);font-family:var(--mono);}
-.tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--mono);}
-.tg{background:var(--gbg);color:var(--green);}.ta{background:var(--abg);color:var(--amber);}.tb{background:var(--bbg);color:var(--blue);}.tr2{background:var(--rbg);color:var(--red);}
-.no-rows{text-align:center;padding:24px;font-size:12px;color:var(--hint);font-family:var(--mono);}
-.prod{font-family:var(--sans);font-weight:500;font-size:12px;}
+.finance-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; margin-bottom: 24px; }
+.fkpi { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
+.fkpi.profit { border-left: 3px solid var(--green); }
+.fkpi.spend  { border-left: 3px solid var(--red); }
+.fkpi.rev    { border-left: 3px solid var(--blue); }
+.fkpi.yield  { border-left: 3px solid var(--amber); }
 
-/* PAGINATION */
-.pag{display:flex;align-items:center;gap:6px;padding:10px 14px;border-top:0.5px solid var(--border);background:var(--surface2);}
-.pag-btn{background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:var(--mono);}
-.pag-btn:hover{background:var(--surface3);}.pag-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
-.pag-info{font-size:11px;color:var(--hint);font-family:var(--mono);margin-left:auto;}
-
-/* MONTH TABLE */
-.mtable-wrap{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:18px;overflow-x:auto;}
-.mtable-wrap table{width:100%;border-collapse:collapse;font-size:12px;}
-.mtable-wrap th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint);text-align:left;padding:0 10px 10px;border-bottom:0.5px solid var(--border);white-space:nowrap;}
-.mtable-wrap td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
-.mtable-wrap tr:last-child td{border-bottom:none;}.mtable-wrap tr:hover td{background:var(--surface2);}
-
-.footer{text-align:center;font-size:10px;color:var(--hint);font-family:var(--mono);padding:16px 0 28px;}
+.tables-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+@media(max-width:700px){ .tables-row { grid-template-columns: 1fr; } }
+.footer { text-align: center; font-size: 10px; color: var(--hint); font-family: var(--mono); padding: 20px 0 32px; }
 </style>
 </head>
 <body>
@@ -142,250 +150,142 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 <div class="header">
   <div class="brand">
     <div class="brand-icon">🌾</div>
-    <div><div class="brand-name">Shrijee Flour</div><div class="brand-sub">live operations dashboard</div></div>
+    <div>
+      <div class="brand-name">Shrijee Flour</div>
+      <div class="brand-sub">live operations dashboard</div>
+    </div>
   </div>
-  <div class="hright">
+  <div class="header-right">
     <div class="live-badge"><div class="live-dot"></div><span id="statusLabel">loading</span></div>
     <span id="last-updated"></span>
-    <button class="rbtn" onclick="loadData()">
+    <button class="refresh-btn" onclick="loadData()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
       Refresh
     </button>
   </div>
 </div>
 
-<div class="main-tabs">
-  <button class="mtab active" onclick="switchMain('stock',this)">📦 Stock</button>
-  <button class="mtab" onclick="switchMain('finance',this)">💰 Finance</button>
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('stock',this)">📦 Stock</button>
+  <button class="tab-btn" onclick="switchTab('finance',this)">💰 Finance</button>
 </div>
 
-<!-- ══ STOCK ══ -->
-<div class="mpanel active" id="mpanel-stock">
-  <div class="sub-tabs">
-    <button class="stab active" onclick="switchSub('stock','current',this)">All time</button>
-    <button class="stab" onclick="switchSub('stock','monthly',this)">Monthly</button>
-    <button class="stab" onclick="switchSub('stock','detail',this)">Full detail</button>
+<!-- STOCK PANEL -->
+<div class="panel active" id="panel-stock">
+<div class="main">
+  <div class="error-bar" id="errorBar"></div>
+  <p class="section-title">stock overview</p>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Products tracked</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub">all categories</div></div>
+    <div class="kpi"><div class="kpi-label">In stock</div><div class="kpi-val kpi-green" id="kOk">—</div><div class="kpi-sub">healthy levels</div></div>
+    <div class="kpi"><div class="kpi-label">Running low</div><div class="kpi-val kpi-amber" id="kLow">—</div><div class="kpi-sub">below minimum</div></div>
+    <div class="kpi"><div class="kpi-label">Out of stock</div><div class="kpi-val kpi-red" id="kOut">—</div><div class="kpi-sub">needs restocking</div></div>
+    <div class="kpi"><div class="kpi-label">Total grain bought</div><div class="kpi-val" id="kGrainIn">—</div><div class="kpi-sub">kg this period</div></div>
+    <div class="kpi"><div class="kpi-label">Total grain milled</div><div class="kpi-val" id="kGrainMilled">—</div><div class="kpi-sub">kg processed</div></div>
   </div>
 
-  <!-- Stock: All time -->
-  <div class="spanel active" id="spanel-stock-current">
-  <div class="main">
-    <div class="err" id="errorBar"></div>
-    <p class="sec">stock overview</p>
-    <div class="kgrid">
-      <div class="kpi"><div class="kl">Products tracked</div><div class="kv" id="kTotal">—</div><div class="ks">all categories</div></div>
-      <div class="kpi"><div class="kl">In stock</div><div class="kv kg" id="kOk">—</div><div class="ks">healthy</div></div>
-      <div class="kpi"><div class="kl">Running low</div><div class="kv ka" id="kLow">—</div><div class="ks">below minimum</div></div>
-      <div class="kpi"><div class="kl">Out of stock</div><div class="kv kr" id="kOut">—</div><div class="ks">needs restocking</div></div>
-      <div class="kpi"><div class="kl">Grain bought</div><div class="kv" id="kGrainIn">—</div><div class="ks">kg total</div></div>
-      <div class="kpi"><div class="kl">Grain milled</div><div class="kv" id="kGrainMilled">—</div><div class="ks">kg processed</div></div>
-    </div>
-
-    <div class="crow">
-      <div class="cc"><div class="ct">Grain — bought vs used vs remaining</div><div class="cs">kg per grain type</div>
-        <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Bought</span><span><span class="ld" style="background:#e05252"></span>Used/milled</span><span><span class="ld" style="background:#16865a"></span>Remaining</span></div>
-        <div style="position:relative;height:200px;"><canvas id="grainChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Grocery — bought vs sold vs remaining</div><div class="cs">kg/L per product</div>
-        <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Bought</span><span><span class="ld" style="background:#e05252"></span>Sold</span><span><span class="ld" style="background:#16865a"></span>Remaining</span></div>
-        <div style="position:relative;height:200px;"><canvas id="grocChart"></canvas></div></div>
-    </div>
-
-    <p class="sec">grains — raw stock</p>
-    <div class="sgrid" id="grainCards"></div>
-    <p class="sec">flour — milled stock</p>
-    <div class="sgrid" id="flourCards"></div>
-    <p class="sec">grocery products</p>
-    <div class="sgrid" id="groceryCards"></div>
+  <div class="stock-section">
+    <p class="section-title">grains — raw stock</p>
+    <div class="stock-grid" id="grainCards"></div>
   </div>
+  <div class="stock-section">
+    <p class="section-title">flour — milled stock</p>
+    <div class="stock-grid" id="flourCards"></div>
+  </div>
+  <div class="stock-section">
+    <p class="section-title">grocery products</p>
+    <div class="stock-grid" id="groceryCards"></div>
   </div>
 
-  <!-- Stock: Monthly -->
-  <div class="spanel" id="spanel-stock-monthly">
-  <div class="main">
-    <p class="sec">monthly stock comparison — quantities (kg)</p>
-    <div class="crow full">
-      <div class="cc"><div class="ct">Grain bought per month</div><div class="cs">kg per grain type per month</div>
-        <div class="leg" id="monthGrainLeg"></div>
-        <div style="position:relative;height:240px;"><canvas id="monthGrainChart"></canvas></div></div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Grain — bought vs used vs remaining</div>
+      <div class="chart-sub">kg per grain type</div>
+      <div class="legend" id="grainLegend"></div>
+      <div style="position:relative;height:210px;"><canvas id="grainChart"></canvas></div>
     </div>
-    <div class="crow">
-      <div class="cc"><div class="ct">Flour produced per month</div><div class="cs">kg output from milling</div>
-        <div class="leg" id="monthFlourLeg"></div>
-        <div style="position:relative;height:200px;"><canvas id="monthFlourChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Grocery bought per month</div><div class="cs">kg/L per product</div>
-        <div class="leg" id="monthGrocLeg"></div>
-        <div style="position:relative;height:200px;"><canvas id="monthGrocChart"></canvas></div></div>
+    <div class="chart-card">
+      <div class="chart-title">Grocery — bought vs sold vs remaining</div>
+      <div class="chart-sub">kg / L per product</div>
+      <div class="legend" id="groceryLegend"></div>
+      <div style="position:relative;height:210px;"><canvas id="groceryChart"></canvas></div>
     </div>
-    <p class="sec">monthly quantity table</p>
-    <div class="mtable-wrap" id="monthStockTable"></div>
-  </div>
   </div>
 
-  <!-- Stock: Full detail with filters -->
-  <div class="spanel" id="spanel-stock-detail">
-  <div class="main">
-    <p class="sec">full stock detail</p>
-    <div class="filter-bar">
-      <label>Category</label>
-      <select id="stockCatFilter" onchange="renderStockDetail()">
-        <option value="">All categories</option>
-        <option value="grain">Grain</option>
-        <option value="flour">Flour</option>
-        <option value="grocery">Grocery</option>
-      </select>
-      <label>Status</label>
-      <select id="stockStatusFilter" onchange="renderStockDetail()">
-        <option value="">All statuses</option>
-        <option value="ok">In stock</option>
-        <option value="low">Running low</option>
-        <option value="out">Out of stock</option>
-      </select>
-      <label>Search</label>
-      <input type="text" id="stockSearch" placeholder="Search product…" oninput="renderStockDetail()"/>
-      <button class="clear-btn" onclick="clearStockFilters()">Clear</button>
-      <span class="result-count" id="stockResultCount"></span>
-    </div>
-    <div class="tw" id="stockDetailTable">
-      <table><thead><tr>
-        <th onclick="sortTable('stockDetail','name',this)">Product</th>
-        <th onclick="sortTable('stockDetail','cat',this)">Category</th>
-        <th onclick="sortTable('stockDetail','open',this)">Opening</th>
-        <th onclick="sortTable('stockDetail','inQ',this)">Bought/Produced</th>
-        <th onclick="sortTable('stockDetail','usedQ',this)">Used/Sold</th>
-        <th onclick="sortTable('stockDetail','rem',this)">Stock left</th>
-        <th onclick="sortTable('stockDetail','minS',this)">Min level</th>
-        <th>Status</th>
-      </tr></thead><tbody id="stockDetailBody"></tbody></table>
-    </div>
-  </div>
+  <p class="section-title">full stock detail</p>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>Product</th><th>Category</th><th>Opening</th><th>Bought / Produced</th><th>Used / Sold</th><th>Stock left</th><th>Min level</th><th>Status</th></tr></thead>
+      <tbody id="detailTable"></tbody>
+    </table>
   </div>
 </div>
-
-<!-- ══ FINANCE ══ -->
-<div class="mpanel" id="mpanel-finance">
-  <div class="sub-tabs">
-    <button class="stab active" onclick="switchSub('finance','overview',this)">Overview</button>
-    <button class="stab" onclick="switchSub('finance','monthly',this)">Monthly</button>
-    <button class="stab" onclick="switchSub('finance','purchases',this)">Purchases</button>
-    <button class="stab" onclick="switchSub('finance','sales',this)">Sales</button>
-  </div>
-
-  <!-- Finance: Overview -->
-  <div class="spanel active" id="spanel-finance-overview">
-  <div class="main">
-    <p class="sec">financial overview</p>
-    <div class="kgrid">
-      <div class="kpi bl"><div class="kl">Total revenue</div><div class="kv" id="fRev">—</div><div class="ks" id="fRevSub">—</div></div>
-      <div class="kpi rl"><div class="kl">Total spend</div><div class="kv" id="fSpend">—</div><div class="ks" id="fSpendSub">—</div></div>
-      <div class="kpi gl"><div class="kl">Gross profit</div><div class="kv kg" id="fProfit">—</div><div class="ks" id="fMargin">—</div></div>
-      <div class="kpi al"><div class="kl">Avg mill yield</div><div class="kv" id="fYield">—</div><div class="ks" id="fYieldSub">—</div></div>
-      <div class="kpi"><div class="kl">Purchase orders</div><div class="kv" id="fPO">—</div><div class="ks">rows</div></div>
-      <div class="kpi"><div class="kl">Sales orders</div><div class="kv" id="fSO">—</div><div class="ks">rows</div></div>
-    </div>
-    <div class="crow">
-      <div class="cc"><div class="ct">Procurement by supplier</div><div class="cs">R spend</div><div class="leg" id="supLeg"></div><div style="position:relative;height:200px;"><canvas id="supChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Sales by category</div><div class="cs">R revenue</div><div class="leg" id="saleCatLeg"></div><div style="position:relative;height:200px;"><canvas id="saleCatChart"></canvas></div></div>
-    </div>
-    <div class="crow">
-      <div class="cc"><div class="ct">Top products — revenue</div><div class="cs">R per item sold</div><div style="position:relative;height:200px;"><canvas id="topRevChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Top products — spend</div><div class="cs">R per item bought</div><div style="position:relative;height:200px;"><canvas id="topSpendChart"></canvas></div></div>
-    </div>
-  </div>
-  </div>
-
-  <!-- Finance: Monthly -->
-  <div class="spanel" id="spanel-finance-monthly">
-  <div class="main">
-    <p class="sec">month-by-month financial comparison</p>
-    <div class="cc" style="margin-bottom:18px;">
-      <div class="ct">Revenue vs Spend vs Profit — by month</div><div class="cs">R per month</div>
-      <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Revenue</span><span><span class="ld" style="background:#e05252"></span>Spend</span><span><span class="ld" style="background:#16865a"></span>Profit</span></div>
-      <div style="position:relative;height:250px;"><canvas id="monthMoneyChart"></canvas></div>
-    </div>
-    <p class="sec">monthly financial table</p>
-    <div class="mtable-wrap" id="monthFinanceTable"></div>
-  </div>
-  </div>
-
-  <!-- Finance: Purchases with filters -->
-  <div class="spanel" id="spanel-finance-purchases">
-  <div class="main">
-    <p class="sec">all purchases</p>
-    <div class="filter-bar">
-      <label>Product</label>
-      <select id="purProductFilter" onchange="renderPurchases()"><option value="">All products</option></select>
-      <label>Supplier</label>
-      <select id="purSupplierFilter" onchange="renderPurchases()"><option value="">All suppliers</option></select>
-      <label>Category</label>
-      <select id="purCatFilter" onchange="renderPurchases()">
-        <option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option>
-      </select>
-      <label>Month</label>
-      <select id="purMonthFilter" onchange="renderPurchases()"><option value="">All months</option></select>
-      <label>Search</label>
-      <input type="text" id="purSearch" placeholder="Search…" oninput="renderPurchases()"/>
-      <button class="clear-btn" onclick="clearPurFilters()">Clear</button>
-      <span class="result-count" id="purCount"></span>
-    </div>
-    <div class="crow">
-      <div class="cc"><div class="ct">Spend by product</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="purProdChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Spend by supplier</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="purSupChart"></canvas></div></div>
-    </div>
-    <div class="tw" id="purTable">
-      <table><thead><tr>
-        <th onclick="sortTable('pur','date',this)">Date</th>
-        <th onclick="sortTable('pur','item',this)">Item</th>
-        <th>Category</th>
-        <th onclick="sortTable('pur','quantity',this)">Qty</th>
-        <th>Unit</th>
-        <th onclick="sortTable('pur','unitprice',this)">Unit price (R)</th>
-        <th onclick="sortTable('pur','total',this)">Total (R)</th>
-        <th onclick="sortTable('pur','supplier',this)">Supplier</th>
-      </tr></thead><tbody id="purBody"></tbody></table>
-      <div class="pag" id="purPag"></div>
-    </div>
-  </div>
-  </div>
-
-  <!-- Finance: Sales with filters -->
-  <div class="spanel" id="spanel-finance-sales">
-  <div class="main">
-    <p class="sec">all sales</p>
-    <div class="filter-bar">
-      <label>Product</label>
-      <select id="salProductFilter" onchange="renderSales()"><option value="">All products</option></select>
-      <label>Category</label>
-      <select id="salCatFilter" onchange="renderSales()">
-        <option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option>
-      </select>
-      <label>Month</label>
-      <select id="salMonthFilter" onchange="renderSales()"><option value="">All months</option></select>
-      <label>Search</label>
-      <input type="text" id="salSearch" placeholder="Search…" oninput="renderSales()"/>
-      <button class="clear-btn" onclick="clearSalFilters()">Clear</button>
-      <span class="result-count" id="salCount"></span>
-    </div>
-    <div class="crow">
-      <div class="cc"><div class="ct">Revenue by product</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="salProdChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Revenue by category</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="salCatChart2"></canvas></div></div>
-    </div>
-    <div class="tw" id="salTable">
-      <table><thead><tr>
-        <th onclick="sortTable('sal','date',this)">Date</th>
-        <th onclick="sortTable('sal','item',this)">Item</th>
-        <th>Category</th>
-        <th onclick="sortTable('sal','quantity',this)">Qty</th>
-        <th>Unit</th>
-        <th onclick="sortTable('sal','unitprice',this)">Unit price (R)</th>
-        <th onclick="sortTable('sal','total',this)">Total (R)</th>
-      </tr></thead><tbody id="salBody"></tbody></table>
-      <div class="pag" id="salPag"></div>
-    </div>
-  </div>
-  </div>
 </div>
 
-<div class="footer">Shrijee Flour · Live from Google Sheets · Data refreshes on every load</div>
+<!-- FINANCE PANEL -->
+<div class="panel" id="panel-finance">
+<div class="main">
+  <p class="section-title">financial overview</p>
+  <div class="finance-kpi-grid">
+    <div class="fkpi rev"><div class="kpi-label">Total revenue</div><div class="kpi-val" id="fRev">—</div><div class="kpi-sub" id="fRevSub">—</div></div>
+    <div class="fkpi spend"><div class="kpi-label">Total spend</div><div class="kpi-val" id="fSpend">—</div><div class="kpi-sub" id="fSpendSub">—</div></div>
+    <div class="fkpi profit"><div class="kpi-label">Gross profit</div><div class="kpi-val kpi-green" id="fProfit">—</div><div class="kpi-sub" id="fMargin">—</div></div>
+    <div class="fkpi yield"><div class="kpi-label">Avg mill yield</div><div class="kpi-val" id="fYield">—</div><div class="kpi-sub" id="fYieldSub">—</div></div>
+    <div class="fkpi"><div class="kpi-label">Purchase orders</div><div class="kpi-val" id="fPO">—</div><div class="kpi-sub">total rows</div></div>
+    <div class="fkpi"><div class="kpi-label">Sales orders</div><div class="kpi-val" id="fSO">—</div><div class="kpi-sub">total rows</div></div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Procurement by supplier</div>
+      <div class="chart-sub">total R spend per vendor</div>
+      <div class="legend" id="supLegend"></div>
+      <div style="position:relative;height:210px;"><canvas id="supplierChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Sales by category</div>
+      <div class="chart-sub">revenue breakdown</div>
+      <div class="legend" id="saleCatLegend"></div>
+      <div style="position:relative;height:210px;"><canvas id="saleCatChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tables-row">
+    <div class="table-card">
+      <p class="section-title" style="margin-bottom:12px">supplier breakdown</p>
+      <table>
+        <thead><tr><th>Supplier</th><th>Orders</th><th>Total (R)</th><th>Avg (R)</th></tr></thead>
+        <tbody id="supplierTable"></tbody>
+      </table>
+    </div>
+    <div class="table-card">
+      <p class="section-title" style="margin-bottom:12px">milling yield — batch detail</p>
+      <table>
+        <thead><tr><th>Date</th><th>Grain</th><th>In (kg)</th><th>Out (kg)</th><th>Yield</th></tr></thead>
+        <tbody id="millingTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="section-title">all procurement rows</p>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit price (R)</th><th>Total (R)</th><th>Supplier</th></tr></thead>
+      <tbody id="purchaseTable"></tbody>
+    </table>
+  </div>
+
+  <p class="section-title">all sales rows</p>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit price (R)</th><th>Total (R)</th></tr></thead>
+      <tbody id="salesTable"></tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<div class="footer">Shrijee Flour · Live from Google Sheets · Refreshes on every load</div>
 
 <script>
 const URLS={
@@ -394,335 +294,134 @@ const URLS={
   milling:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1053164568&single=true&output=csv',
   opening:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1102474552&single=true&output=csv',
 };
-const COLORS=['#2563a8','#16865a','#b55a10','#8b36a8','#a83250','#5a7a20','#0f7a8a','#8a7020','#a87020','#205a7a'];
-const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-/* ── Global data store ── */
-let G={purchases:[],sales:[],milling:[],opening:[],allProducts:[],grainP:[],flourP:[],grocP:[],sortState:{},pages:{}};
+const COLORS=['#2563a8','#16865a','#b55a10','#8b36a8','#a83250','#5a7a20','#0f7a8a','#8a7020'];
 
 function parseCSV(text){
-  const rows=text.trim().split('\n').map(r=>{const cells=[];let cur='',inQ=false;for(let i=0;i<r.length;i++){if(r[i]==='"'){inQ=!inQ;}else if(r[i]===','&&!inQ){cells.push(cur.trim());cur='';}else cur+=r[i];}cells.push(cur.trim());return cells;});
-  const h=rows[0].map(x=>x.replace(/[^a-zA-Z0-9_]/g,'').toLowerCase());
-  return rows.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]||''])));
+  const rows=text.trim().split('\n').map(r=>{
+    const cells=[];let cur='',inQ=false;
+    for(let i=0;i<r.length;i++){if(r[i]==='"'){inQ=!inQ;}else if(r[i]===','&&!inQ){cells.push(cur.trim());cur='';}else cur+=r[i];}
+    cells.push(cur.trim());return cells;
+  });
+  const headers=rows[0].map(h=>h.replace(/[^a-zA-Z0-9_]/g,'').toLowerCase());
+  return rows.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]||''])));
 }
-async function fetchCSV(url){if(!url||url.startsWith('PASTE_'))return null;const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return parseCSV(await r.text());}
-
-function mk(d){if(!d)return null;let m,y;if(d.includes('/')){const p=d.split('/');if(p.length>=3){m=parseInt(p[1]);y=parseInt(p[2]);}}else if(d.includes('-')){const p=d.split('-');if(p.length>=3){y=parseInt(p[0]);m=parseInt(p[1]);}}if(!m||!y||isNaN(m)||isNaN(y))return null;return y+'-'+String(m).padStart(2,'0');}
-function fmtMK(k){if(!k)return'?';const[y,m]=k.split('-');return MN[parseInt(m)-1]+' '+y;}
+async function fetchCSV(url){if(!url||url.startsWith('PASTE_'))return null;const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);return parseCSV(await res.text());}
 
 let charts={};
-function bChart(id,type,labels,datasets,extra={}){
+function buildChart(id,type,labels,datasets,extra={}){
   if(charts[id])charts[id].destroy();
-  const ctx=document.getElementById(id);if(!ctx)return;
-  charts[id]=new Chart(ctx,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:type==='doughnut'||type==='pie'?{}:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10}}}},...extra}});
+  charts[id]=new Chart(document.getElementById(id),{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:type==='doughnut'?{}:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:30}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10}}}},...extra}});
+}
+function buildLegend(id,labels,colors){document.getElementById(id).innerHTML=labels.map((l,i)=>`<span><span class="ldot" style="background:${colors[i%colors.length]}"></span>${l}</span>`).join('');}
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+
+function stockCard(product,unit,opening,inQty,usedQty,remaining,minStock){
+  const status=remaining<=0?'out':(minStock>0&&remaining<=minStock?'low':'ok');
+  const r=Math.max(0,Math.round(remaining));
+  return `<div class="stock-card ${status}">
+    <div class="card-product">${product}</div>
+    <div class="card-stock ${status}">${r}<span class="card-unit">${unit}</span></div>
+    <div class="card-rows">
+      <div class="card-row"><span class="card-row-label">opening</span><span class="card-row-val">${opening} ${unit}</span></div>
+      <div class="card-divider"></div>
+      <div class="card-row"><span class="card-row-label">+ in</span><span class="card-row-val pos">+${inQty} ${unit}</span></div>
+      <div class="card-row"><span class="card-row-label">− used/sold</span><span class="card-row-val neg">−${usedQty} ${unit}</span></div>
+      <div class="card-divider"></div>
+      <div class="card-row"><span class="card-row-label">= remaining</span><span class="card-row-val" style="font-weight:600;color:var(--text)">${r} ${unit}</span></div>
+      ${minStock>0?`<div class="card-row"><span class="card-row-label">min level</span><span class="card-row-val">${minStock} ${unit}</span></div>`:''}
+    </div>
+  </div>`;
 }
 
-function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
-function sc(p){const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'low':'ok');const r=Math.max(0,Math.round(p.rem));return`<div class="sc ${s}"><div class="sp">${p.dn}</div><div class="sv ${s}">${r}<span class="su">${p.unit}</span></div><div class="srows"><div class="sr"><span class="srl">opening</span><span class="srv">${p.open} ${p.unit}</span></div><div class="sdiv"></div><div class="sr"><span class="srl">+ in</span><span class="srv p">+${p.inQ} ${p.unit}</span></div><div class="sr"><span class="srl">− used/sold</span><span class="srv n">−${p.usedQ} ${p.unit}</span></div><div class="sdiv"></div><div class="sr"><span class="srl">= remaining</span><span class="srv" style="font-weight:600;color:var(--text)">${r} ${p.unit}</span></div>${p.minS>0?`<div class="sr"><span class="srl">min level</span><span class="srv">${p.minS} ${p.unit}</span></div>`:''}</div></div>`;}
-
-function switchMain(name,btn){
-  document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('mpanel-'+name).classList.add('active');
+function switchTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
   btn.classList.add('active');
 }
-function switchSub(main,sub,btn){
-  const parent=document.getElementById('mpanel-'+main);
-  parent.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
-  parent.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('spanel-'+main+'-'+sub).classList.add('active');
-  btn.classList.add('active');
-}
 
-/* ── Sort ── */
-function sortTable(key,field,th){
-  const dir=G.sortState[key]===field+'-asc'?'desc':'asc';
-  G.sortState[key]=field+'-'+dir;
-  document.querySelectorAll(`#${key}Table th, #${key}DetailTable th`).forEach(t=>{t.classList.remove('sort-asc','sort-desc');});
-  th.classList.add('sort-'+dir);
-  if(key==='pur')renderPurchases();
-  else if(key==='sal')renderSales();
-  else if(key==='stockDetail')renderStockDetail();
-}
-
-/* ── Pagination ── */
-const PER_PAGE=20;
-function renderPage(rows,bodyId,pagId,renderRow,key){
-  const page=G.pages[key]||1;
-  const total=rows.length;const pages=Math.max(1,Math.ceil(total/PER_PAGE));
-  const start=(page-1)*PER_PAGE;const slice=rows.slice(start,start+PER_PAGE);
-  const body=document.getElementById(bodyId);
-  body.innerHTML=slice.length?slice.map(renderRow).join(''):`<tr><td colspan="10" class="no-rows">No rows match your filter</td></tr>`;
-  const pag=document.getElementById(pagId);
-  if(!pag)return;
-  let html=``;
-  if(page>1)html+=`<button class="pag-btn" onclick="goPage('${key}',${page-1})">‹ Prev</button>`;
-  for(let i=Math.max(1,page-2);i<=Math.min(pages,page+2);i++){html+=`<button class="pag-btn${i===page?' active':''}" onclick="goPage('${key}',${i})">${i}</button>`;}
-  if(page<pages)html+=`<button class="pag-btn" onclick="goPage('${key}',${page+1})">Next ›</button>`;
-  html+=`<span class="pag-info">Showing ${start+1}–${Math.min(start+PER_PAGE,total)} of ${total}</span>`;
-  pag.innerHTML=html;
-}
-function goPage(key,page){G.pages[key]=page;if(key==='pur')renderPurchases();else if(key==='sal')renderSales();}
-
-/* ── Populate dropdowns ── */
-function populateDropdowns(){
-  const {purchases,sales}=G;
-  const purItems=[...new Set(purchases.map(r=>r.item||'').filter(Boolean))].sort();
-  const purSups=[...new Set(purchases.map(r=>r.supplier||'').filter(Boolean))].sort();
-  const salItems=[...new Set(sales.map(r=>r.item||'').filter(Boolean))].sort();
-  const allMKs=[...new Set([...purchases,...sales].map(r=>mk(r.date)).filter(Boolean))].sort();
-
-  const fill=(id,items)=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">All</option>'+items.map(i=>`<option value="${i}">${i}</option>`).join('');el.value=cur;};
-  fill('purProductFilter',purItems);fill('purSupplierFilter',purSups);
-  fill('purMonthFilter',allMKs.map(m=>({val:m,label:fmtMK(m)})).map(o=>`<option value="${o.val}">${o.label}</option>`).join(''));
-  fill('salProductFilter',salItems);
-  fill('salMonthFilter',allMKs.map(m=>({val:m,label:fmtMK(m)})).map(o=>`<option value="${o.val}">${o.label}</option>`).join(''));
-
-  document.getElementById('purMonthFilter').innerHTML='<option value="">All months</option>'+allMKs.map(m=>`<option value="${m}">${fmtMK(m)}</option>`).join('');
-  document.getElementById('salMonthFilter').innerHTML='<option value="">All months</option>'+allMKs.map(m=>`<option value="${m}">${fmtMK(m)}</option>`).join('');
-  document.getElementById('purProductFilter').innerHTML='<option value="">All products</option>'+purItems.map(i=>`<option value="${i}">${i}</option>`).join('');
-  document.getElementById('purSupplierFilter').innerHTML='<option value="">All suppliers</option>'+purSups.map(i=>`<option value="${i}">${i}</option>`).join('');
-  document.getElementById('salProductFilter').innerHTML='<option value="">All products</option>'+salItems.map(i=>`<option value="${i}">${i}</option>`).join('');
-}
-
-/* ── Clear filters ── */
-function clearStockFilters(){document.getElementById('stockCatFilter').value='';document.getElementById('stockStatusFilter').value='';document.getElementById('stockSearch').value='';renderStockDetail();}
-function clearPurFilters(){['purProductFilter','purSupplierFilter','purCatFilter','purMonthFilter'].forEach(id=>document.getElementById(id).value='');document.getElementById('purSearch').value='';G.pages.pur=1;renderPurchases();}
-function clearSalFilters(){['salProductFilter','salCatFilter','salMonthFilter'].forEach(id=>document.getElementById(id).value='');document.getElementById('salSearch').value='';G.pages.sal=1;renderSales();}
-
-/* ── Get / sort rows ── */
-function applySort(rows,key,field,isNum){
-  const dir=G.sortState[key];if(!dir)return rows;
-  const asc=dir.endsWith('-asc');
-  return [...rows].sort((a,b)=>{let av=a[field]||'',bv=b[field]||'';if(isNum){av=parseFloat(av)||0;bv=parseFloat(bv)||0;}else{av=av.toLowerCase();bv=bv.toLowerCase();}return asc?(av>bv?1:-1):(av<bv?1:-1);});
-}
-
-/* ── Render stock detail ── */
-function renderStockDetail(){
-  let rows=[...G.allProducts];
-  const cat=document.getElementById('stockCatFilter').value;
-  const status=document.getElementById('stockStatusFilter').value;
-  const search=(document.getElementById('stockSearch').value||'').toLowerCase();
-  if(cat)rows=rows.filter(p=>p.cat===cat);
-  if(status)rows=rows.filter(p=>{const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'low':'ok');return s===status;});
-  if(search)rows=rows.filter(p=>p.dn.toLowerCase().includes(search));
-  const sk=G.sortState.stockDetail;
-  if(sk){const[f,d]=sk.split('-');const numFields=['open','inQ','usedQ','rem','minS'];rows=applySort(rows,'stockDetail',f,numFields.includes(f));if(d==='desc')rows.reverse();}
-  setText('stockResultCount',rows.length+' products');
-  const tgc=c=>c==='grain'?'ta':c==='flour'?'tg':'tb';
-  const stC=p=>p.rem<=0?'tr2':(p.minS>0&&p.rem<=p.minS?'ta':'tg');
-  const stT=p=>p.rem<=0?'Out of stock':(p.minS>0&&p.rem<=p.minS?'Running low':'In stock');
-  document.getElementById('stockDetailBody').innerHTML=rows.length?rows.map(p=>`<tr><td class="prod">${p.dn}</td><td><span class="tag ${tgc(p.cat)}">${p.cat}</span></td><td class="num">${p.open} ${p.unit}</td><td class="ng">+${p.inQ} ${p.unit}</td><td class="nr">−${p.usedQ} ${p.unit}</td><td class="num" style="font-weight:600">${Math.max(0,Math.round(p.rem))} ${p.unit}</td><td class="num" style="color:var(--hint)">${p.minS>0?p.minS+' '+p.unit:'—'}</td><td><span class="tag ${stC(p)}">${stT(p)}</span></td></tr>`).join(''):`<tr><td colspan="8" class="no-rows">No products match</td></tr>`;
-}
-
-/* ── Render purchases ── */
-function renderPurchases(){
-  let rows=[...G.purchases];
-  const prod=document.getElementById('purProductFilter').value;
-  const sup=document.getElementById('purSupplierFilter').value;
-  const cat=document.getElementById('purCatFilter').value;
-  const month=document.getElementById('purMonthFilter').value;
-  const search=(document.getElementById('purSearch').value||'').toLowerCase();
-  if(prod)rows=rows.filter(r=>r.item===prod);
-  if(sup)rows=rows.filter(r=>r.supplier===sup);
-  if(cat)rows=rows.filter(r=>(r.category||'').toLowerCase()===cat);
-  if(month)rows=rows.filter(r=>mk(r.date)===month);
-  if(search)rows=rows.filter(r=>(r.item+r.supplier+r.category).toLowerCase().includes(search));
-  const sk=G.sortState.pur;
-  if(sk){const[f,d]=sk.split('-');rows=applySort(rows,'pur',f,['quantity','unitprice','total'].includes(f));if(d==='desc')rows.reverse();}
-  setText('purCount',rows.length+' rows · R'+Math.round(rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0)).toLocaleString()+' total');
-
-  // Mini charts from filtered data
-  const pm={};rows.forEach(r=>{const k=r.item||'?';pm[k]=(pm[k]||0)+(parseFloat(r.total)||0);});
-  const pg=Object.entries(pm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('purProdChart','bar',pg.map(x=>x[0]),[{data:pg.map(x=>Math.round(x[1])),backgroundColor:pg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
-  const sm={};rows.forEach(r=>{const k=r.supplier||'?';sm[k]=(sm[k]||0)+(parseFloat(r.total)||0);});
-  const sg=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('purSupChart','bar',sg.map(x=>x[0]),[{data:sg.map(x=>Math.round(x[1])),backgroundColor:sg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
-
-  renderPage(rows,'purBody','purPag',r=>`<tr><td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td><td><span class="tag ta">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td><td>${r.supplier||'—'}</td></tr>`,'pur');
-}
-
-/* ── Render sales ── */
-function renderSales(){
-  let rows=[...G.sales];
-  const prod=document.getElementById('salProductFilter').value;
-  const cat=document.getElementById('salCatFilter').value;
-  const month=document.getElementById('salMonthFilter').value;
-  const search=(document.getElementById('salSearch').value||'').toLowerCase();
-  if(prod)rows=rows.filter(r=>r.item===prod);
-  if(cat)rows=rows.filter(r=>(r.category||'').toLowerCase()===cat);
-  if(month)rows=rows.filter(r=>mk(r.date)===month);
-  if(search)rows=rows.filter(r=>(r.item+r.category).toLowerCase().includes(search));
-  const sk=G.sortState.sal;
-  if(sk){const[f,d]=sk.split('-');rows=applySort(rows,'sal',f,['quantity','unitprice','total'].includes(f));if(d==='desc')rows.reverse();}
-  setText('salCount',rows.length+' rows · R'+Math.round(rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0)).toLocaleString()+' revenue');
-
-  const pm={};rows.forEach(r=>{const k=r.item||'?';pm[k]=(pm[k]||0)+(parseFloat(r.total)||0);});
-  const pg=Object.entries(pm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('salProdChart','bar',pg.map(x=>x[0]),[{data:pg.map(x=>Math.round(x[1])),backgroundColor:pg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
-  const cm={};rows.forEach(r=>{const k=r.category||'Other';cm[k]=(cm[k]||0)+(parseFloat(r.total)||0);});
-  const cg=Object.entries(cm).sort((a,b)=>b[1]-a[1]);
-  bChart('salCatChart2','doughnut',cg.map(x=>x[0]),[{data:cg.map(x=>Math.round(x[1])),backgroundColor:cg.map((_,i)=>COLORS[i%COLORS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%',scales:{}});
-
-  renderPage(rows,'salBody','salPag',r=>`<tr><td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td><td><span class="tag tg">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td></tr>`,'sal');
-}
-
-/* ── MAIN LOAD ── */
 async function loadData(){
   document.getElementById('loader').classList.remove('hidden');
   setText('statusLabel','loading');
   document.getElementById('errorBar').style.display='none';
   try{
     const[P,S,M,O]=await Promise.all([fetchCSV(URLS.purchases),fetchCSV(URLS.sales),fetchCSV(URLS.milling),fetchCSV(URLS.opening)]);
-    G.purchases=P||[];G.sales=S||[];G.milling=M||[];G.opening=O||[];
+    const purchases=P||[];const sales=S||[];const milling=M||[];const opening=O||[];
 
-    /* Opening stock map */
     const openMap={};
-    G.opening.forEach(r=>{const k=(r.product||'').trim().toLowerCase();if(!k||k.startsWith('—'))return;openMap[k]={qty:parseFloat(r.openingstock||r.opening_stock||0),unit:r.unit||'kg',min:parseFloat(r.minstock||r.min_stock||0),category:(r.category||'').toLowerCase()};});
+    opening.forEach(r=>{const key=(r.product||'').trim().toLowerCase();if(!key||key.startsWith('—'))return;openMap[key]={qty:parseFloat(r.openingstock||r.opening_stock||0),unit:r.unit||'kg',min:parseFloat(r.minstock||r.min_stock||0),category:(r.category||'').toLowerCase()};});
 
-    /* Tallies */
     const buyMap={},sellMap={},milledGrain={},milledFlour={};
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!buyMap[k])buyMap[k]={qty:0,unit:r.unit||'kg',category:r.category||''};buyMap[k].qty+=q;});
-    G.sales.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!sellMap[k])sellMap[k]={qty:0,unit:r.unit||'kg'};sellMap[k].qty+=q;});
+    purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!buyMap[k])buyMap[k]={qty:0,unit:r.unit||'kg',category:r.category||''};buyMap[k].qty+=q;});
+    sales.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!sellMap[k])sellMap[k]={qty:0,unit:r.unit||'kg'};sellMap[k].qty+=q;});
     const seen=new Set();
-    G.milling.forEach(r=>{const gk=(r.grainin||r.grain_in||'').trim().toLowerCase();const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const qI=parseFloat(r.qtyin||r.qty_in||0);const qO=parseFloat(r.qtyout||r.qty_out||0);const d=gk+qI+(r.date||'');if(seen.has(d))return;seen.add(d);if(gk)milledGrain[gk]=(milledGrain[gk]||0)+qI;if(fk)milledFlour[fk]=(milledFlour[fk]||0)+qO;});
+    milling.forEach(r=>{const gk=(r.grainin||r.grain_in||'').trim().toLowerCase();const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const qIn=parseFloat(r.qtyin||r.qty_in||0);const qOut=parseFloat(r.qtyout||r.qty_out||0);const d=gk+qIn+(r.date||'');if(seen.has(d))return;seen.add(d);if(gk)milledGrain[gk]=(milledGrain[gk]||0)+qIn;if(fk)milledFlour[fk]=(milledFlour[fk]||0)+qOut;});
 
-    /* Build products */
     const allKeys=new Set([...Object.keys(openMap),...Object.keys(buyMap),...Object.keys(sellMap),...Object.keys(milledGrain),...Object.keys(milledFlour)]);
-    G.grainP=[];G.flourP=[];G.grocP=[];
+    const grainP=[],flourP=[],groceryP=[];
     allKeys.forEach(key=>{
-      const open=openMap[key]?.qty||0;const unit=openMap[key]?.unit||buyMap[key]?.unit||'kg';const minS=openMap[key]?.min||0;
-      let cat=(openMap[key]?.category||buyMap[key]?.category||'').toLowerCase();
+      const open=openMap[key]?.qty||0;const unit=openMap[key]?.unit||buyMap[key]?.unit||'kg';const minStock=openMap[key]?.min||0;
+      let category=(openMap[key]?.category||buyMap[key]?.category||'').toLowerCase();
       const dn=key.replace(/\b\w/g,c=>c.toUpperCase());
-      if(!cat){if(milledGrain[key]||['wheat','maize','chickpea','sorghum','rice'].some(g=>key.includes(g)&&!key.includes('flour')))cat='grain';else if(key.includes('flour'))cat='flour';else cat='grocery';}
-      const bought=buyMap[key]?.qty||0;const soldD=sellMap[key]?.qty||0;const mIn=milledGrain[key]||0;const mOut=milledFlour[key]||0;
-      const p={key,dn,unit,open,minS,cat};
-      if(cat==='grain'){p.inQ=bought;p.usedQ=mIn+soldD;p.rem=open+bought-mIn-soldD;G.grainP.push(p);}
-      else if(cat==='flour'){p.inQ=mOut;p.usedQ=soldD;p.rem=open+mOut-soldD;G.flourP.push(p);}
-      else{p.inQ=bought;p.usedQ=soldD;p.rem=open+bought-soldD;G.grocP.push(p);}
+      if(!category){if(milledGrain[key]||['wheat','maize','chickpea','sorghum','rice'].some(g=>key.includes(g)&&!key.includes('flour')))category='grain';else if(key.includes('flour'))category='flour';else category='grocery';}
+      const bought=buyMap[key]?.qty||0;const soldDir=sellMap[key]?.qty||0;const milledIn=milledGrain[key]||0;const milledOut=milledFlour[key]||0;
+      if(category==='grain'){grainP.push({key,displayName:dn,unit,open,inQty:bought,usedQty:milledIn+soldDir,remaining:open+bought-milledIn-soldDir,minStock,category});}
+      else if(category==='flour'){flourP.push({key,displayName:dn,unit,open,inQty:milledOut,usedQty:soldDir,remaining:open+milledOut-soldDir,minStock,category});}
+      else{groceryP.push({key,displayName:dn,unit,open,inQty:bought,usedQty:soldDir,remaining:open+bought-soldDir,minStock,category});}
     });
-    G.allProducts=[...G.grainP,...G.flourP,...G.grocP];
 
-    /* Stock KPIs */
-    const all=G.allProducts;
-    setText('kTotal',all.length);setText('kOk',all.filter(p=>p.rem>(p.minS||0)).length);
-    setText('kLow',all.filter(p=>p.rem>0&&p.minS>0&&p.rem<=p.minS).length);setText('kOut',all.filter(p=>p.rem<=0).length);
+    const rc=(products,cid)=>{document.getElementById(cid).innerHTML=products.length?products.map(p=>stockCard(p.displayName,p.unit,p.open,p.inQty,p.usedQty,p.remaining,p.minStock)).join(''):'<div style="color:var(--hint);font-size:12px;font-family:var(--mono)">No products in this category</div>';};
+    rc(grainP,'grainCards');rc(flourP,'flourCards');rc(groceryP,'groceryCards');
+
+    const all=[...grainP,...flourP,...groceryP];
+    setText('kTotal',all.length);
+    setText('kOk',all.filter(p=>p.remaining>(p.minStock||0)).length);
+    setText('kLow',all.filter(p=>p.remaining>0&&p.minStock>0&&p.remaining<=p.minStock).length);
+    setText('kOut',all.filter(p=>p.remaining<=0).length);
     setText('kGrainIn',Object.values(milledGrain).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
     setText('kGrainMilled',Object.values(milledFlour).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
 
-    /* Stock cards */
-    const rc=(arr,id)=>{document.getElementById(id).innerHTML=arr.length?arr.map(p=>sc(p)).join(''):'<div style="color:var(--hint);font-size:12px;font-family:var(--mono)">None</div>';};
-    rc(G.grainP,'grainCards');rc(G.flourP,'flourCards');rc(G.grocP,'groceryCards');
+    buildLegend('grainLegend',['Bought','Used/milled','Remaining'],['#2563a8','#e05252','#16865a']);
+    buildChart('grainChart','bar',grainP.map(p=>p.displayName),[{label:'Bought',data:grainP.map(p=>p.inQty),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Used',data:grainP.map(p=>p.usedQty),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:grainP.map(p=>Math.max(0,p.remaining)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
+    buildLegend('groceryLegend',['Bought','Sold','Remaining'],['#2563a8','#e05252','#16865a']);
+    buildChart('groceryChart','bar',groceryP.map(p=>p.displayName),[{label:'Bought',data:groceryP.map(p=>p.inQty),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Sold',data:groceryP.map(p=>p.usedQty),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:groceryP.map(p=>Math.max(0,p.remaining)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
 
-    /* Stock overview charts */
-    bChart('grainChart','bar',G.grainP.map(p=>p.dn),[{label:'Bought',data:G.grainP.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Used',data:G.grainP.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:G.grainP.map(p=>Math.max(0,p.rem)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
-    bChart('grocChart','bar',G.grocP.map(p=>p.dn),[{label:'Bought',data:G.grocP.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Sold',data:G.grocP.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:G.grocP.map(p=>Math.max(0,p.rem)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
+    const tagC=c=>c==='grain'?'tag-grain':c==='flour'?'tag-flour':'tag-grocery';
+    const stC=p=>p.remaining<=0?'tag-out':(p.minStock>0&&p.remaining<=p.minStock?'tag-low':'tag-ok');
+    const stT=p=>p.remaining<=0?'Out of stock':(p.minStock>0&&p.remaining<=p.minStock?'Running low':'In stock');
+    document.getElementById('detailTable').innerHTML=all.map(p=>`<tr><td style="font-weight:500">${p.displayName}</td><td><span class="tag ${tagC(p.category)}">${p.category}</span></td><td class="num">${p.open} ${p.unit}</td><td class="num num-green">+${p.inQty} ${p.unit}</td><td class="num num-red">−${p.usedQty} ${p.unit}</td><td class="num" style="font-weight:600;font-size:13px">${Math.max(0,Math.round(p.remaining))} ${p.unit}</td><td class="num" style="color:var(--hint)">${p.minStock>0?p.minStock+' '+p.unit:'—'}</td><td><span class="tag ${stC(p)}">${stT(p)}</span></td></tr>`).join('');
 
-    /* Stock detail table */
-    renderStockDetail();
-
-    /* Populate dropdowns */
-    populateDropdowns();
-
-    /* Purchases & Sales tables */
-    renderPurchases();renderSales();
-
-    /* ── MONTHLY DATA ── */
-    const allMKs=[...new Set([...G.purchases,...G.sales,...G.milling].map(r=>mk(r.date)).filter(Boolean))].sort();
-
-    /* Monthly stock chart — grain bought per month per product */
-    const grainKeys=G.grainP.map(p=>p.key);
-    const mGrainData={};
-    grainKeys.forEach(k=>{mGrainData[k]={};allMKs.forEach(m=>mGrainData[k][m]=0);});
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mk(r.date);if(grainKeys.includes(k)&&m)mGrainData[k][m]=(mGrainData[k][m]||0)+(parseFloat(r.quantity)||0);});
-    const grainDatasets=grainKeys.map((k,i)=>({label:G.grainP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mGrainData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthGrainChart','bar',allMKs.map(fmtMK),grainDatasets);
-    document.getElementById('monthGrainLeg').innerHTML=grainKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.grainP.find(p=>p.key===k)?.dn||k}</span>`).join('');
-
-    /* Monthly flour produced */
-    const flourKeys=G.flourP.map(p=>p.key);
-    const mFlourData={};
-    flourKeys.forEach(k=>{mFlourData[k]={};allMKs.forEach(m=>mFlourData[k][m]=0);});
-    const seen2=new Set();
-    G.milling.forEach(r=>{const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const m=mk(r.date);const qO=parseFloat(r.qtyout||r.qty_out||0);const d=fk+qO+(r.date||'');if(seen2.has(d))return;seen2.add(d);if(flourKeys.includes(fk)&&m)mFlourData[fk][m]=(mFlourData[fk][m]||0)+qO;});
-    const flourDatasets=flourKeys.map((k,i)=>({label:G.flourP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mFlourData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthFlourChart','bar',allMKs.map(fmtMK),flourDatasets);
-    document.getElementById('monthFlourLeg').innerHTML=flourKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.flourP.find(p=>p.key===k)?.dn||k}</span>`).join('');
-
-    /* Monthly grocery bought */
-    const grocKeys=G.grocP.map(p=>p.key);
-    const mGrocData={};
-    grocKeys.forEach(k=>{mGrocData[k]={};allMKs.forEach(m=>mGrocData[k][m]=0);});
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mk(r.date);if(grocKeys.includes(k)&&m)mGrocData[k][m]=(mGrocData[k][m]||0)+(parseFloat(r.quantity)||0);});
-    const grocDatasets=grocKeys.map((k,i)=>({label:G.grocP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mGrocData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthGrocChart','bar',allMKs.map(fmtMK),grocDatasets);
-    document.getElementById('monthGrocLeg').innerHTML=grocKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.grocP.find(p=>p.key===k)?.dn||k}</span>`).join('');
-
-    /* Monthly stock quantity table */
-    document.getElementById('monthStockTable').innerHTML=`<table>
-      <thead><tr><th>Month</th><th>Grain bought (kg)</th><th>Grain milled (kg)</th><th>Flour produced (kg)</th><th>Grocery bought</th><th>Purchase rows</th></tr></thead>
-      <tbody>${allMKs.map(m=>{
-        const gb=G.purchases.filter(r=>mk(r.date)===m&&(r.category||'').toLowerCase()==='grain').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
-        const gml=G.milling.filter(r=>mk(r.date)===m).reduce((s,r)=>s+(parseFloat(r.qtyin||r.qty_in||0)),0);
-        const fp=G.milling.filter(r=>mk(r.date)===m).reduce((s,r)=>s+(parseFloat(r.qtyout||r.qty_out||0)),0);
-        const grb=G.purchases.filter(r=>mk(r.date)===m&&(r.category||'').toLowerCase()==='grocery').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
-        const po=G.purchases.filter(r=>mk(r.date)===m).length;
-        return`<tr><td class="prod">${fmtMK(m)}</td><td class="ng">${gb} kg</td><td class="num">${gml.toFixed(0)} kg</td><td class="num">${fp.toFixed(0)} kg</td><td class="num">${grb} kg/L</td><td class="num">${po}</td></tr>`;
-      }).join('')}</tbody></table>`;
-
-    /* ── FINANCE ── */
-    const totalSpend=G.purchases.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
-    const totalRev=G.sales.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+    const totalSpend=purchases.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+    const totalRev=sales.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
     const profit=totalRev-totalSpend;
     const margin=totalRev>0?((profit/totalRev)*100).toFixed(1):0;
-    const mpairs=G.milling.filter(r=>parseFloat(r.qtyin||r.qty_in||0)>0&&parseFloat(r.qtyout||r.qty_out||0)>0);
-    const avgY=mpairs.length?(mpairs.reduce((s,r)=>{const qi=parseFloat(r.qtyin||r.qty_in||0);const qo=parseFloat(r.qtyout||r.qty_out||0);return s+(qi>0?(qo/qi)*100:0);},0)/mpairs.length).toFixed(1):'—';
+    const mp=milling.filter(r=>parseFloat(r.qtyin||r.qty_in||0)>0&&parseFloat(r.qtyout||r.qty_out||0)>0);
+    const avgY=mp.length?(mp.reduce((s,r)=>{const qi=parseFloat(r.qtyin||r.qty_in||0);const qo=parseFloat(r.qtyout||r.qty_out||0);return s+(qi>0?(qo/qi)*100:0);},0)/mp.length).toFixed(1):'—';
 
-    setText('fRev','R '+totalRev.toLocaleString());setText('fRevSub',G.sales.length+' sales orders');
-    setText('fSpend','R '+totalSpend.toLocaleString());setText('fSpendSub',G.purchases.length+' purchase orders');
+    setText('fRev','R '+totalRev.toLocaleString());setText('fRevSub',sales.length+' sales orders');
+    setText('fSpend','R '+totalSpend.toLocaleString());setText('fSpendSub',purchases.length+' purchase orders');
     setText('fProfit',(profit>=0?'+':'')+'R '+Math.abs(profit).toLocaleString());setText('fMargin',margin+'% gross margin');
-    setText('fYield',avgY+'%');setText('fYieldSub',mpairs.length+' batches');
-    setText('fPO',G.purchases.length);setText('fSO',G.sales.length);
+    setText('fYield',avgY+'%');setText('fYieldSub',mp.length+' batches');
+    setText('fPO',purchases.length);setText('fSO',sales.length);
 
-    /* Finance overview charts */
-    const supMap={};G.purchases.forEach(r=>{const k=r.supplier||'Unknown';supMap[k]=(supMap[k]||0)+(parseFloat(r.total)||0);});
+    const supMap={};purchases.forEach(r=>{const k=r.supplier||'Unknown';supMap[k]=(supMap[k]||0)+(parseFloat(r.total)||0);});
     const supG=Object.entries(supMap).sort((a,b)=>b[1]-a[1]);
-    document.getElementById('supLeg').innerHTML=supG.map((x,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${x[0]}</span>`).join('');
-    bChart('supChart','bar',supG.map(x=>x[0]),[{data:supG.map(x=>Math.round(x[1])),backgroundColor:supG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:11},callback:v=>'R'+v.toLocaleString()}}}});
+    buildLegend('supLegend',supG.map(x=>x[0]),COLORS);
+    buildChart('supplierChart','bar',supG.map(x=>x[0]),[{data:supG.map(x=>x[1]),backgroundColor:supG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:11},callback:v=>'R'+v.toLocaleString()}}}});
 
-    const catMap={};G.sales.forEach(r=>{const k=r.category||'Other';catMap[k]=(catMap[k]||0)+(parseFloat(r.total)||0);});
+    const catMap={};sales.forEach(r=>{const k=r.category||'Other';catMap[k]=(catMap[k]||0)+(parseFloat(r.total)||0);});
     const catG=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
-    document.getElementById('saleCatLeg').innerHTML=catG.map((x,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${x[0]} R${Math.round(x[1]).toLocaleString()}</span>`).join('');
-    bChart('saleCatChart','doughnut',catG.map(x=>x[0]),[{data:catG.map(x=>Math.round(x[1])),backgroundColor:catG.map((_,i)=>COLORS[i%COLORS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%',scales:{}});
+    buildLegend('saleCatLegend',catG.map(x=>`${x[0]} R${x[1].toLocaleString()}`),COLORS);
+    buildChart('saleCatChart','doughnut',catG.map(x=>x[0]),[{data:catG.map(x=>x[1]),backgroundColor:catG.map((_,i)=>COLORS[i%COLORS.length]),borderWidth:0,hoverOffset:6}],{cutout:'60%',scales:{}});
 
-    const revMap={};G.sales.forEach(r=>{const k=r.item||'?';revMap[k]=(revMap[k]||0)+(parseFloat(r.total)||0);});
-    const revG=Object.entries(revMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-    bChart('topRevChart','bar',revG.map(x=>x[0]),[{data:revG.map(x=>Math.round(x[1])),backgroundColor:revG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
+    const supCounts={};purchases.forEach(r=>{const k=r.supplier||'Unknown';supCounts[k]=(supCounts[k]||0)+1;});
+    document.getElementById('supplierTable').innerHTML=supG.map(([sup,tot])=>`<tr><td style="font-weight:500">${sup}</td><td class="num">${supCounts[sup]||'—'}</td><td class="num">R ${tot.toLocaleString()}</td><td class="num">R ${Math.round(tot/(supCounts[sup]||1)).toLocaleString()}</td></tr>`).join('');
 
-    const spMap={};G.purchases.forEach(r=>{const k=r.item||'?';spMap[k]=(spMap[k]||0)+(parseFloat(r.total)||0);});
-    const spG=Object.entries(spMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-    bChart('topSpendChart','bar',spG.map(x=>x[0]),[{data:spG.map(x=>Math.round(x[1])),backgroundColor:spG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
+    const seenM=new Set();
+    document.getElementById('millingTable').innerHTML=milling.filter(r=>{const qi=parseFloat(r.qtyin||r.qty_in||0);if(!qi)return false;const k=(r.date||'')+(r.grainin||r.grain_in||'')+qi;if(seenM.has(k))return false;seenM.add(k);return true;}).map(r=>{const qi=parseFloat(r.qtyin||r.qty_in||0);const qo=parseFloat(r.qtyout||r.qty_out||0);const yld=qi>0?((qo/qi)*100).toFixed(1):'—';return`<tr><td>${r.date||'—'}</td><td style="font-weight:500">${r.grainin||r.grain_in||'—'}</td><td class="num">${qi}</td><td class="num">${qo}</td><td class="num ${parseFloat(yld)>=85?'num-green':'num-amber'}">${yld}%</td></tr>`;}).join('');
 
-    /* Monthly money chart */
-    const mRev={},mSpend={};
-    G.sales.forEach(r=>{const m=mk(r.date);if(m)mRev[m]=(mRev[m]||0)+(parseFloat(r.total)||0);});
-    G.purchases.forEach(r=>{const m=mk(r.date);if(m)mSpend[m]=(mSpend[m]||0)+(parseFloat(r.total)||0);});
-    bChart('monthMoneyChart','bar',allMKs.map(fmtMK),[
-      {label:'Revenue',data:allMKs.map(m=>Math.round(mRev[m]||0)),backgroundColor:'rgba(37,99,168,0.75)',borderRadius:4},
-      {label:'Spend',data:allMKs.map(m=>Math.round(mSpend[m]||0)),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:4},
-      {label:'Profit',data:allMKs.map(m=>Math.round((mRev[m]||0)-(mSpend[m]||0))),backgroundColor:'rgba(22,134,90,0.75)',borderRadius:4},
-    ],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:11},callback:v=>'R'+v.toLocaleString()}}}});
-
-    /* Monthly finance table */
-    document.getElementById('monthFinanceTable').innerHTML=`<table>
-      <thead><tr><th>Month</th><th>Revenue (R)</th><th>Spend (R)</th><th>Profit (R)</th><th>Margin %</th><th>Sales</th><th>Purchases</th></tr></thead>
-      <tbody>${allMKs.map(m=>{
-        const rev=Math.round(mRev[m]||0);const spd=Math.round(mSpend[m]||0);const pft=rev-spd;const mgn=rev>0?((pft/rev)*100).toFixed(1):0;
-        return`<tr><td class="prod">${fmtMK(m)}</td><td class="ng">R ${rev.toLocaleString()}</td><td class="nr">R ${spd.toLocaleString()}</td><td class="num" style="font-weight:600;color:${pft>=0?'var(--green)':'var(--red)'}">${pft>=0?'+':''}R ${Math.abs(pft).toLocaleString()}</td><td class="num">${mgn}%</td><td class="num">${G.sales.filter(r=>mk(r.date)===m).length}</td><td class="num">${G.purchases.filter(r=>mk(r.date)===m).length}</td></tr>`;
-      }).join('')}
-      <tr style="background:var(--surface2);font-weight:600"><td class="prod">TOTAL</td><td class="ng">R ${Math.round(totalRev).toLocaleString()}</td><td class="nr">R ${Math.round(totalSpend).toLocaleString()}</td><td class="num" style="color:var(--green)">+R ${Math.round(profit).toLocaleString()}</td><td class="num">${margin}%</td><td class="num">${G.sales.length}</td><td class="num">${G.purchases.length}</td></tr>
-      </tbody></table>`;
+    document.getElementById('purchaseTable').innerHTML=purchases.map(r=>`<tr><td>${r.date||'—'}</td><td style="font-weight:500">${r.item||'—'}</td><td><span class="tag tag-grain">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td><td>${r.supplier||'—'}</td></tr>`).join('');
+    document.getElementById('salesTable').innerHTML=sales.map(r=>`<tr><td>${r.date||'—'}</td><td style="font-weight:500">${r.item||'—'}</td><td><span class="tag tag-flour">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td></tr>`).join('');
 
     setText('statusLabel','live');
     setText('last-updated','updated '+new Date().toLocaleTimeString());
