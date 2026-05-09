@@ -1,135 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Grain & Milling Operations Dashboard</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shrijee Flour — Stock Tracker</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: rgba(0,0,0,0.10);
-    --text: #1a1a18;
-    --muted: #6b6b67;
-    --hint: #9b9b96;
-    --green: #3B6D11;
-    --green-bg: #EAF3DE;
-    --amber: #854F0B;
-    --amber-bg: #FAEEDA;
-    --blue: #185FA5;
-    --blue-bg: #E6F1FB;
-    --red: #A32D2D;
-    --accent1: #378ADD;
-    --accent2: #1D9E75;
-    --accent3: #BA7517;
-    --accent4: #639922;
-    --accent5: #D85A30;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1a1a18; --surface: #242422; --surface2: #2e2e2b;
-      --border: rgba(255,255,255,0.10); --text: #f0efe9; --muted: #a8a8a3; --hint: #72726e;
-      --green: #97C459; --green-bg: #173404; --amber: #FAC775; --amber-bg: #412402;
-      --blue: #85B7EB; --blue-bg: #042C53; --red: #F09595;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
-  /* ── Header ── */
-  .header { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .header-left h1 { font-size: 18px; font-weight: 600; }
-  .header-left p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .header-right { display: flex; align-items: center; gap: 10px; }
-  .refresh-btn { background: var(--text); color: var(--surface); border: none; border-radius: var(--radius-sm); padding: 8px 16px; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
-  .refresh-btn:hover { opacity: 0.8; }
-  .refresh-btn svg { width: 13px; height: 13px; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
-  .status-label { font-size: 11px; color: var(--muted); }
-  #last-updated { font-size: 11px; color: var(--hint); }
+:root {
+  --bg: #0f0f0d;
+  --surface: #1a1a16;
+  --surface2: #222220;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0efe8;
+  --muted: #8a8a82;
+  --hint: #55554f;
+  --green: #7ec96a;
+  --green-dim: rgba(126,201,106,0.12);
+  --amber: #f0a840;
+  --amber-dim: rgba(240,168,64,0.12);
+  --red: #e05252;
+  --red-dim: rgba(224,82,82,0.12);
+  --accent: #c8b87a;
+  --accent-dim: rgba(200,184,122,0.10);
+  --radius: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
 
-  /* ── Layout ── */
-  .main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
-  .section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.09em; color: var(--hint); text-transform: uppercase; margin: 0 0 10px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100vh; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 
-  /* ── Loading ── */
-  .loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 16px; transition: opacity 0.4s; }
-  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
-  .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 13px; color: var(--muted); }
+/* ── HEADER ── */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; border-bottom: 0.5px solid var(--border);
+  background: var(--surface); flex-wrap: wrap; gap: 12px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--accent-dim); border: 0.5px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.brand-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.brand-sub { font-size: 11px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--green-dim); border: 0.5px solid rgba(126,201,106,0.3);
+  border-radius: 20px; padding: 5px 12px; font-size: 11px; color: var(--green);
+  font-family: var(--mono);
+}
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.refresh-btn {
+  background: var(--surface2); border: 0.5px solid var(--border2);
+  border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 500;
+  color: var(--text); cursor: pointer; font-family: var(--sans);
+  display: flex; align-items: center; gap: 6px; transition: background 0.15s;
+}
+.refresh-btn:hover { background: #2a2a26; }
+.refresh-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+#last-updated { font-size: 11px; color: var(--hint); font-family: var(--mono); }
 
-  /* ── Error banner ── */
-  .error-banner { background: #FCEBEB; border: 0.5px solid #F09595; color: #A32D2D; border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; margin-bottom: 16px; display: none; }
+/* ── LOADING ── */
+.loader {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; z-index: 999; transition: opacity 0.4s;
+}
+.loader.hidden { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 32px; height: 32px; border: 2px solid var(--border2);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text { font-size: 12px; color: var(--muted); font-family: var(--mono); }
 
-  /* ── KPI grid ── */
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
-  .kpi { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px 16px; }
-  .kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-  .kpi-val { font-size: 22px; font-weight: 600; }
-  .kpi-sub { font-size: 10px; color: var(--hint); margin-top: 3px; }
-  .kpi-green { color: var(--green); }
-  .kpi-amber { color: var(--amber); }
+/* ── ERROR ── */
+.error-bar {
+  background: var(--red-dim); border: 0.5px solid rgba(224,82,82,0.3);
+  color: var(--red); border-radius: 8px; padding: 10px 16px;
+  font-size: 12px; margin-bottom: 16px; display: none;
+}
 
-  /* ── Charts grid ── */
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } }
-  .chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; }
-  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .chart-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
-  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; font-size: 11px; color: var(--muted); }
-  .legend span { display: flex; align-items: center; gap: 4px; }
-  .dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+/* ── MAIN ── */
+.main { padding: 24px; max-width: 1200px; margin: 0 auto; }
+.section-title {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--hint); font-family: var(--mono);
+  margin: 0 0 12px;
+}
 
-  /* ── Tables ── */
-  .table-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; color: var(--hint); text-transform: uppercase; text-align: left; padding: 0 10px 10px; border-bottom: 0.5px solid var(--border); }
-  td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--surface2); }
-  .badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
-  .badge-green { background: var(--green-bg); color: var(--green); }
-  .badge-amber { background: var(--amber-bg); color: var(--amber); }
-  .badge-blue { background: var(--blue-bg); color: var(--blue); }
-  .bar-wrap { height: 5px; background: var(--surface2); border-radius: 3px; min-width: 80px; }
-  .bar-fill { height: 100%; border-radius: 3px; background: var(--accent4); transition: width 0.6s ease; }
+/* ── SETUP NOTICE ── */
+.setup-notice {
+  background: var(--amber-dim); border: 0.5px solid rgba(240,168,64,0.3);
+  border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px;
+}
+.setup-notice h3 { font-size: 13px; color: var(--amber); margin-bottom: 10px; }
+.setup-notice p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.setup-notice code {
+  font-family: var(--mono); background: rgba(240,168,64,0.1);
+  padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--amber);
+}
 
-  /* ── Two-col tables layout ── */
-  .tables-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  @media (max-width: 800px) { .tables-row { grid-template-columns: 1fr; } }
+/* ── STOCK CARDS ── */
+.stock-section { margin-bottom: 28px; }
+.stock-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.stock-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 16px; position: relative; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.stock-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+}
+.stock-card.ok::before { background: var(--green); }
+.stock-card.low::before { background: var(--amber); }
+.stock-card.out::before { background: var(--red); }
+.stock-card.ok { border-color: rgba(126,201,106,0.2); }
+.stock-card.low { border-color: rgba(240,168,64,0.2); }
+.stock-card.out { border-color: rgba(224,82,82,0.2); }
 
-  /* ── Setup guide ── */
-  .setup-guide { background: var(--blue-bg); border: 0.5px solid #85B7EB; border-radius: var(--radius); padding: 20px 24px; margin-bottom: 20px; }
-  .setup-guide h3 { font-size: 13px; font-weight: 600; color: var(--blue); margin-bottom: 12px; }
-  .steps { display: flex; flex-direction: column; gap: 10px; }
-  .step { display: flex; gap: 12px; align-items: flex-start; }
-  .step-num { background: var(--blue); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .step-text { font-size: 12px; color: var(--text); line-height: 1.5; }
-  .step-text code { background: rgba(0,0,0,0.08); padding: 1px 5px; border-radius: 3px; font-family: monospace; font-size: 11px; }
-  .url-box { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-family: monospace; font-size: 11px; color: var(--muted); word-break: break-all; margin-top: 8px; }
-  .footer { text-align: center; font-size: 11px; color: var(--hint); padding: 20px 0 32px; }
+.card-product { font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
+.card-stock { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
+.card-stock.ok { color: var(--text); }
+.card-stock.low { color: var(--amber); }
+.card-stock.out { color: var(--red); }
+.card-unit { font-size: 12px; color: var(--muted); display: inline; margin-left: 4px; font-weight: 400; }
+.card-rows { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.card-row { display: flex; justify-content: space-between; font-size: 11px; font-family: var(--mono); }
+.card-row-label { color: var(--hint); }
+.card-row-val { color: var(--muted); }
+.card-row-val.in { color: var(--green); }
+.card-row-val.out-val { color: var(--red); }
+.card-divider { height: 0.5px; background: var(--border); margin: 6px 0; }
+
+/* ── SUMMARY BAR ── */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 28px; }
+.summary-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.summary-label { font-size: 10px; font-family: var(--mono); color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.summary-val { font-size: 20px; font-weight: 600; color: var(--text); }
+.summary-sub { font-size: 10px; color: var(--hint); margin-top: 3px; font-family: var(--mono); }
+
+/* ── CHARTS ROW ── */
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+@media(max-width:640px){ .charts-row { grid-template-columns: 1fr; } }
+.chart-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.chart-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.chart-sub { font-size: 10px; color: var(--muted); margin-bottom: 14px; font-family: var(--mono); }
+
+/* ── DETAIL TABLE ── */
+.table-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { font-size: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--hint); text-align: left; padding: 0 12px 10px; border-bottom: 0.5px solid var(--border); }
+td { padding: 9px 12px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+.tag { display: inline-block; font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; }
+.tag-grain { background: var(--amber-dim); color: var(--amber); }
+.tag-flour { background: rgba(126,201,106,0.12); color: var(--green); }
+.tag-grocery { background: rgba(100,150,220,0.12); color: #7aabf0; }
+.stock-num { font-family: var(--mono); font-weight: 500; }
+.stock-ok { color: var(--green); }
+.stock-low { color: var(--amber); }
+.stock-out { color: var(--red); }
+
+/* ── SHEET SETUP BOX ── */
+.sheet-box { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
+.sheet-box h3 { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 14px; }
+.sheet-steps { display: flex; flex-direction: column; gap: 10px; }
+.sheet-step { display: flex; gap: 12px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.sheet-num { background: var(--accent-dim); color: var(--accent); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0; font-family: var(--mono); }
+.col-list { margin-top: 8px; background: var(--surface2); border-radius: 6px; padding: 10px 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 2; }
+.col-name { color: var(--accent); }
+
+.footer { text-align: center; font-size: 10px; color: var(--hint); font-family: var(--mono); padding: 20px 0 32px; }
 </style>
 </head>
 <body>
 
-<div class="loading-overlay" id="loader">
+<div class="loader" id="loader">
   <div class="spinner"></div>
-  <div class="loading-text">Fetching live data from Google Sheets…</div>
+  <div class="loader-text">loading stock data…</div>
 </div>
 
 <div class="header">
-  <div class="header-left">
-    <h1>🌾 Grain &amp; Milling Operations</h1>
-    <p>Live dashboard — auto-reads from Google Sheets on every load</p>
+  <div class="brand">
+    <div class="brand-icon">🌾</div>
+    <div>
+      <div class="brand-name">Shrijee Flour</div>
+      <div class="brand-sub">inventory & stock tracker</div>
+    </div>
   </div>
   <div class="header-right">
-    <span class="status-dot" id="statusDot"></span>
-    <span class="status-label" id="statusLabel">Loading…</span>
+    <div class="live-badge"><div class="live-dot"></div><span id="statusLabel">loading</span></div>
     <span id="last-updated"></span>
     <button class="refresh-btn" onclick="loadData()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -140,390 +211,411 @@
 
 <div class="main">
 
-  <div class="error-banner" id="errorBanner"></div>
+  <div class="error-bar" id="errorBar"></div>
 
-  <!-- Setup guide — hidden once data loads -->
-  <div class="setup-guide" id="setupGuide">
-    <h3>⚙️ One-time setup — make your sheet public (read-only)</h3>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-text">Open your Google Sheet → click <strong>File → Share → Publish to web</strong></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text">Choose <strong>Each sheet tab</strong> → select <strong>Comma-separated values (.csv)</strong> → click <strong>Publish</strong></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text">Copy the CSV URLs for each tab (Purchases, Sales, Milling Log) and paste them into the <code>SHEET_URLS</code> section at the top of the <code>&lt;script&gt;</code> in this file</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-text">Push to GitHub → Settings → Pages → Source: main branch → Save. Your live URL will be:<br>
-        <div class="url-box">https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/dashboard.html</div>
-      </div></div>
-      <div class="step"><div class="step-num">5</div><div class="step-text">Every time you add rows to your Google Sheet, just refresh the dashboard page — it always reads the latest data ✅</div></div>
+  <!-- Sheet setup instruction -->
+  <div class="sheet-box" id="setupBox">
+    <h3>📋 One-time setup — add an "Opening Stock" tab to your Google Sheet</h3>
+    <div class="sheet-steps">
+      <div class="sheet-step"><div class="sheet-num">1</div><div>In your Google Sheet, add a new tab called <strong>Opening Stock</strong></div></div>
+      <div class="sheet-step"><div class="sheet-num">2</div>
+        <div>Add these exact column headers in row 1:
+          <div class="col-list">
+            <span class="col-name">Product</span> &nbsp;|&nbsp;
+            <span class="col-name">Category</span> &nbsp;|&nbsp;
+            <span class="col-name">Opening Stock</span> &nbsp;|&nbsp;
+            <span class="col-name">Unit</span> &nbsp;|&nbsp;
+            <span class="col-name">Min Stock</span>
+          </div>
+          Then fill in each product (Wheat, Maize, Sugar, Oil etc.) with your opening amounts and minimum warning level.
+        </div>
+      </div>
+      <div class="sheet-step"><div class="sheet-num">3</div><div>File → Share → Publish to web → select <strong>Opening Stock</strong> tab → CSV → Publish → paste URL below in the code where it says <code>PASTE_OPENING_STOCK_CSV_URL</code></div></div>
     </div>
   </div>
 
-  <p class="section-label">Key performance indicators</p>
-  <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi"><div class="kpi-label">Total procurement spend</div><div class="kpi-val" id="kTotalSpend">—</div><div class="kpi-sub" id="kSpendSub">—</div></div>
-    <div class="kpi"><div class="kpi-label">Total sales revenue</div><div class="kpi-val" id="kTotalRev">—</div><div class="kpi-sub" id="kRevSub">—</div></div>
-    <div class="kpi"><div class="kpi-label">Gross profit</div><div class="kpi-val kpi-green" id="kProfit">—</div><div class="kpi-sub" id="kProfitSub">—</div></div>
-    <div class="kpi"><div class="kpi-label">Avg milling yield</div><div class="kpi-val kpi-green" id="kYield">—</div><div class="kpi-sub" id="kYieldSub">—</div></div>
-    <div class="kpi"><div class="kpi-label">Purchase orders</div><div class="kpi-val" id="kPO">—</div><div class="kpi-sub">Total procurement rows</div></div>
-    <div class="kpi"><div class="kpi-label">Sales orders</div><div class="kpi-val" id="kSO">—</div><div class="kpi-sub">Total sales rows</div></div>
-    <div class="kpi"><div class="kpi-label">Top supplier</div><div class="kpi-val" id="kTopSup" style="font-size:15px;margin-top:2px;">—</div><div class="kpi-sub" id="kTopSupSub">—</div></div>
-    <div class="kpi"><div class="kpi-label">Top customer</div><div class="kpi-val" id="kTopCust" style="font-size:15px;margin-top:2px;">—</div><div class="kpi-sub" id="kTopCustSub">—</div></div>
+  <!-- Summary KPIs -->
+  <p class="section-title">stock overview</p>
+  <div class="summary-grid">
+    <div class="summary-card"><div class="summary-label">Products tracked</div><div class="summary-val" id="kTotal">—</div><div class="summary-sub">across all categories</div></div>
+    <div class="summary-card"><div class="summary-label">In stock</div><div class="summary-val" style="color:var(--green)" id="kOk">—</div><div class="summary-sub">healthy levels</div></div>
+    <div class="summary-card"><div class="summary-label">Running low</div><div class="summary-val" style="color:var(--amber)" id="kLow">—</div><div class="summary-sub">below minimum</div></div>
+    <div class="summary-card"><div class="summary-label">Out of stock</div><div class="summary-val" style="color:var(--red)" id="kOut">—</div><div class="summary-sub">needs restocking</div></div>
+    <div class="summary-card"><div class="summary-label">Total grain bought</div><div class="summary-val" id="kGrainIn">—</div><div class="summary-sub">kg this period</div></div>
+    <div class="summary-card"><div class="summary-label">Total grain milled</div><div class="summary-val" id="kGrainMilled">—</div><div class="summary-sub">kg processed</div></div>
   </div>
 
-  <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-title">Procurement by supplier</div>
-      <div class="chart-sub">Total spend per vendor (R)</div>
-      <div class="legend" id="supLegend"></div>
-      <div style="position:relative;height:200px;"><canvas id="supplierChart" role="img" aria-label="Bar chart of procurement spend by supplier"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Sales revenue by customer</div>
-      <div class="chart-sub">Total revenue per buyer (R)</div>
-      <div class="legend" id="custLegend"></div>
-      <div style="position:relative;height:200px;"><canvas id="customerChart" role="img" aria-label="Bar chart of sales revenue by customer"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Category breakdown — procurement</div>
-      <div class="chart-sub">Spend by product category</div>
-      <div class="legend" id="catLegend"></div>
-      <div style="position:relative;height:200px;"><canvas id="categoryChart" role="img" aria-label="Doughnut chart of spend by category"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Sales by category</div>
-      <div class="chart-sub">Revenue by product category</div>
-      <div class="legend" id="saleCatLegend"></div>
-      <div style="position:relative;height:200px;"><canvas id="saleCatChart" role="img" aria-label="Doughnut chart of sales by category"></canvas></div>
-    </div>
+  <!-- Grain stock cards -->
+  <div class="stock-section">
+    <p class="section-title">grains — raw stock</p>
+    <div class="stock-grid" id="grainCards"></div>
   </div>
 
-  <div class="tables-row">
-    <div class="table-card">
-      <p class="section-label" style="margin-bottom:12px">Supplier breakdown</p>
-      <table>
-        <thead><tr><th>Supplier</th><th>Orders</th><th>Total (R)</th><th>Avg order (R)</th></tr></thead>
-        <tbody id="supplierTable"></tbody>
-      </table>
+  <!-- Flour stock cards -->
+  <div class="stock-section">
+    <p class="section-title">flour — milled stock</p>
+    <div class="stock-grid" id="flourCards"></div>
+  </div>
+
+  <!-- Grocery stock cards -->
+  <div class="stock-section">
+    <p class="section-title">grocery products</p>
+    <div class="stock-grid" id="groceryCards"></div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Grain — bought vs milled vs remaining</div>
+      <div class="chart-sub">kg per grain type</div>
+      <div style="position:relative;height:220px;"><canvas id="grainChart"></canvas></div>
     </div>
-    <div class="table-card">
-      <p class="section-label" style="margin-bottom:12px">Customer breakdown</p>
-      <table>
-        <thead><tr><th>Customer</th><th>Orders</th><th>Revenue (R)</th><th>Avg order (R)</th></tr></thead>
-        <tbody id="customerTable"></tbody>
-      </table>
+    <div class="chart-card">
+      <div class="chart-title">Grocery — bought vs sold vs remaining</div>
+      <div class="chart-sub">kg / L per product</div>
+      <div style="position:relative;height:220px;"><canvas id="groceryChart"></canvas></div>
     </div>
   </div>
 
-  <p class="section-label">Milling yield — batch detail</p>
+  <!-- Full detail table -->
+  <p class="section-title">full stock detail</p>
   <div class="table-card">
     <table>
-      <thead><tr><th>Date</th><th>Grain in</th><th>Qty in (kg)</th><th>Flour out</th><th>Qty out (kg)</th><th>Yield %</th><th>Loss (kg)</th><th>Status</th></tr></thead>
-      <tbody id="millingTable"></tbody>
-    </table>
-  </div>
-
-  <p class="section-label">All procurement rows</p>
-  <div class="table-card">
-    <table>
-      <thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit price (R)</th><th>Total (R)</th><th>Supplier</th></tr></thead>
-      <tbody id="purchaseTable"></tbody>
-    </table>
-  </div>
-
-  <p class="section-label">All sales rows</p>
-  <div class="table-card">
-    <table>
-      <thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Qty</th><th>Unit</th><th>Unit price (R)</th><th>Total (R)</th><th>Customer</th></tr></thead>
-      <tbody id="salesTable"></tbody>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Opening</th>
+          <th>Bought / Produced</th>
+          <th>Used / Sold</th>
+          <th>Stock left</th>
+          <th>Min level</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="detailTable"></tbody>
     </table>
   </div>
 
 </div>
 
-<div class="footer">Grain &amp; Milling Operations Dashboard · Powered by Google Sheets + GitHub Pages · Data refreshes on every page load</div>
+<div class="footer">Shrijee Flour · Stock Tracker · Live from Google Sheets · Refreshes on every load</div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════
-   ▸ STEP 1 — PASTE YOUR PUBLISHED CSV URLS HERE
-   In Google Sheets: File → Share → Publish to web → select each
-   sheet tab → CSV → Publish → copy URL → paste below
-   ══════════════════════════════════════════════════════════════ */
-const SHEET_URLS = {
+/* ══ SHEET URLS — paste your 4 published CSV links here ══ */
+const URLS = {
   purchases: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1150334603&single=true&output=csv',
   sales:     'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=0&single=true&output=csv',
   milling:   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1053164568&single=true&output=csv',
+  opening:   'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1102474552&single=true&output=csv',
 };
-
-/* ── Palette ── */
-const COLORS = ['#378ADD','#1D9E75','#BA7517','#D85A30','#639922','#7F77DD','#D4537E','#888780'];
-
-/* ── Chart instances (so we can destroy & recreate on refresh) ── */
-let charts = {};
 
 /* ══ CSV parser ══ */
 function parseCSV(text) {
   const rows = text.trim().split('\n').map(r => {
-    const cells = [];
-    let cur = '', inQ = false;
+    const cells = []; let cur = '', inQ = false;
     for (let i = 0; i < r.length; i++) {
       if (r[i] === '"') { inQ = !inQ; }
       else if (r[i] === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
       else cur += r[i];
     }
-    cells.push(cur.trim());
-    return cells;
+    cells.push(cur.trim()); return cells;
   });
-  const headers = rows[0].map(h => h.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase());
-  return rows.slice(1)
-    .filter(r => r.some(c => c !== ''))
-    .map(r => Object.fromEntries(headers.map((h, i) => [h, r[i] || ''])));
+  const headers = rows[0].map(h => h.replace(/[^a-zA-Z0-9_]/g,'').toLowerCase());
+  return rows.slice(1).filter(r => r.some(c => c !== ''))
+    .map(r => Object.fromEntries(headers.map((h,i) => [h, r[i]||''])));
 }
 
-/* ══ Fetch CSV ══ */
 async function fetchCSV(url) {
   if (!url || url.startsWith('PASTE_')) return null;
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
   return parseCSV(await res.text());
 }
 
-/* ══ Group & sum helper ══ */
-function groupSum(rows, keyField, valueField) {
-  const map = {};
-  rows.forEach(r => {
-    const k = r[keyField] || 'Unknown';
-    const v = parseFloat(r[valueField]) || 0;
-    map[k] = (map[k] || 0) + v;
-  });
-  return Object.entries(map).sort((a, b) => b[1] - a[1]);
-}
-
-/* ══ Build / update a Chart.js chart ══ */
-function buildChart(id, type, labels, datasets, extra = {}) {
+/* ══ Charts ══ */
+let charts = {};
+function makeChart(id, labels, datasets) {
   if (charts[id]) charts[id].destroy();
-  const ctx = document.getElementById(id);
-  charts[id] = new Chart(ctx, {
-    type,
+  charts[id] = new Chart(document.getElementById(id), {
+    type: 'bar',
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: type === 'doughnut' ? {} : {
-        x: { grid: { display: false }, ticks: { font: { size: 11 }, maxRotation: 30 } },
-        y: { grid: { color: 'rgba(128,128,128,0.12)' }, ticks: { font: { size: 11 }, callback: v => 'R' + v.toLocaleString() } }
-      },
-      ...extra
+      plugins: { legend: { labels: { color: '#8a8a82', font: { size: 11 }, boxWidth: 10 } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#55554f', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#55554f', font: { size: 10 }, callback: v => v + ' kg' } }
+      }
     }
   });
 }
 
-function buildLegend(containerId, labels, colors) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = labels.map((l, i) =>
-    `<span><span class="dot" style="background:${colors[i % colors.length]}"></span>${l}</span>`
-  ).join('');
+/* ══ Render a stock card ══ */
+function stockCard(product, unit, opening, inQty, usedQty, remaining, minStock) {
+  const status = remaining <= 0 ? 'out' : (minStock > 0 && remaining <= minStock ? 'low' : 'ok');
+  return `<div class="stock-card ${status}">
+    <div class="card-product">${product}</div>
+    <div class="card-stock ${status}">${remaining % 1 === 0 ? remaining : remaining.toFixed(1)}<span class="card-unit">${unit}</span></div>
+    <div class="card-rows">
+      <div class="card-row"><span class="card-row-label">opening</span><span class="card-row-val">${opening} ${unit}</span></div>
+      <div class="card-divider"></div>
+      <div class="card-row"><span class="card-row-label">+ in</span><span class="card-row-val in">+${inQty} ${unit}</span></div>
+      <div class="card-row"><span class="card-row-label">− used/sold</span><span class="card-row-val out-val">−${usedQty} ${unit}</span></div>
+      <div class="card-divider"></div>
+      <div class="card-row"><span class="card-row-label">= remaining</span><span class="card-row-val" style="color:var(--text);font-weight:500">${remaining % 1 === 0 ? remaining : remaining.toFixed(1)} ${unit}</span></div>
+      ${minStock > 0 ? `<div class="card-row"><span class="card-row-label">min level</span><span class="card-row-val">${minStock} ${unit}</span></div>` : ''}
+    </div>
+  </div>`;
 }
 
-/* ══ Main: load & render ══ */
+/* ══ MAIN LOAD ══ */
 async function loadData() {
   document.getElementById('loader').classList.remove('hidden');
-  document.getElementById('statusLabel').textContent = 'Loading…';
-  document.getElementById('errorBanner').style.display = 'none';
+  document.getElementById('statusLabel').textContent = 'loading';
+  document.getElementById('errorBar').style.display = 'none';
 
   try {
-    /* ── Fetch all three sheets in parallel ── */
-    const [purchases, sales, milling] = await Promise.all([
-      fetchCSV(SHEET_URLS.purchases),
-      fetchCSV(SHEET_URLS.sales),
-      fetchCSV(SHEET_URLS.milling),
+    const [P, S, M, O] = await Promise.all([
+      fetchCSV(URLS.purchases), fetchCSV(URLS.sales),
+      fetchCSV(URLS.milling),   fetchCSV(URLS.opening),
     ]);
 
-    /* ── Use embedded fallback data if URLs not yet configured ── */
-    const P = purchases || FALLBACK.purchases;
-    const S = sales     || FALLBACK.sales;
-    const M = milling   || FALLBACK.milling;
+    const purchases = P || FALLBACK.purchases;
+    const sales     = S || FALLBACK.sales;
+    const milling   = M || FALLBACK.milling;
+    const opening   = O || FALLBACK.opening;
 
-    if (!purchases || !sales || !milling) {
-      document.getElementById('setupGuide').style.display = 'block';
-    } else {
-      document.getElementById('setupGuide').style.display = 'none';
+    document.getElementById('setupBox').style.display = O ? 'none' : 'block';
+
+    /* ── Build opening stock map ── */
+    const openMap = {}; // product → { qty, unit, min, category }
+    opening.forEach(r => {
+      const key = (r.product||'').trim().toLowerCase();
+      openMap[key] = {
+        qty: parseFloat(r.openingstock||r.opening_stock||r.openingqty||0),
+        unit: r.unit||'kg',
+        min: parseFloat(r.minstock||r.min_stock||r.minimumstock||0),
+        category: (r.category||'').trim()
+      };
+    });
+
+    /* ── Tally purchases by item ── */
+    const buyMap = {};
+    purchases.forEach(r => {
+      const key = (r.item||'').trim().toLowerCase();
+      const qty = parseFloat(r.quantity||0);
+      if (!buyMap[key]) buyMap[key] = { qty: 0, unit: r.unit||'kg', category: r.category||'' };
+      buyMap[key].qty += qty;
+    });
+
+    /* ── Tally sales by item ── */
+    const sellMap = {};
+    sales.forEach(r => {
+      const key = (r.item||'').trim().toLowerCase();
+      const qty = parseFloat(r.quantity||0);
+      if (!sellMap[key]) sellMap[key] = { qty: 0, unit: r.unit||'kg' };
+      sellMap[key].qty += qty;
+    });
+
+    /* ── Tally milling: grain in → flour out ── */
+    const milledGrain = {}; // grain used
+    const milledFlour = {}; // flour produced
+    const seen = new Set();
+    milling.forEach(r => {
+      const grainKey = (r.grainin||r.grain_in||'').trim().toLowerCase();
+      const flourKey = (r.flourout||r.flour_out||'').trim().toLowerCase();
+      const qIn  = parseFloat(r.qtyin||r.qty_in||0);
+      const qOut = parseFloat(r.qtyout||r.qty_out||0);
+      const dedup = grainKey + qIn + (r.date||'');
+      if (seen.has(dedup)) return; seen.add(dedup);
+      if (grainKey) milledGrain[grainKey] = (milledGrain[grainKey]||0) + qIn;
+      if (flourKey) milledFlour[flourKey] = (milledFlour[flourKey]||0) + qOut;
+    });
+
+    /* ── Build unified product list ── */
+    const allProducts = new Set([
+      ...Object.keys(openMap),
+      ...Object.keys(buyMap),
+      ...Object.keys(sellMap),
+      ...Object.keys(milledGrain),
+      ...Object.keys(milledFlour),
+    ]);
+
+    /* ── Categorise & compute stock ── */
+    const grainProducts = [], flourProducts = [], groceryProducts = [];
+
+    allProducts.forEach(key => {
+      const open     = openMap[key]?.qty || 0;
+      const unit     = openMap[key]?.unit || buyMap[key]?.unit || 'kg';
+      const minStock = openMap[key]?.min || 0;
+      let   category = (openMap[key]?.category || buyMap[key]?.category || '').toLowerCase();
+
+      const bought   = buyMap[key]?.qty || 0;
+      const soldDir  = sellMap[key]?.qty || 0;
+      const milledIn = milledGrain[key] || 0;   // grain consumed in milling
+      const milledOut= milledFlour[key] || 0;   // flour produced from milling
+
+      /* Determine category from data if not in opening stock */
+      const displayName = key.replace(/\b\w/g, c => c.toUpperCase());
+      if (!category) {
+        if (milledIn > 0 || ['wheat','maize','chickpea','sorghum','rice'].some(g => key.includes(g) && !key.includes('flour'))) category = 'grain';
+        else if (key.includes('flour')) category = 'flour';
+        else category = 'grocery';
+      }
+
+      let remaining, inQty, usedQty;
+      if (category === 'grain') {
+        inQty    = bought;
+        usedQty  = milledIn + soldDir;
+        remaining = open + bought - usedQty;
+        grainProducts.push({ key, displayName, unit, open, inQty, usedQty, remaining, minStock, category });
+      } else if (category === 'flour') {
+        inQty    = milledOut;
+        usedQty  = soldDir;
+        remaining = open + milledOut - soldDir;
+        flourProducts.push({ key, displayName, unit, open, inQty, usedQty, remaining, minStock, category });
+      } else {
+        inQty    = bought;
+        usedQty  = soldDir;
+        remaining = open + bought - soldDir;
+        groceryProducts.push({ key, displayName, unit, open, inQty, usedQty, remaining, minStock, category });
+      }
+    });
+
+    /* ── Render cards ── */
+    const renderCards = (products, containerId) => {
+      document.getElementById(containerId).innerHTML = products.length
+        ? products.map(p => stockCard(p.displayName, p.unit, p.open, p.inQty, p.usedQty, Math.max(0, Math.round(p.remaining)), p.minStock)).join('')
+        : '<div style="color:var(--hint);font-size:12px;font-family:var(--mono)">No products found in this category</div>';
+    };
+    renderCards(grainProducts, 'grainCards');
+    renderCards(flourProducts, 'flourCards');
+    renderCards(groceryProducts, 'groceryCards');
+
+    /* ── Summary KPIs ── */
+    const all = [...grainProducts, ...flourProducts, ...groceryProducts];
+    const okCount  = all.filter(p => p.remaining > (p.minStock||0)).length;
+    const lowCount = all.filter(p => p.remaining > 0 && p.remaining <= (p.minStock||0) && p.minStock > 0).length;
+    const outCount = all.filter(p => p.remaining <= 0).length;
+    document.getElementById('kTotal').textContent = all.length;
+    document.getElementById('kOk').textContent    = okCount;
+    document.getElementById('kLow').textContent   = lowCount;
+    document.getElementById('kOut').textContent   = outCount;
+    document.getElementById('kGrainIn').textContent   = Object.values(milledGrain).reduce((a,b)=>a+b,0).toFixed(0) + ' kg';
+    document.getElementById('kGrainMilled').textContent = Object.values(milledFlour).reduce((a,b)=>a+b,0).toFixed(0) + ' kg';
+
+
+
+    /* ── Grain chart ── */
+    if (grainProducts.length) {
+      makeChart('grainChart',
+        grainProducts.map(p => p.displayName),
+        [
+          { label: 'Bought', data: grainProducts.map(p => p.inQty), backgroundColor: 'rgba(126,201,106,0.7)', borderRadius: 3 },
+          { label: 'Milled/sold', data: grainProducts.map(p => p.usedQty), backgroundColor: 'rgba(224,82,82,0.6)', borderRadius: 3 },
+          { label: 'Remaining', data: grainProducts.map(p => Math.max(0, p.remaining)), backgroundColor: 'rgba(200,184,122,0.7)', borderRadius: 3 },
+        ]
+      );
     }
 
-    /* ── KPIs ── */
-    const totalSpend = P.reduce((s, r) => s + (parseFloat(r.total) || 0), 0);
-    const totalRev   = S.reduce((s, r) => s + (parseFloat(r.total) || 0), 0);
-    const profit     = totalRev - totalSpend;
-    const margin     = totalSpend > 0 ? ((profit / totalRev) * 100).toFixed(1) : 0;
+    /* ── Grocery chart ── */
+    if (groceryProducts.length) {
+      makeChart('groceryChart',
+        groceryProducts.map(p => p.displayName),
+        [
+          { label: 'Bought', data: groceryProducts.map(p => p.inQty), backgroundColor: 'rgba(122,171,240,0.7)', borderRadius: 3 },
+          { label: 'Sold', data: groceryProducts.map(p => p.usedQty), backgroundColor: 'rgba(224,82,82,0.6)', borderRadius: 3 },
+          { label: 'Remaining', data: groceryProducts.map(p => Math.max(0, p.remaining)), backgroundColor: 'rgba(200,184,122,0.7)', borderRadius: 3 },
+        ]
+      );
+    }
 
-    const millingPairs = M.filter(r => parseFloat(r.qtyout || r.qty_out || r.qtyout) > 0 && parseFloat(r.qtyin || r.qty_in) > 0);
-    const avgYield = millingPairs.length
-      ? (millingPairs.reduce((s, r) => {
-          const qIn  = parseFloat(r.qtyin  || r.qty_in  || 0);
-          const qOut = parseFloat(r.qtyout || r.qty_out || 0);
-          return s + (qIn > 0 ? (qOut / qIn) * 100 : 0);
-        }, 0) / millingPairs.length).toFixed(1)
-      : '—';
+    /* ── Detail table ── */
+    const tagClass = c => c === 'grain' ? 'tag-grain' : c === 'flour' ? 'tag-flour' : 'tag-grocery';
+    const statusClass = p => p.remaining <= 0 ? 'stock-out' : (p.minStock > 0 && p.remaining <= p.minStock ? 'stock-low' : 'stock-ok');
+    const statusText  = p => p.remaining <= 0 ? '⚠ Out' : (p.minStock > 0 && p.remaining <= p.minStock ? '↓ Low' : '✓ OK');
 
-    const supGroups  = groupSum(P, 'supplier', 'total');
-    const custGroups = groupSum(S, 'supplier', 'total');
-
-    setText('kTotalSpend', 'R ' + totalSpend.toLocaleString());
-    setText('kSpendSub', P.length + ' purchase orders');
-    setText('kTotalRev', 'R ' + totalRev.toLocaleString());
-    setText('kRevSub', S.length + ' sales orders');
-    setText('kProfit', (profit >= 0 ? '+' : '') + 'R ' + profit.toLocaleString());
-    setText('kProfitSub', margin + '% gross margin');
-    setText('kYield', avgYield + '%');
-    setText('kYieldSub', millingPairs.length + ' milling batches');
-    setText('kPO', P.length);
-    setText('kSO', S.length);
-    if (supGroups.length)  { setText('kTopSup',  supGroups[0][0]);  setText('kTopSupSub',  'R ' + supGroups[0][1].toLocaleString() + ' spend'); }
-    if (custGroups.length) { setText('kTopCust', custGroups[0][0]); setText('kTopCustSub', 'R ' + custGroups[0][1].toLocaleString() + ' revenue'); }
-
-    /* ── Supplier bar chart ── */
-    const supLabels = supGroups.map(x => x[0]);
-    const supVals   = supGroups.map(x => x[1]);
-    buildLegend('supLegend', supLabels, COLORS);
-    buildChart('supplierChart', 'bar', supLabels, [{
-      data: supVals, backgroundColor: supLabels.map((_, i) => COLORS[i % COLORS.length]), borderRadius: 4, borderSkipped: false
-    }]);
-
-    /* ── Customer bar chart ── */
-    const custLabels = custGroups.map(x => x[0]);
-    const custVals   = custGroups.map(x => x[1]);
-    buildLegend('custLegend', custLabels, COLORS);
-    buildChart('customerChart', 'bar', custLabels, [{
-      data: custVals, backgroundColor: custLabels.map((_, i) => COLORS[i % COLORS.length]), borderRadius: 4, borderSkipped: false
-    }]);
-
-    /* ── Category doughnut — Procurement ── */
-    const catP = groupSum(P, 'category', 'total');
-    buildLegend('catLegend', catP.map(x => `${x[0]} R${x[1].toLocaleString()}`), COLORS);
-    buildChart('categoryChart', 'doughnut', catP.map(x => x[0]), [{
-      data: catP.map(x => x[1]), backgroundColor: catP.map((_, i) => COLORS[i % COLORS.length]), borderWidth: 0, hoverOffset: 6
-    }], { cutout: '60%' });
-
-    /* ── Category doughnut — Sales ── */
-    const catS = groupSum(S, 'category', 'total');
-    buildLegend('saleCatLegend', catS.map(x => `${x[0]} R${x[1].toLocaleString()}`), COLORS);
-    buildChart('saleCatChart', 'doughnut', catS.map(x => x[0]), [{
-      data: catS.map(x => x[1]), backgroundColor: catS.map((_, i) => COLORS[i % COLORS.length]), borderWidth: 0, hoverOffset: 6
-    }], { cutout: '60%' });
-
-    /* ── Supplier table ── */
-    const supCounts = {};
-    P.forEach(r => { const k = r.supplier || 'Unknown'; supCounts[k] = (supCounts[k] || 0) + 1; });
-    document.getElementById('supplierTable').innerHTML = supGroups.map(([sup, tot]) =>
-      `<tr><td style="font-weight:500">${sup}</td><td>${supCounts[sup] || '—'}</td><td>R ${tot.toLocaleString()}</td><td>R ${Math.round(tot / (supCounts[sup] || 1)).toLocaleString()}</td></tr>`
-    ).join('');
-
-    /* ── Customer table ── */
-    const custCounts = {};
-    S.forEach(r => { const k = r.supplier || 'Unknown'; custCounts[k] = (custCounts[k] || 0) + 1; });
-    document.getElementById('customerTable').innerHTML = custGroups.map(([cust, tot]) =>
-      `<tr><td style="font-weight:500">${cust}</td><td>${custCounts[cust] || '—'}</td><td>R ${tot.toLocaleString()}</td><td>R ${Math.round(tot / (custCounts[cust] || 1)).toLocaleString()}</td></tr>`
-    ).join('');
-
-    /* ── Milling table ── */
-    const seen = new Set();
-    document.getElementById('millingTable').innerHTML = M
-      .filter(r => {
-        const qIn = parseFloat(r.qtyin || r.qty_in || 0);
-        if (!qIn) return false;
-        const key = (r.date || '') + (r.grainin || r.grain_in || '') + qIn;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
-      .map(r => {
-        const qIn  = parseFloat(r.qtyin  || r.qty_in  || 0);
-        const qOut = parseFloat(r.qtyout || r.qty_out || 0);
-        const yld  = qIn > 0 ? ((qOut / qIn) * 100).toFixed(1) : '—';
-        const loss = qIn - qOut;
-        const good = parseFloat(yld) >= 85;
-        return `<tr>
-          <td>${r.date || '—'}</td>
-          <td>${r.grainin || r.grain_in || '—'}</td>
-          <td>${qIn}</td>
-          <td>${r.flourout || r.flour_out || '—'}</td>
-          <td>${qOut}</td>
-          <td style="font-weight:500;color:${good ? 'var(--green)' : 'var(--amber)'}">${yld}%</td>
-          <td>${loss}</td>
-          <td><span class="badge ${good ? 'badge-green' : 'badge-amber'}">${good ? 'Good' : 'Below avg'}</span></td>
-        </tr>`;
-      }).join('');
-
-    /* ── All purchases table ── */
-    document.getElementById('purchaseTable').innerHTML = P.map(r =>
-      `<tr><td>${r.date||'—'}</td><td style="font-weight:500">${r.item||'—'}</td><td><span class="badge badge-blue">${r.category||'—'}</span></td><td>${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td>R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td>R ${parseFloat(r.total||0).toLocaleString()}</td><td>${r.supplier||'—'}</td></tr>`
-    ).join('');
-
-    /* ── All sales table ── */
-    document.getElementById('salesTable').innerHTML = S.map(r =>
-      `<tr><td>${r.date||'—'}</td><td style="font-weight:500">${r.item||'—'}</td><td><span class="badge badge-green">${r.category||'—'}</span></td><td>${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td>R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td>R ${parseFloat(r.total||0).toLocaleString()}</td><td>${r.supplier||'—'}</td></tr>`
-    ).join('');
+    document.getElementById('detailTable').innerHTML = all.map(p => `<tr>
+      <td style="font-weight:500">${p.displayName}</td>
+      <td><span class="tag ${tagClass(p.category)}">${p.category}</span></td>
+      <td class="stock-num">${p.open} ${p.unit}</td>
+      <td class="stock-num" style="color:var(--green)">+${p.inQty} ${p.unit}</td>
+      <td class="stock-num" style="color:var(--red)">−${p.usedQty} ${p.unit}</td>
+      <td class="stock-num ${statusClass(p)}" style="font-size:13px;font-weight:600">${Math.max(0,p.remaining)} ${p.unit}</td>
+      <td class="stock-num" style="color:var(--hint)">${p.minStock > 0 ? p.minStock + ' ' + p.unit : '—'}</td>
+      <td class="stock-num ${statusClass(p)}">${statusText(p)}</td>
+    </tr>`).join('');
 
     /* ── Status ── */
-    document.getElementById('statusDot').style.background = '#3B6D11';
-    document.getElementById('statusLabel').textContent = purchases ? 'Live' : 'Demo data';
-    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    document.getElementById('statusLabel').textContent = O ? 'live' : 'demo data';
+    document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString();
 
-  } catch (err) {
+  } catch(err) {
     console.error(err);
-    const banner = document.getElementById('errorBanner');
-    banner.textContent = '⚠ Could not fetch data: ' + err.message + '. Check your CSV URLs or CORS settings.';
-    banner.style.display = 'block';
-    document.getElementById('statusDot').style.background = '#A32D2D';
-    document.getElementById('statusLabel').textContent = 'Error';
+    const b = document.getElementById('errorBar');
+    b.textContent = '⚠ ' + err.message + ' — check your CSV URLs';
+    b.style.display = 'block';
+    document.getElementById('statusLabel').textContent = 'error';
   }
 
   document.getElementById('loader').classList.add('hidden');
 }
 
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-/* ══ Fallback / demo data (your actual May 2025 data) ══ */
+/* ══ FALLBACK demo data ══ */
 const FALLBACK = {
   purchases: [
-    {date:'01/05/2025',item:'Wheat',category:'Grain',quantity:'200',unit:'kg',unitprice:'8.5',total:'1700',supplier:'Ali Farms'},
-    {date:'02/05/2025',item:'Maize',category:'Grain',quantity:'150',unit:'kg',unitprice:'7',total:'1050',supplier:'Valley Mills'},
-    {date:'03/05/2025',item:'Chickpea',category:'Grain',quantity:'80',unit:'kg',unitprice:'24',total:'1920',supplier:'Ali Farms'},
-    {date:'05/05/2025',item:'Sorghum',category:'Grain',quantity:'100',unit:'kg',unitprice:'11',total:'1100',supplier:'Valley Mills'},
-    {date:'07/05/2025',item:'Sugar',category:'Grocery',quantity:'50',unit:'kg',unitprice:'22',total:'1100',supplier:'City Wholesale'},
-    {date:'08/05/2025',item:'Salt',category:'Grocery',quantity:'30',unit:'kg',unitprice:'5',total:'150',supplier:'City Wholesale'},
-    {date:'10/05/2025',item:'Wheat',category:'Grain',quantity:'300',unit:'kg',unitprice:'8.5',total:'2550',supplier:'Ali Farms'},
-    {date:'12/05/2025',item:'Oil',category:'Grocery',quantity:'40',unit:'L',unitprice:'45',total:'1800',supplier:'City Wholesale'},
-    {date:'15/05/2025',item:'Maize',category:'Grain',quantity:'200',unit:'kg',unitprice:'7',total:'1400',supplier:'Valley Mills'},
-    {date:'18/05/2025',item:'Rice',category:'Grain',quantity:'100',unit:'kg',unitprice:'18',total:'1800',supplier:'Ali Farms'},
-    {date:'20/05/2025',item:'Chickpea',category:'Grain',quantity:'60',unit:'kg',unitprice:'24.5',total:'1470',supplier:'Valley Mills'},
-    {date:'25/05/2025',item:'Sugar',category:'Grocery',quantity:'80',unit:'kg',unitprice:'22',total:'1760',supplier:'City Wholesale'},
+    {date:'01/05',item:'Wheat',category:'grain',quantity:'200',unit:'kg',total:'1700',supplier:'Ali Farms'},
+    {date:'02/05',item:'Maize',category:'grain',quantity:'150',unit:'kg',total:'1050',supplier:'Valley Mills'},
+    {date:'03/05',item:'Chickpea',category:'grain',quantity:'80',unit:'kg',total:'1920',supplier:'Ali Farms'},
+    {date:'05/05',item:'Sorghum',category:'grain',quantity:'100',unit:'kg',total:'1100',supplier:'Valley Mills'},
+    {date:'07/05',item:'Sugar',category:'grocery',quantity:'50',unit:'kg',total:'1100',supplier:'City Wholesale'},
+    {date:'08/05',item:'Salt',category:'grocery',quantity:'30',unit:'kg',total:'150',supplier:'City Wholesale'},
+    {date:'10/05',item:'Wheat',category:'grain',quantity:'300',unit:'kg',total:'2550',supplier:'Ali Farms'},
+    {date:'12/05',item:'Oil',category:'grocery',quantity:'40',unit:'L',total:'1800',supplier:'City Wholesale'},
+    {date:'15/05',item:'Maize',category:'grain',quantity:'200',unit:'kg',total:'1400',supplier:'Valley Mills'},
+    {date:'18/05',item:'Rice',category:'grain',quantity:'100',unit:'kg',total:'1800',supplier:'Ali Farms'},
+    {date:'20/05',item:'Chickpea',category:'grain',quantity:'60',unit:'kg',total:'1470',supplier:'Valley Mills'},
+    {date:'25/05',item:'Sugar',category:'grocery',quantity:'80',unit:'kg',total:'1760',supplier:'City Wholesale'},
   ],
   sales: [
-    {date:'03/05/2025',item:'Wheat Flour',category:'Flour',quantity:'80',unit:'kg',unitprice:'22',total:'1760',supplier:'Ahmed Bakery'},
-    {date:'05/05/2025',item:'Maize Flour',category:'Flour',quantity:'60',unit:'kg',unitprice:'18',total:'1080',supplier:'Retail Walk-in'},
-    {date:'07/05/2025',item:'Sugar',category:'Grocery',quantity:'30',unit:'kg',unitprice:'28',total:'840',supplier:'Retail Walk-in'},
-    {date:'09/05/2025',item:'Wheat Flour',category:'Flour',quantity:'100',unit:'kg',unitprice:'22',total:'2200',supplier:'City Canteen'},
-    {date:'12/05/2025',item:'Chickpea Flour',category:'Flour',quantity:'40',unit:'kg',unitprice:'35',total:'1400',supplier:'City Canteen'},
-    {date:'14/05/2025',item:'Rice',category:'Grain',quantity:'50',unit:'kg',unitprice:'24',total:'1200',supplier:'Retail Walk-in'},
-    {date:'16/05/2025',item:'Maize Flour',category:'Flour',quantity:'80',unit:'kg',unitprice:'18.5',total:'1480',supplier:'Ahmed Bakery'},
-    {date:'19/05/2025',item:'Oil',category:'Grocery',quantity:'20',unit:'L',unitprice:'58',total:'1160',supplier:'Retail Walk-in'},
-    {date:'22/05/2025',item:'Wheat Flour',category:'Flour',quantity:'150',unit:'kg',unitprice:'23',total:'3450',supplier:'Ahmed Bakery'},
-    {date:'24/05/2025',item:'Sorghum Flour',category:'Flour',quantity:'50',unit:'kg',unitprice:'20',total:'1000',supplier:'Retail Walk-in'},
-    {date:'27/05/2025',item:'Sugar',category:'Grocery',quantity:'40',unit:'kg',unitprice:'28.5',total:'1140',supplier:'City Canteen'},
-    {date:'30/05/2025',item:'Wheat Flour',category:'Flour',quantity:'120',unit:'kg',unitprice:'23',total:'2760',supplier:'City Canteen'},
+    {date:'03/05',item:'Wheat Flour',category:'flour',quantity:'80',unit:'kg',total:'1760',supplier:'Ahmed Bakery'},
+    {date:'05/05',item:'Maize Flour',category:'flour',quantity:'60',unit:'kg',total:'1080',supplier:'Retail'},
+    {date:'07/05',item:'Sugar',category:'grocery',quantity:'30',unit:'kg',total:'840',supplier:'Retail'},
+    {date:'09/05',item:'Wheat Flour',category:'flour',quantity:'100',unit:'kg',total:'2200',supplier:'City Canteen'},
+    {date:'12/05',item:'Chickpea Flour',category:'flour',quantity:'40',unit:'kg',total:'1400',supplier:'City Canteen'},
+    {date:'14/05',item:'Rice',category:'grain',quantity:'50',unit:'kg',total:'1200',supplier:'Retail'},
+    {date:'16/05',item:'Maize Flour',category:'flour',quantity:'80',unit:'kg',total:'1480',supplier:'Ahmed Bakery'},
+    {date:'19/05',item:'Oil',category:'grocery',quantity:'20',unit:'L',total:'1160',supplier:'Retail'},
+    {date:'22/05',item:'Wheat Flour',category:'flour',quantity:'150',unit:'kg',total:'3450',supplier:'Ahmed Bakery'},
+    {date:'24/05',item:'Sorghum Flour',category:'flour',quantity:'50',unit:'kg',total:'1000',supplier:'Retail'},
+    {date:'27/05',item:'Sugar',category:'grocery',quantity:'40',unit:'kg',total:'1140',supplier:'City Canteen'},
+    {date:'30/05',item:'Wheat Flour',category:'flour',quantity:'120',unit:'kg',total:'2760',supplier:'City Canteen'},
   ],
   milling: [
-    {date:'07/05/2025',grainin:'Wheat',qtyin:'50',unitin:'kg',flourout:'Wheat Flour',qtyout:'43',unitout:'kg'},
-    {date:'10/05/2025',grainin:'Maize',qtyin:'80',unitin:'kg',flourout:'Maize Flour',qtyout:'68',unitout:'kg'},
-    {date:'14/05/2025',grainin:'Wheat',qtyin:'100',unitin:'kg',flourout:'Wheat Flour',qtyout:'86',unitout:'kg'},
-    {date:'18/05/2025',grainin:'Chickpea',qtyin:'40',unitin:'kg',flourout:'Chickpea Flour',qtyout:'34',unitout:'kg'},
-    {date:'22/05/2025',grainin:'Wheat',qtyin:'120',unitin:'kg',flourout:'Wheat Flour',qtyout:'103',unitout:'kg'},
-    {date:'28/05/2025',grainin:'Sorghum',qtyin:'60',unitin:'kg',flourout:'Sorghum Flour',qtyout:'51',unitout:'kg'},
+    {date:'07/05',grainin:'Wheat',qtyin:'50',flourout:'Wheat Flour',qtyout:'43'},
+    {date:'10/05',grainin:'Maize',qtyin:'80',flourout:'Maize Flour',qtyout:'68'},
+    {date:'14/05',grainin:'Wheat',qtyin:'100',flourout:'Wheat Flour',qtyout:'86'},
+    {date:'18/05',grainin:'Chickpea',qtyin:'40',flourout:'Chickpea Flour',qtyout:'34'},
+    {date:'22/05',grainin:'Wheat',qtyin:'120',flourout:'Wheat Flour',qtyout:'103'},
+    {date:'28/05',grainin:'Sorghum',qtyin:'60',flourout:'Sorghum Flour',qtyout:'51'},
+  ],
+  opening: [
+    {product:'Wheat',category:'grain',openingstock:'100',unit:'kg',minstock:'50'},
+    {product:'Maize',category:'grain',openingstock:'80',unit:'kg',minstock:'40'},
+    {product:'Chickpea',category:'grain',openingstock:'30',unit:'kg',minstock:'20'},
+    {product:'Sorghum',category:'grain',openingstock:'50',unit:'kg',minstock:'20'},
+    {product:'Rice',category:'grain',openingstock:'40',unit:'kg',minstock:'20'},
+    {product:'Wheat Flour',category:'flour',openingstock:'0',unit:'kg',minstock:'30'},
+    {product:'Maize Flour',category:'flour',openingstock:'0',unit:'kg',minstock:'20'},
+    {product:'Chickpea Flour',category:'flour',openingstock:'0',unit:'kg',minstock:'10'},
+    {product:'Sorghum Flour',category:'flour',openingstock:'0',unit:'kg',minstock:'10'},
+    {product:'Sugar',category:'grocery',openingstock:'20',unit:'kg',minstock:'15'},
+    {product:'Salt',category:'grocery',openingstock:'10',unit:'kg',minstock:'5'},
+    {product:'Oil',category:'grocery',openingstock:'10',unit:'L',minstock:'10'},
   ]
 };
 
-/* ── Auto-load on page open ── */
 loadData();
 </script>
 </body>
