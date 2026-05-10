@@ -346,9 +346,6 @@ const PER=20;
 let D={pur:[],sal:[],mil:[],opn:[],all:[],grP:[],flP:[],grO:[],months:[]};
 let SS={};/* sort state */
 let PG={pur:1,sal:1};
-/* pending chart draws: {id, fn} — drawn when panel becomes visible */
-let PENDING={};
-
 /* ─ Utils ─ */
 function csv(txt){
   const rows=txt.trim().split('\n').map(r=>{const c=[];let cur='',q=false;for(let i=0;i<r.length;i++){if(r[i]==='"'){q=!q;}else if(r[i]===','&&!q){c.push(cur.trim());cur='';}else cur+=r[i];}c.push(cur.trim());return c;});
@@ -366,26 +363,31 @@ let CH={};
 function drawChart(id,type,labels,datasets,extra){
   if(CH[id])CH[id].destroy();
   const ctx=document.getElementById(id);if(!ctx)return;
+  const yTick=(extra&&extra.yTick)||{};
+  const cutout=(extra&&extra.cutout)||undefined;
   const scales=type==='doughnut'||type==='pie'?{}:{
     x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},
-    y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},...((extra&&extra.yTick)||{})}}
+    y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},...yTick}}
   };
-  CH[id]=new Chart(ctx,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales,...(extra||{})}});
+  CH[id]=new Chart(ctx,{type,data:{labels,datasets},options:{
+    responsive:true,maintainAspectRatio:false,animation:false,
+    plugins:{legend:{display:false}},
+    scales,...(cutout?{cutout}:{})
+  }});
 }
-/* Queue chart for lazy render when panel is visible */
+
+/* Draw chart — temporarily show hidden panel so canvas has dimensions */
 function qChart(panelId,id,type,labels,datasets,extra){
-  const panel=document.getElementById(panelId);
-  if(panel&&panel.classList.contains('on')){drawChart(id,type,labels,datasets,extra);}
-  else{PENDING[id]={panelId,id,type,labels,datasets,extra};}
+  const panel=document.getElementById(panelId);if(!panel)return;
+  const mpanel=panel.closest('.mpanel');
+  const mWasHidden=mpanel&&!mpanel.classList.contains('on');
+  const pWasHidden=!panel.classList.contains('on');
+  if(mWasHidden){mpanel.style.cssText='display:block!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important';}
+  if(pWasHidden){panel.style.cssText='display:block!important;visibility:hidden!important;position:absolute!important;pointer-events:none!important';}
+  drawChart(id,type,labels,datasets,extra);
+  if(pWasHidden){panel.style.cssText='';}
+  if(mWasHidden){mpanel.style.cssText='';}
 }
-/* Flush pending charts for a panel */
-function flushCharts(panelId){
-  Object.keys(PENDING).forEach(id=>{
-    const p=PENDING[id];
-    if(p.panelId===panelId){drawChart(p.id,p.type,p.labels,p.datasets,p.extra);delete PENDING[id];}
-  });
-}
-function barOpts(yFmt){return{yTick:{callback:yFmt||undefined}};}
 
 /* ─ Nav ─ */
 function goMain(name){
@@ -393,7 +395,6 @@ function goMain(name){
     document.getElementById('mp-'+n).classList.toggle('on',n===name);
     document.getElementById('mtab-'+n).classList.toggle('on',n===name);
   });
-  setTimeout(()=>flushCharts('sp-'+name+'-'+(name==='stock'?'alltime':'overview')),30);
 }
 function goSub(main,sub){
   const mp=document.getElementById('mp-'+main);
@@ -402,12 +403,8 @@ function goSub(main,sub){
   const pid='sp-'+main+'-'+sub;
   document.getElementById(pid).classList.add('on');
   document.getElementById('st-'+main+'-'+sub).classList.add('on');
-  setTimeout(()=>{
-    flushCharts(pid);
-    // Re-render filtered tables when switching to their panels
-    if(main==='finance'&&sub==='purchases')renderPur();
-    if(main==='finance'&&sub==='sales')renderSal();
-  },30);
+  if(main==='finance'&&sub==='purchases')setTimeout(renderPur,10);
+  if(main==='finance'&&sub==='sales')setTimeout(renderSal,10);
 }
 
 /* ─ Stock card ─ */
@@ -623,15 +620,12 @@ async function loadData(){
     const purItems=[...new Set(D.pur.map(r=>r.item||'').filter(Boolean))].sort();
     const purSups=[...new Set(D.pur.map(r=>r.supplier||'').filter(Boolean))].sort();
     const salItems=[...new Set(D.sal.map(r=>r.item||'').filter(Boolean))].sort();
-    const setOpts=(id,prefix,items)=>{document.getElementById(id).innerHTML=prefix+items.map(i=>`<option value="${i}">${i}</option>`).join('');};
-    setOpts('pProd','<option value="">All products</option>',purItems);
-    setOpts('pSup','<option value="">All suppliers</option>',purSups);
-    setOpts('sProd','<option value="">All products</option>',salItems);
-    setOpts('pMon','<option value="">All months</option>',D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
-    setOpts('sMon','<option value="">All months</option>',D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
-    // Fix: last two setOpts pass pre-built HTML, so override directly
-    document.getElementById('pMon').innerHTML='<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join('');
-    document.getElementById('sMon').innerHTML='<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join('');
+    const setEl=(id,html)=>{const e=document.getElementById(id);if(e)e.innerHTML=html;};
+    setEl('pProd','<option value="">All products</option>'+purItems.map(i=>`<option value="${i}">${i}</option>`).join(''));
+    setEl('pSup','<option value="">All suppliers</option>'+purSups.map(i=>`<option value="${i}">${i}</option>`).join(''));
+    setEl('sProd','<option value="">All products</option>'+salItems.map(i=>`<option value="${i}">${i}</option>`).join(''));
+    setEl('pMon','<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
+    setEl('sMon','<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
 
     renderPur();renderSal();
 
