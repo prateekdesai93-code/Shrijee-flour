@@ -8,384 +8,328 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 :root{
-  --bg:#f7f6f3;--surface:#fff;--surface2:#f2f1ed;--surface3:#eae9e4;
-  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
-  --text:#18180f;--muted:#72726a;--hint:#ababA3;
-  --green:#2d7d1a;--gbg:#eaf4e6;--gbd:rgba(45,125,26,0.2);
-  --amber:#8a5200;--abg:#fff4e0;--abd:rgba(138,82,0,0.2);
-  --red:#b52a2a;--rbg:#fdf0f0;--rbd:rgba(181,42,42,0.2);
-  --blue:#1a5fa8;--bbg:#eef4fd;
-  --radius:12px;--rsm:8px;
+  --bg:#f7f6f3;--surf:#fff;--surf2:#f2f1ed;--surf3:#e8e7e2;
+  --bdr:rgba(0,0,0,0.08);--bdr2:rgba(0,0,0,0.15);
+  --tx:#18180f;--mu:#72726a;--hi:#ababA3;
+  --gr:#2d7d1a;--gbg:#eaf4e6;--gbd:rgba(45,125,26,0.2);
+  --am:#8a5200;--abg:#fff4e0;--abd:rgba(138,82,0,0.2);
+  --rd:#b52a2a;--rbg:#fdf0f0;--rbd:rgba(181,42,42,0.2);
+  --bl:#1a5fa8;--bbg:#eef4fd;
+  --rad:12px;--rsm:8px;
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);min-height:100vh;}
 
-/* HEADER */
-.header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;min-height:58px;}
+.hdr{background:var(--surf);border-bottom:0.5px solid var(--bdr);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;min-height:58px;}
 .brand{display:flex;align-items:center;gap:10px;}
-.brand-icon{width:32px;height:32px;border-radius:8px;background:var(--text);display:flex;align-items:center;justify-content:center;font-size:15px;}
-.brand-name{font-size:14px;font-weight:600;}
-.brand-sub{font-size:10px;color:var(--muted);}
+.bicon{width:32px;height:32px;border-radius:8px;background:var(--tx);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.bname{font-size:14px;font-weight:600;}.bsub{font-size:10px;color:var(--mu);}
 .hright{display:flex;align-items:center;gap:8px;}
-.live-badge{display:flex;align-items:center;gap:5px;background:var(--gbg);border:0.5px solid var(--gbd);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--green);font-family:var(--mono);}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+.lbadge{display:flex;align-items:center;gap:5px;background:var(--gbg);border:0.5px solid var(--gbd);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gr);font-family:var(--mono);}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--gr);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
-.rbtn{background:var(--text);color:#fff;border:none;border-radius:var(--rsm);padding:6px 13px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;}
+.rbtn{background:var(--tx);color:#fff;border:none;border-radius:var(--rsm);padding:6px 13px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;}
 .rbtn svg{width:12px;height:12px;}
-#last-updated{font-size:10px;color:var(--hint);font-family:var(--mono);}
+#last-upd{font-size:10px;color:var(--hi);font-family:var(--mono);}
 
-/* MAIN TABS */
-.main-tabs{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 24px;display:flex;}
-.mtab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--sans);margin-bottom:-0.5px;display:flex;align-items:center;gap:6px;transition:color 0.15s;}
-.mtab:hover{color:var(--text);}
-.mtab.active{color:var(--text);border-bottom-color:var(--text);}
+.mtabs{background:var(--surf);border-bottom:0.5px solid var(--bdr);padding:0 24px;display:flex;}
+.mtab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--mu);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--sans);margin-bottom:-0.5px;display:flex;align-items:center;gap:6px;}
+.mtab:hover{color:var(--tx);}.mtab.on{color:var(--tx);border-bottom-color:var(--tx);}
 
-/* SUB TABS */
-.sub-tabs{background:var(--surface2);border-bottom:0.5px solid var(--border);padding:0 20px;display:flex;gap:2px;overflow-x:auto;}
-.stab{padding:8px 14px;font-size:11px;font-weight:500;color:var(--muted);border:none;background:none;cursor:pointer;border-radius:6px 6px 0 0;font-family:var(--sans);white-space:nowrap;transition:all 0.15s;}
-.stab:hover{color:var(--text);background:rgba(0,0,0,0.04);}
-.stab.active{color:var(--text);background:var(--surface);border:0.5px solid var(--border);border-bottom:1px solid var(--surface);}
+.stabs{background:var(--surf2);border-bottom:0.5px solid var(--bdr);padding:0 20px;display:flex;gap:2px;overflow-x:auto;}
+.stab{padding:8px 14px;font-size:11px;font-weight:500;color:var(--mu);border:none;background:none;cursor:pointer;border-radius:6px 6px 0 0;font-family:var(--sans);white-space:nowrap;transition:all 0.15s;}
+.stab:hover{color:var(--tx);background:rgba(0,0,0,0.04);}
+.stab.on{color:var(--tx);background:var(--surf);border:0.5px solid var(--bdr);border-bottom:1px solid var(--surf);}
 
-/* PANELS */
-.mpanel{display:none;}.mpanel.active{display:block;}
-.spanel{display:none;}.spanel.active{display:block;}
-.main{padding:18px 22px;max-width:1300px;margin:0 auto;}
-.sec{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--hint);font-family:var(--mono);margin:0 0 10px;}
+.mpanel{display:none;}.mpanel.on{display:block;}
+.spanel{display:none;}.spanel.on{display:block;}
+.wrap{padding:18px 22px;max-width:1300px;margin:0 auto;}
+.sec{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--hi);font-family:var(--mono);margin:0 0 10px;}
+.mb{margin-bottom:20px;}
 
-/* LOADER */
 .loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:999;transition:opacity 0.4s;}
-.loader.hidden{opacity:0;pointer-events:none;}
-.spinner{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin 0.7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-size:12px;color:var(--muted);font-family:var(--mono);}
-.err{background:var(--rbg);border:0.5px solid var(--rbd);color:var(--red);border-radius:var(--rsm);padding:10px 14px;font-size:12px;margin-bottom:14px;display:none;}
+.loader.gone{opacity:0;pointer-events:none;}
+.spin{width:28px;height:28px;border:2px solid var(--bdr2);border-top-color:var(--tx);border-radius:50%;animation:sp 0.7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ltxt{font-size:12px;color:var(--mu);font-family:var(--mono);}
+
+.err{background:var(--rbg);border:0.5px solid var(--rbd);color:var(--rd);border-radius:var(--rsm);padding:10px 14px;font-size:12px;margin-bottom:14px;display:none;}
 
 /* KPI */
-.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
-.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rsm);padding:14px;}
-.kpi.bl{border-left:3px solid var(--blue);}.kpi.gl{border-left:3px solid var(--green);}.kpi.rl{border-left:3px solid var(--red);}.kpi.al{border-left:3px solid var(--amber);}
-.kl{font-size:11px;color:var(--muted);margin-bottom:5px;}.kv{font-size:20px;font-weight:600;letter-spacing:-0.02em;}.ks{font-size:10px;color:var(--hint);margin-top:2px;font-family:var(--mono);}
-.kg{color:var(--green);}.ka{color:var(--amber);}.kr{color:var(--red);}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
+.kc{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;}
+.kc.bl{border-left:3px solid var(--bl);}.kc.gl{border-left:3px solid var(--gr);}.kc.rl{border-left:3px solid var(--rd);}.kc.al{border-left:3px solid var(--am);}
+.kl{font-size:11px;color:var(--mu);margin-bottom:5px;}.kv{font-size:20px;font-weight:600;letter-spacing:-0.02em;}.ks{font-size:10px;color:var(--hi);margin-top:2px;font-family:var(--mono);}
+.cg{color:var(--gr);}.ca{color:var(--am);}.cr{color:var(--rd);}
 
-/* STOCK CARDS */
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px;}
-.sc{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;}
+/* Stock cards */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;margin-bottom:18px;}
+.sc{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad);padding:14px;position:relative;overflow:hidden;}
 .sc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
-.sc.ok::before{background:var(--green);}.sc.low::before{background:var(--amber);}.sc.out::before{background:var(--red);}
-.sp{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
-.sv{font-size:26px;font-weight:600;letter-spacing:-0.02em;}
-.sv.ok{color:var(--text);}.sv.low{color:var(--amber);}.sv.out{color:var(--red);}
-.su{font-size:12px;font-weight:400;color:var(--muted);margin-left:3px;}
-.srows{margin-top:10px;display:flex;flex-direction:column;gap:3px;}
+.sc.ok::before{background:var(--gr);}.sc.lw::before{background:var(--am);}.sc.out::before{background:var(--rd);}
+.sp{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--mu);margin-bottom:6px;font-family:var(--mono);}
+.sv{font-size:25px;font-weight:600;letter-spacing:-0.02em;}
+.sv.ok{color:var(--tx);}.sv.lw{color:var(--am);}.sv.out{color:var(--rd);}
+.su{font-size:12px;font-weight:400;color:var(--mu);margin-left:3px;}
+.sr2{margin-top:10px;display:flex;flex-direction:column;gap:3px;}
 .sr{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono);}
-.srl{color:var(--hint);}.srv{color:var(--muted);}
-.srv.p{color:var(--green);}.srv.n{color:var(--red);}
-.sdiv{height:0.5px;background:var(--border);margin:4px 0;}
+.srl{color:var(--hi);}.srv{color:var(--mu);}
+.srv.p{color:var(--gr);}.srv.n{color:var(--rd);}
+.sdv{height:0.5px;background:var(--bdr);margin:4px 0;}
 
-/* FILTER BAR */
-.filter-bar{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rsm);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
-.filter-bar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
-.filter-bar select,.filter-bar input{background:var(--surface2);border:0.5px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);font-family:var(--sans);outline:none;cursor:pointer;}
-.filter-bar select:focus,.filter-bar input:focus{border-color:var(--text);}
-.filter-bar input{min-width:160px;}
-.clear-btn{background:none;border:0.5px solid var(--border2);border-radius:6px;padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--sans);}
-.clear-btn:hover{color:var(--text);border-color:var(--text);}
-.result-count{font-size:11px;color:var(--hint);font-family:var(--mono);margin-left:auto;}
-
-/* CHARTS */
+/* Charts */
 .crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
-.crow.full{grid-template-columns:1fr;}
+.crow.one{grid-template-columns:1fr;}
 @media(max-width:640px){.crow{grid-template-columns:1fr;}}
-.cc{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;}
-.ct{font-size:13px;font-weight:600;margin-bottom:2px;}.cs{font-size:10px;color:var(--muted);margin-bottom:10px;font-family:var(--mono);}
-.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--muted);}
+.cc{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad);padding:16px;}
+.ct{font-size:13px;font-weight:600;margin-bottom:2px;}.cs{font-size:10px;color:var(--mu);margin-bottom:10px;font-family:var(--mono);}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--mu);}
 .leg span{display:flex;align-items:center;gap:4px;}.ld{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 
-/* TABLES */
-.tw{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:18px;overflow:hidden;}
+/* Filter bar */
+.fb{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.fb label{font-size:11px;color:var(--mu);font-family:var(--mono);}
+.fb select,.fb input{background:var(--surf2);border:0.5px solid var(--bdr2);border-radius:6px;padding:5px 8px;font-size:12px;color:var(--tx);font-family:var(--sans);outline:none;}
+.fb select:focus,.fb input:focus{border-color:var(--tx);}
+.fb input{min-width:140px;}
+.clr{background:none;border:0.5px solid var(--bdr2);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--mu);cursor:pointer;font-family:var(--sans);}
+.clr:hover{color:var(--tx);border-color:var(--tx);}
+.rc{font-size:11px;color:var(--hi);font-family:var(--mono);margin-left:auto;}
+
+/* Tables */
+.tw{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad);margin-bottom:18px;overflow:hidden;}
 .tw table{width:100%;border-collapse:collapse;font-size:12px;}
-.tw th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint);text-align:left;padding:10px 12px;border-bottom:0.5px solid var(--border);background:var(--surface2);cursor:pointer;white-space:nowrap;user-select:none;}
-.tw th:hover{color:var(--text);}
-.tw th.sort-asc::after{content:' ↑';}.tw th.sort-desc::after{content:' ↓';}
-.tw td{padding:8px 12px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
-.tw tr:last-child td{border-bottom:none;}.tw tr:hover td{background:var(--surface2);}
-.num{font-family:var(--mono);font-weight:500;}.ng{color:var(--green);font-family:var(--mono);}.nr{color:var(--red);font-family:var(--mono);}
+.tw th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hi);text-align:left;padding:9px 11px;border-bottom:0.5px solid var(--bdr);background:var(--surf2);cursor:pointer;white-space:nowrap;user-select:none;}
+.tw th:hover{color:var(--tx);}
+.tw th.sa::after{content:' ↑';}.tw th.sd::after{content:' ↓';}
+.tw td{padding:8px 11px;border-bottom:0.5px solid var(--bdr);vertical-align:middle;}
+.tw tr:last-child td{border-bottom:none;}.tw tr:hover td{background:var(--surf2);}
+.num{font-family:var(--mono);font-weight:500;}.ng{color:var(--gr);font-family:var(--mono);}.nr{color:var(--rd);font-family:var(--mono);}.na{color:var(--am);font-family:var(--mono);}
 .tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--mono);}
-.tg{background:var(--gbg);color:var(--green);}.ta{background:var(--abg);color:var(--amber);}.tb{background:var(--bbg);color:var(--blue);}.tr2{background:var(--rbg);color:var(--red);}
-.no-rows{text-align:center;padding:24px;font-size:12px;color:var(--hint);font-family:var(--mono);}
+.tg{background:var(--gbg);color:var(--gr);}.ta{background:var(--abg);color:var(--am);}.tb{background:var(--bbg);color:var(--bl);}.tr{background:var(--rbg);color:var(--rd);}
 .prod{font-family:var(--sans);font-weight:500;font-size:12px;}
+.norow{text-align:center;padding:22px;font-size:12px;color:var(--hi);font-family:var(--mono);}
 
-/* PAGINATION */
-.pag{display:flex;align-items:center;gap:6px;padding:10px 14px;border-top:0.5px solid var(--border);background:var(--surface2);}
-.pag-btn{background:var(--surface);border:0.5px solid var(--border2);border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:var(--mono);}
-.pag-btn:hover{background:var(--surface3);}.pag-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
-.pag-info{font-size:11px;color:var(--hint);font-family:var(--mono);margin-left:auto;}
+/* Pagination */
+.pag{display:flex;align-items:center;gap:5px;padding:9px 12px;border-top:0.5px solid var(--bdr);background:var(--surf2);}
+.pb{background:var(--surf);border:0.5px solid var(--bdr2);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:var(--mono);}
+.pb:hover{background:var(--surf3);}.pb.on{background:var(--tx);color:#fff;border-color:var(--tx);}
+.pi{font-size:11px;color:var(--hi);font-family:var(--mono);margin-left:auto;}
 
-/* MONTH TABLE */
-.mtable-wrap{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:18px;overflow-x:auto;}
-.mtable-wrap table{width:100%;border-collapse:collapse;font-size:12px;}
-.mtable-wrap th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hint);text-align:left;padding:0 10px 10px;border-bottom:0.5px solid var(--border);white-space:nowrap;}
-.mtable-wrap td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
-.mtable-wrap tr:last-child td{border-bottom:none;}.mtable-wrap tr:hover td{background:var(--surface2);}
+/* Month table */
+.mtw{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--rad);margin-bottom:18px;overflow-x:auto;}
+.mtw table{width:100%;border-collapse:collapse;font-size:12px;}
+.mtw th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--hi);text-align:left;padding:9px 11px;border-bottom:0.5px solid var(--bdr);white-space:nowrap;}
+.mtw td{padding:8px 11px;border-bottom:0.5px solid var(--bdr);vertical-align:middle;}
+.mtw tr:last-child td{border-bottom:none;}.mtw tr:hover td{background:var(--surf2);}
+.tot td{background:var(--surf2)!important;font-weight:600;}
 
-.footer{text-align:center;font-size:10px;color:var(--hint);font-family:var(--mono);padding:16px 0 28px;}
+.foot{text-align:center;font-size:10px;color:var(--hi);font-family:var(--mono);padding:16px 0 28px;}
 </style>
 </head>
 <body>
 
-<div class="loader" id="loader">
-  <div class="spinner"></div>
-  <div class="loader-text">loading live data…</div>
-</div>
+<div class="loader" id="ldr"><div class="spin"></div><div class="ltxt">loading live data…</div></div>
 
-<div class="header">
+<div class="hdr">
   <div class="brand">
-    <div class="brand-icon">🌾</div>
-    <div><div class="brand-name">Shrijee Flour</div><div class="brand-sub">live operations dashboard</div></div>
+    <div class="bicon">🌾</div>
+    <div><div class="bname">Shrijee Flour</div><div class="bsub">live operations dashboard</div></div>
   </div>
   <div class="hright">
-    <div class="live-badge"><div class="live-dot"></div><span id="statusLabel">loading</span></div>
-    <span id="last-updated"></span>
+    <div class="lbadge"><div class="ldot"></div><span id="sLabel">loading</span></div>
+    <span id="last-upd"></span>
     <button class="rbtn" onclick="loadData()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-      Refresh
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Refresh
     </button>
   </div>
 </div>
 
-<div class="main-tabs">
-  <button class="mtab active" onclick="switchMain('stock',this)">📦 Stock</button>
-  <button class="mtab" onclick="switchMain('finance',this)">💰 Finance</button>
+<div class="mtabs">
+  <button class="mtab on" id="mtab-stock" onclick="goMain('stock')">📦 Stock</button>
+  <button class="mtab" id="mtab-finance" onclick="goMain('finance')">💰 Finance</button>
 </div>
 
-<!-- ══ STOCK ══ -->
-<div class="mpanel active" id="mpanel-stock">
-  <div class="sub-tabs">
-    <button class="stab active" onclick="switchSub('stock','current',this)">All time</button>
-    <button class="stab" onclick="switchSub('stock','monthly',this)">Monthly</button>
-    <button class="stab" onclick="switchSub('stock','detail',this)">Full detail</button>
+<!-- ═══ STOCK ═══ -->
+<div class="mpanel on" id="mp-stock">
+  <div class="stabs">
+    <button class="stab on" id="st-stock-alltime" onclick="goSub('stock','alltime')">All time</button>
+    <button class="stab" id="st-stock-monthly" onclick="goSub('stock','monthly')">Monthly</button>
+    <button class="stab" id="st-stock-detail" onclick="goSub('stock','detail')">Full detail</button>
   </div>
 
-  <!-- Stock: All time -->
-  <div class="spanel active" id="spanel-stock-current">
-  <div class="main">
-    <div class="err" id="errorBar"></div>
-    <p class="sec">stock overview</p>
-    <div class="kgrid">
-      <div class="kpi"><div class="kl">Products tracked</div><div class="kv" id="kTotal">—</div><div class="ks">all categories</div></div>
-      <div class="kpi"><div class="kl">In stock</div><div class="kv kg" id="kOk">—</div><div class="ks">healthy</div></div>
-      <div class="kpi"><div class="kl">Running low</div><div class="kv ka" id="kLow">—</div><div class="ks">below minimum</div></div>
-      <div class="kpi"><div class="kl">Out of stock</div><div class="kv kr" id="kOut">—</div><div class="ks">needs restocking</div></div>
-      <div class="kpi"><div class="kl">Grain bought</div><div class="kv" id="kGrainIn">—</div><div class="ks">kg total</div></div>
-      <div class="kpi"><div class="kl">Grain milled</div><div class="kv" id="kGrainMilled">—</div><div class="ks">kg processed</div></div>
+  <div class="spanel on" id="sp-stock-alltime"><div class="wrap">
+    <div class="err" id="errBar"></div>
+    <p class="sec mb">stock overview</p>
+    <div class="kg">
+      <div class="kc"><div class="kl">Products tracked</div><div class="kv" id="kTot">—</div><div class="ks">all categories</div></div>
+      <div class="kc"><div class="kl">In stock</div><div class="kv cg" id="kOk">—</div><div class="ks">healthy</div></div>
+      <div class="kc"><div class="kl">Running low</div><div class="kv ca" id="kLw">—</div><div class="ks">below minimum</div></div>
+      <div class="kc"><div class="kl">Out of stock</div><div class="kv cr" id="kOut">—</div><div class="ks">needs restocking</div></div>
+      <div class="kc"><div class="kl">Grain bought</div><div class="kv" id="kGIn">—</div><div class="ks">kg total</div></div>
+      <div class="kc"><div class="kl">Grain milled</div><div class="kv" id="kGMill">—</div><div class="ks">kg processed</div></div>
     </div>
-
     <div class="crow">
-      <div class="cc"><div class="ct">Grain — bought vs used vs remaining</div><div class="cs">kg per grain type</div>
+      <div class="cc"><div class="ct">Grain — bought vs used vs remaining</div><div class="cs">kg per type</div>
         <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Bought</span><span><span class="ld" style="background:#e05252"></span>Used/milled</span><span><span class="ld" style="background:#16865a"></span>Remaining</span></div>
-        <div style="position:relative;height:200px;"><canvas id="grainChart"></canvas></div></div>
+        <div style="position:relative;height:200px;"><canvas id="cGrain"></canvas></div></div>
       <div class="cc"><div class="ct">Grocery — bought vs sold vs remaining</div><div class="cs">kg/L per product</div>
         <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Bought</span><span><span class="ld" style="background:#e05252"></span>Sold</span><span><span class="ld" style="background:#16865a"></span>Remaining</span></div>
-        <div style="position:relative;height:200px;"><canvas id="grocChart"></canvas></div></div>
+        <div style="position:relative;height:200px;"><canvas id="cGroc"></canvas></div></div>
     </div>
+    <p class="sec">grains — raw stock</p><div class="sgrid" id="grainCards"></div>
+    <p class="sec">flour — milled stock</p><div class="sgrid" id="flourCards"></div>
+    <p class="sec">grocery products</p><div class="sgrid" id="grocCards"></div>
+  </div></div>
 
-    <p class="sec">grains — raw stock</p>
-    <div class="sgrid" id="grainCards"></div>
-    <p class="sec">flour — milled stock</p>
-    <div class="sgrid" id="flourCards"></div>
-    <p class="sec">grocery products</p>
-    <div class="sgrid" id="groceryCards"></div>
-  </div>
-  </div>
-
-  <!-- Stock: Monthly -->
-  <div class="spanel" id="spanel-stock-monthly">
-  <div class="main">
-    <p class="sec">monthly stock comparison — quantities (kg)</p>
-    <div class="crow full">
-      <div class="cc"><div class="ct">Grain bought per month</div><div class="cs">kg per grain type per month</div>
-        <div class="leg" id="monthGrainLeg"></div>
-        <div style="position:relative;height:240px;"><canvas id="monthGrainChart"></canvas></div></div>
-    </div>
+  <div class="spanel" id="sp-stock-monthly"><div class="wrap">
+    <p class="sec mb">monthly stock — quantities (kg)</p>
+    <div class="crow one"><div class="cc">
+      <div class="ct">Grain bought per month</div><div class="cs">kg per grain type</div>
+      <div class="leg" id="lgMGrain"></div>
+      <div style="position:relative;height:240px;"><canvas id="cMGrain"></canvas></div>
+    </div></div>
     <div class="crow">
-      <div class="cc"><div class="ct">Flour produced per month</div><div class="cs">kg output from milling</div>
-        <div class="leg" id="monthFlourLeg"></div>
-        <div style="position:relative;height:200px;"><canvas id="monthFlourChart"></canvas></div></div>
+      <div class="cc"><div class="ct">Flour produced per month</div><div class="cs">kg from milling</div>
+        <div class="leg" id="lgMFlour"></div>
+        <div style="position:relative;height:200px;"><canvas id="cMFlour"></canvas></div></div>
       <div class="cc"><div class="ct">Grocery bought per month</div><div class="cs">kg/L per product</div>
-        <div class="leg" id="monthGrocLeg"></div>
-        <div style="position:relative;height:200px;"><canvas id="monthGrocChart"></canvas></div></div>
+        <div class="leg" id="lgMGroc"></div>
+        <div style="position:relative;height:200px;"><canvas id="cMGroc"></canvas></div></div>
     </div>
     <p class="sec">monthly quantity table</p>
-    <div class="mtable-wrap" id="monthStockTable"></div>
-  </div>
-  </div>
+    <div class="mtw" id="mStockTbl"></div>
+  </div></div>
 
-  <!-- Stock: Full detail with filters -->
-  <div class="spanel" id="spanel-stock-detail">
-  <div class="main">
-    <p class="sec">full stock detail</p>
-    <div class="filter-bar">
+  <div class="spanel" id="sp-stock-detail"><div class="wrap">
+    <p class="sec mb">full stock detail</p>
+    <div class="fb">
       <label>Category</label>
-      <select id="stockCatFilter" onchange="renderStockDetail()">
-        <option value="">All categories</option>
-        <option value="grain">Grain</option>
-        <option value="flour">Flour</option>
-        <option value="grocery">Grocery</option>
-      </select>
+      <select id="fCat" onchange="renderDetail()"><option value="">All categories</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option></select>
       <label>Status</label>
-      <select id="stockStatusFilter" onchange="renderStockDetail()">
-        <option value="">All statuses</option>
-        <option value="ok">In stock</option>
-        <option value="low">Running low</option>
-        <option value="out">Out of stock</option>
-      </select>
+      <select id="fStat" onchange="renderDetail()"><option value="">All statuses</option><option value="ok">In stock</option><option value="lw">Running low</option><option value="out">Out of stock</option></select>
       <label>Search</label>
-      <input type="text" id="stockSearch" placeholder="Search product…" oninput="renderStockDetail()"/>
-      <button class="clear-btn" onclick="clearStockFilters()">Clear</button>
-      <span class="result-count" id="stockResultCount"></span>
+      <input id="fSrch" type="text" placeholder="Search product…" oninput="renderDetail()"/>
+      <button class="clr" onclick="document.getElementById('fCat').value='';document.getElementById('fStat').value='';document.getElementById('fSrch').value='';renderDetail()">Clear</button>
+      <span class="rc" id="rcDet"></span>
     </div>
-    <div class="tw" id="stockDetailTable">
-      <table><thead><tr>
-        <th onclick="sortTable('stockDetail','dn',this)">Product</th>
-        <th onclick="sortTable('stockDetail','cat',this)">Category</th>
-        <th onclick="sortTable('stockDetail','open',this)">Opening</th>
-        <th onclick="sortTable('stockDetail','inQ',this)">Bought/Produced</th>
-        <th onclick="sortTable('stockDetail','usedQ',this)">Used/Sold</th>
-        <th onclick="sortTable('stockDetail','rem',this)">Stock left</th>
-        <th onclick="sortTable('stockDetail','minS',this)">Min level</th>
+    <div class="tw"><table>
+      <thead><tr>
+        <th onclick="srt('det','dn',false,this)">Product</th>
+        <th onclick="srt('det','cat',false,this)">Category</th>
+        <th onclick="srt('det','open',true,this)">Opening</th>
+        <th onclick="srt('det','inQ',true,this)">Bought/Produced</th>
+        <th onclick="srt('det','usedQ',true,this)">Used/Sold</th>
+        <th onclick="srt('det','rem',true,this)">Stock left</th>
+        <th onclick="srt('det','minS',true,this)">Min level</th>
         <th>Status</th>
-      </tr></thead><tbody id="stockDetailBody"></tbody></table>
-    </div>
-  </div>
-  </div>
+      </tr></thead>
+      <tbody id="detBody"></tbody>
+    </table></div>
+  </div></div>
 </div>
 
-<!-- ══ FINANCE ══ -->
-<div class="mpanel" id="mpanel-finance">
-  <div class="sub-tabs">
-    <button class="stab active" onclick="switchSub('finance','overview',this)">Overview</button>
-    <button class="stab" onclick="switchSub('finance','monthly',this)">Monthly</button>
-    <button class="stab" onclick="switchSub('finance','purchases',this)">Purchases</button>
-    <button class="stab" onclick="switchSub('finance','sales',this)">Sales</button>
+<!-- ═══ FINANCE ═══ -->
+<div class="mpanel" id="mp-finance">
+  <div class="stabs">
+    <button class="stab on" id="st-finance-overview" onclick="goSub('finance','overview')">Overview</button>
+    <button class="stab" id="st-finance-monthly" onclick="goSub('finance','monthly')">Monthly</button>
+    <button class="stab" id="st-finance-purchases" onclick="goSub('finance','purchases')">Purchases</button>
+    <button class="stab" id="st-finance-sales" onclick="goSub('finance','sales')">Sales</button>
   </div>
 
-  <!-- Finance: Overview -->
-  <div class="spanel active" id="spanel-finance-overview">
-  <div class="main">
-    <p class="sec">financial overview</p>
-    <div class="kgrid">
-      <div class="kpi bl"><div class="kl">Total revenue</div><div class="kv" id="fRev">—</div><div class="ks" id="fRevSub">—</div></div>
-      <div class="kpi rl"><div class="kl">Total spend</div><div class="kv" id="fSpend">—</div><div class="ks" id="fSpendSub">—</div></div>
-      <div class="kpi gl"><div class="kl">Gross profit</div><div class="kv kg" id="fProfit">—</div><div class="ks" id="fMargin">—</div></div>
-      <div class="kpi al"><div class="kl">Avg mill yield</div><div class="kv" id="fYield">—</div><div class="ks" id="fYieldSub">—</div></div>
-      <div class="kpi"><div class="kl">Purchase orders</div><div class="kv" id="fPO">—</div><div class="ks">rows</div></div>
-      <div class="kpi"><div class="kl">Sales orders</div><div class="kv" id="fSO">—</div><div class="ks">rows</div></div>
+  <div class="spanel on" id="sp-finance-overview"><div class="wrap">
+    <p class="sec mb">financial overview</p>
+    <div class="kg">
+      <div class="kc bl"><div class="kl">Total revenue</div><div class="kv" id="fRev">—</div><div class="ks" id="fRevS">—</div></div>
+      <div class="kc rl"><div class="kl">Total spend</div><div class="kv" id="fSpd">—</div><div class="ks" id="fSpdS">—</div></div>
+      <div class="kc gl"><div class="kl">Gross profit</div><div class="kv cg" id="fPft">—</div><div class="ks" id="fMgn">—</div></div>
+      <div class="kc al"><div class="kl">Avg mill yield</div><div class="kv" id="fYld">—</div><div class="ks" id="fYldS">—</div></div>
+      <div class="kc"><div class="kl">Purchase orders</div><div class="kv" id="fPO">—</div><div class="ks">rows</div></div>
+      <div class="kc"><div class="kl">Sales orders</div><div class="kv" id="fSO">—</div><div class="ks">rows</div></div>
     </div>
     <div class="crow">
-      <div class="cc"><div class="ct">Procurement by supplier</div><div class="cs">R spend</div><div class="leg" id="supLeg"></div><div style="position:relative;height:200px;"><canvas id="supChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Sales by category</div><div class="cs">R revenue</div><div class="leg" id="saleCatLeg"></div><div style="position:relative;height:200px;"><canvas id="saleCatChart"></canvas></div></div>
+      <div class="cc"><div class="ct">Procurement by supplier</div><div class="cs">R spend</div><div class="leg" id="lgSup"></div><div style="position:relative;height:200px;"><canvas id="cSup"></canvas></div></div>
+      <div class="cc"><div class="ct">Sales by category</div><div class="cs">R revenue</div><div class="leg" id="lgSCat"></div><div style="position:relative;height:200px;"><canvas id="cSCat"></canvas></div></div>
     </div>
     <div class="crow">
-      <div class="cc"><div class="ct">Top products — revenue</div><div class="cs">R per item sold</div><div style="position:relative;height:200px;"><canvas id="topRevChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Top products — spend</div><div class="cs">R per item bought</div><div style="position:relative;height:200px;"><canvas id="topSpendChart"></canvas></div></div>
+      <div class="cc"><div class="ct">Top products — revenue</div><div class="cs">R per item sold</div><div style="position:relative;height:200px;"><canvas id="cTRev"></canvas></div></div>
+      <div class="cc"><div class="ct">Top products — spend</div><div class="cs">R per item bought</div><div style="position:relative;height:200px;"><canvas id="cTSpd"></canvas></div></div>
     </div>
-  </div>
-  </div>
+  </div></div>
 
-  <!-- Finance: Monthly -->
-  <div class="spanel" id="spanel-finance-monthly">
-  <div class="main">
-    <p class="sec">month-by-month financial comparison</p>
-    <div class="cc" style="margin-bottom:18px;">
+  <div class="spanel" id="sp-finance-monthly"><div class="wrap">
+    <p class="sec mb">month-by-month financial comparison</p>
+    <div class="cc mb">
       <div class="ct">Revenue vs Spend vs Profit — by month</div><div class="cs">R per month</div>
       <div class="leg"><span><span class="ld" style="background:#2563a8"></span>Revenue</span><span><span class="ld" style="background:#e05252"></span>Spend</span><span><span class="ld" style="background:#16865a"></span>Profit</span></div>
-      <div style="position:relative;height:250px;"><canvas id="monthMoneyChart"></canvas></div>
+      <div style="position:relative;height:250px;"><canvas id="cMMoney"></canvas></div>
     </div>
     <p class="sec">monthly financial table</p>
-    <div class="mtable-wrap" id="monthFinanceTable"></div>
-  </div>
-  </div>
+    <div class="mtw" id="mFinTbl"></div>
+  </div></div>
 
-  <!-- Finance: Purchases with filters -->
-  <div class="spanel" id="spanel-finance-purchases">
-  <div class="main">
-    <p class="sec">all purchases</p>
-    <div class="filter-bar">
-      <label>Product</label>
-      <select id="purProductFilter" onchange="renderPurchases()"><option value="">All products</option></select>
-      <label>Supplier</label>
-      <select id="purSupplierFilter" onchange="renderPurchases()"><option value="">All suppliers</option></select>
+  <div class="spanel" id="sp-finance-purchases"><div class="wrap">
+    <p class="sec mb">all purchases</p>
+    <div class="fb">
+      <label>Product</label><select id="pProd" onchange="renderPur()"><option value="">All products</option></select>
+      <label>Supplier</label><select id="pSup" onchange="renderPur()"><option value="">All suppliers</option></select>
       <label>Category</label>
-      <select id="purCatFilter" onchange="renderPurchases()">
-        <option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option>
-      </select>
-      <label>Month</label>
-      <select id="purMonthFilter" onchange="renderPurchases()"><option value="">All months</option></select>
-      <label>Search</label>
-      <input type="text" id="purSearch" placeholder="Search…" oninput="renderPurchases()"/>
-      <button class="clear-btn" onclick="clearPurFilters()">Clear</button>
-      <span class="result-count" id="purCount"></span>
+      <select id="pCat" onchange="renderPur()"><option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option></select>
+      <label>Month</label><select id="pMon" onchange="renderPur()"><option value="">All months</option></select>
+      <label>Search</label><input id="pSrch" type="text" placeholder="Search…" oninput="renderPur()"/>
+      <button class="clr" onclick="clrPur()">Clear</button>
+      <span class="rc" id="rcPur"></span>
     </div>
     <div class="crow">
-      <div class="cc"><div class="ct">Spend by product</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="purProdChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Spend by supplier</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="purSupChart"></canvas></div></div>
+      <div class="cc"><div class="ct">Spend by product</div><div class="cs">filtered</div><div style="position:relative;height:180px;"><canvas id="cPProd"></canvas></div></div>
+      <div class="cc"><div class="ct">Spend by supplier</div><div class="cs">filtered</div><div style="position:relative;height:180px;"><canvas id="cPSup"></canvas></div></div>
     </div>
-    <div class="tw" id="purTable">
-      <table><thead><tr>
-        <th onclick="sortTable('pur','date',this)">Date</th>
-        <th onclick="sortTable('pur','item',this)">Item</th>
+    <div class="tw"><table>
+      <thead><tr>
+        <th onclick="srt('pur','date',false,this)">Date</th>
+        <th onclick="srt('pur','item',false,this)">Item</th>
         <th>Category</th>
-        <th onclick="sortTable('pur','quantity',this)">Qty</th>
-        <th>Unit</th>
-        <th onclick="sortTable('pur','unitprice',this)">Unit price (R)</th>
-        <th onclick="sortTable('pur','total',this)">Total (R)</th>
-        <th onclick="sortTable('pur','supplier',this)">Supplier</th>
-      </tr></thead><tbody id="purBody"></tbody></table>
-      <div class="pag" id="purPag"></div>
-    </div>
-  </div>
-  </div>
+        <th onclick="srt('pur','quantity',true,this)">Qty</th><th>Unit</th>
+        <th onclick="srt('pur','unitprice',true,this)">Unit price (R)</th>
+        <th onclick="srt('pur','total',true,this)">Total (R)</th>
+        <th onclick="srt('pur','supplier',false,this)">Supplier</th>
+      </tr></thead>
+      <tbody id="purBody"></tbody>
+    </table><div class="pag" id="purPag"></div></div>
+  </div></div>
 
-  <!-- Finance: Sales with filters -->
-  <div class="spanel" id="spanel-finance-sales">
-  <div class="main">
-    <p class="sec">all sales</p>
-    <div class="filter-bar">
-      <label>Product</label>
-      <select id="salProductFilter" onchange="renderSales()"><option value="">All products</option></select>
+  <div class="spanel" id="sp-finance-sales"><div class="wrap">
+    <p class="sec mb">all sales</p>
+    <div class="fb">
+      <label>Product</label><select id="sProd" onchange="renderSal()"><option value="">All products</option></select>
       <label>Category</label>
-      <select id="salCatFilter" onchange="renderSales()">
-        <option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option>
-      </select>
-      <label>Month</label>
-      <select id="salMonthFilter" onchange="renderSales()"><option value="">All months</option></select>
-      <label>Search</label>
-      <input type="text" id="salSearch" placeholder="Search…" oninput="renderSales()"/>
-      <button class="clear-btn" onclick="clearSalFilters()">Clear</button>
-      <span class="result-count" id="salCount"></span>
+      <select id="sCat" onchange="renderSal()"><option value="">All</option><option value="grain">Grain</option><option value="flour">Flour</option><option value="grocery">Grocery</option></select>
+      <label>Month</label><select id="sMon" onchange="renderSal()"><option value="">All months</option></select>
+      <label>Search</label><input id="sSrch" type="text" placeholder="Search…" oninput="renderSal()"/>
+      <button class="clr" onclick="clrSal()">Clear</button>
+      <span class="rc" id="rcSal"></span>
     </div>
     <div class="crow">
-      <div class="cc"><div class="ct">Revenue by product</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="salProdChart"></canvas></div></div>
-      <div class="cc"><div class="ct">Revenue by category</div><div class="cs">filtered results</div><div style="position:relative;height:180px;"><canvas id="salCatChart2"></canvas></div></div>
+      <div class="cc"><div class="ct">Revenue by product</div><div class="cs">filtered</div><div style="position:relative;height:180px;"><canvas id="cSProd"></canvas></div></div>
+      <div class="cc"><div class="ct">Revenue by category</div><div class="cs">filtered</div><div style="position:relative;height:180px;"><canvas id="cSCat2"></canvas></div></div>
     </div>
-    <div class="tw" id="salTable">
-      <table><thead><tr>
-        <th onclick="sortTable('sal','date',this)">Date</th>
-        <th onclick="sortTable('sal','item',this)">Item</th>
+    <div class="tw"><table>
+      <thead><tr>
+        <th onclick="srt('sal','date',false,this)">Date</th>
+        <th onclick="srt('sal','item',false,this)">Item</th>
         <th>Category</th>
-        <th onclick="sortTable('sal','quantity',this)">Qty</th>
-        <th>Unit</th>
-        <th onclick="sortTable('sal','unitprice',this)">Unit price (R)</th>
-        <th onclick="sortTable('sal','total',this)">Total (R)</th>
-      </tr></thead><tbody id="salBody"></tbody></table>
-      <div class="pag" id="salPag"></div>
-    </div>
-  </div>
-  </div>
+        <th onclick="srt('sal','quantity',true,this)">Qty</th><th>Unit</th>
+        <th onclick="srt('sal','unitprice',true,this)">Unit price (R)</th>
+        <th onclick="srt('sal','total',true,this)">Total (R)</th>
+      </tr></thead>
+      <tbody id="salBody"></tbody>
+    </table><div class="pag" id="salPag"></div></div>
+  </div></div>
 </div>
 
-<div class="footer">Shrijee Flour · Live from Google Sheets · Data refreshes on every load</div>
+<div class="foot">Shrijee Flour · Live from Google Sheets · Refreshes on every load</div>
 
 <script>
 const URLS={
@@ -394,346 +338,400 @@ const URLS={
   milling:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1053164568&single=true&output=csv',
   opening:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1102474552&single=true&output=csv',
 };
-const COLORS=['#2563a8','#16865a','#b55a10','#8b36a8','#a83250','#5a7a20','#0f7a8a','#8a7020','#a87020','#205a7a'];
+const COLS=['#2563a8','#16865a','#b55a10','#8b36a8','#a83250','#5a7a20','#0f7a8a','#8a7020','#a06030','#205a6a'];
 const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const PER=20;
 
-/* ── Global data store ── */
-let G={purchases:[],sales:[],milling:[],opening:[],allProducts:[],grainP:[],flourP:[],grocP:[],sortState:{},pages:{}};
+/* ─ State ─ */
+let D={pur:[],sal:[],mil:[],opn:[],all:[],grP:[],flP:[],grO:[],months:[]};
+let SS={};/* sort state */
+let PG={pur:1,sal:1};
+/* pending chart draws: {id, fn} — drawn when panel becomes visible */
+let PENDING={};
 
-function parseCSV(text){
-  const rows=text.trim().split('\n').map(r=>{const cells=[];let cur='',inQ=false;for(let i=0;i<r.length;i++){if(r[i]==='"'){inQ=!inQ;}else if(r[i]===','&&!inQ){cells.push(cur.trim());cur='';}else cur+=r[i];}cells.push(cur.trim());return cells;});
+/* ─ Utils ─ */
+function csv(txt){
+  const rows=txt.trim().split('\n').map(r=>{const c=[];let cur='',q=false;for(let i=0;i<r.length;i++){if(r[i]==='"'){q=!q;}else if(r[i]===','&&!q){c.push(cur.trim());cur='';}else cur+=r[i];}c.push(cur.trim());return c;});
   const h=rows[0].map(x=>x.replace(/[^a-zA-Z0-9_]/g,'').toLowerCase());
   return rows.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]||''])));
 }
-async function fetchCSV(url){if(!url||url.startsWith('PASTE_'))return null;const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return parseCSV(await r.text());}
+async function get(url){const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return csv(await r.text());}
+function mkey(d){if(!d)return null;let m,y;if(d.includes('/')){const p=d.split('/');if(p.length>=3){m=+p[1];y=+p[2];}}else if(d.includes('-')){const p=d.split('-');if(p.length>=3){y=+p[0];m=+p[1];}}if(!m||!y||isNaN(m)||isNaN(y))return null;return y+'-'+String(m).padStart(2,'0');}
+function fmk(k){if(!k)return'?';const[y,m]=k.split('-');return MN[+m-1]+' '+y;}
+function st(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function R(n){return Math.round(n);}
 
-function mk(d){if(!d)return null;let m,y;if(d.includes('/')){const p=d.split('/');if(p.length>=3){m=parseInt(p[1]);y=parseInt(p[2]);}}else if(d.includes('-')){const p=d.split('-');if(p.length>=3){y=parseInt(p[0]);m=parseInt(p[1]);}}if(!m||!y||isNaN(m)||isNaN(y))return null;return y+'-'+String(m).padStart(2,'0');}
-function fmtMK(k){if(!k)return'?';const[y,m]=k.split('-');return MN[parseInt(m)-1]+' '+y;}
-
-let charts={};
-function bChart(id,type,labels,datasets,extra={}){
-  if(charts[id])charts[id].destroy();
+/* ─ Chart engine ─ */
+let CH={};
+function drawChart(id,type,labels,datasets,extra){
+  if(CH[id])CH[id].destroy();
   const ctx=document.getElementById(id);if(!ctx)return;
-  const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:type==='doughnut'||type==='pie'?{}:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10}}}}};
-  charts[id]=new Chart(ctx,{type,data:{labels,datasets},options:{...base,...extra,scales:{...base.scales,...(extra.scales||{})}}});
+  const scales=type==='doughnut'||type==='pie'?{}:{
+    x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},
+    y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},...((extra&&extra.yTick)||{})}}
+  };
+  CH[id]=new Chart(ctx,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales,...(extra||{})}});
+}
+/* Queue chart for lazy render when panel is visible */
+function qChart(panelId,id,type,labels,datasets,extra){
+  const panel=document.getElementById(panelId);
+  if(panel&&panel.classList.contains('on')){drawChart(id,type,labels,datasets,extra);}
+  else{PENDING[id]={panelId,id,type,labels,datasets,extra};}
+}
+/* Flush pending charts for a panel */
+function flushCharts(panelId){
+  Object.keys(PENDING).forEach(id=>{
+    const p=PENDING[id];
+    if(p.panelId===panelId){drawChart(p.id,p.type,p.labels,p.datasets,p.extra);delete PENDING[id];}
+  });
+}
+function barOpts(yFmt){return{yTick:{callback:yFmt||undefined}};}
+
+/* ─ Nav ─ */
+function goMain(name){
+  ['stock','finance'].forEach(n=>{
+    document.getElementById('mp-'+n).classList.toggle('on',n===name);
+    document.getElementById('mtab-'+n).classList.toggle('on',n===name);
+  });
+  setTimeout(()=>flushCharts('sp-'+name+'-'+(name==='stock'?'alltime':'overview')),30);
+}
+function goSub(main,sub){
+  const mp=document.getElementById('mp-'+main);
+  mp.querySelectorAll('.spanel').forEach(p=>p.classList.remove('on'));
+  mp.querySelectorAll('.stab').forEach(b=>b.classList.remove('on'));
+  const pid='sp-'+main+'-'+sub;
+  document.getElementById(pid).classList.add('on');
+  document.getElementById('st-'+main+'-'+sub).classList.add('on');
+  setTimeout(()=>{
+    flushCharts(pid);
+    // Re-render filtered tables when switching to their panels
+    if(main==='finance'&&sub==='purchases')renderPur();
+    if(main==='finance'&&sub==='sales')renderSal();
+  },30);
 }
 
-function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
-function sc(p){const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'low':'ok');const r=Math.max(0,Math.round(p.rem));return`<div class="sc ${s}"><div class="sp">${p.dn}</div><div class="sv ${s}">${r}<span class="su">${p.unit}</span></div><div class="srows"><div class="sr"><span class="srl">opening</span><span class="srv">${p.open} ${p.unit}</span></div><div class="sdiv"></div><div class="sr"><span class="srl">+ in</span><span class="srv p">+${p.inQ} ${p.unit}</span></div><div class="sr"><span class="srl">− used/sold</span><span class="srv n">−${p.usedQ} ${p.unit}</span></div><div class="sdiv"></div><div class="sr"><span class="srl">= remaining</span><span class="srv" style="font-weight:600;color:var(--text)">${r} ${p.unit}</span></div>${p.minS>0?`<div class="sr"><span class="srl">min level</span><span class="srv">${p.minS} ${p.unit}</span></div>`:''}</div></div>`;}
-
-function switchSub(main,sub,btn){
-  const parent=document.getElementById('mpanel-'+main);
-  parent.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.stab').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+main+"'")){b.classList.remove('active');}});
-  const target=document.getElementById('spanel-'+main+'-'+sub);
-  if(target)target.classList.add('active');
-  btn.classList.add('active');
-  // Refresh charts now that panel is visible
-  setTimeout(()=>{ Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}});
-    if(main==='finance'&&sub==='purchases')renderPurchases();
-    if(main==='finance'&&sub==='sales')renderSales();
-  },50);
-}
-function switchMain(name,btn){
-  document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('mpanel-'+name).classList.add('active');
-  btn.classList.add('active');
-  setTimeout(()=>{ Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}});},50);
+/* ─ Stock card ─ */
+function sCard(p){
+  const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'lw':'ok');
+  const r=Math.max(0,R(p.rem));
+  return`<div class="sc ${s}"><div class="sp">${p.dn}</div><div class="sv ${s}">${r}<span class="su">${p.unit}</span></div>
+  <div class="sr2">
+    <div class="sr"><span class="srl">opening</span><span class="srv">${p.open} ${p.unit}</span></div>
+    <div class="sdv"></div>
+    <div class="sr"><span class="srl">+ in</span><span class="srv p">+${p.inQ} ${p.unit}</span></div>
+    <div class="sr"><span class="srl">− used/sold</span><span class="srv n">−${p.usedQ} ${p.unit}</span></div>
+    <div class="sdv"></div>
+    <div class="sr"><span class="srl">= remaining</span><span class="srv" style="font-weight:600;color:var(--tx)">${r} ${p.unit}</span></div>
+    ${p.minS>0?`<div class="sr"><span class="srl">min level</span><span class="srv">${p.minS} ${p.unit}</span></div>`:''}
+  </div></div>`;
 }
 
-/* ── Sort ── */
-function sortTable(key,field,th){
-  const dir=G.sortState[key]===field+'-asc'?'desc':'asc';
-  G.sortState[key]=field+'-'+dir;
-  document.querySelectorAll(`#${key}Table th, #${key}DetailTable th`).forEach(t=>{t.classList.remove('sort-asc','sort-desc');});
-  th.classList.add('sort-'+dir);
-  if(key==='pur')renderPurchases();
-  else if(key==='sal')renderSales();
-  else if(key==='stockDetail')renderStockDetail();
+/* ─ Sort ─ */
+function srt(key,field,isNum,th){
+  const cur=SS[key];const dir=(cur===field+'-a')?'d':'a';SS[key]=field+'-'+dir;
+  document.querySelectorAll(`[onclick*="srt('${key}'"]`).forEach(t=>{t.classList.remove('sa','sd');});
+  th.classList.add(dir==='a'?'sa':'sd');
+  if(key==='det')renderDetail();else if(key==='pur')renderPur();else if(key==='sal')renderSal();
 }
-
-/* ── Pagination ── */
-const PER_PAGE=20;
-function renderPage(rows,bodyId,pagId,renderRow,key){
-  const page=G.pages[key]||1;
-  const total=rows.length;const pages=Math.max(1,Math.ceil(total/PER_PAGE));
-  const start=(page-1)*PER_PAGE;const slice=rows.slice(start,start+PER_PAGE);
-  const body=document.getElementById(bodyId);
-  body.innerHTML=slice.length?slice.map(renderRow).join(''):`<tr><td colspan="10" class="no-rows">No rows match your filter</td></tr>`;
-  const pag=document.getElementById(pagId);
-  if(!pag)return;
-  let html=``;
-  if(page>1)html+=`<button class="pag-btn" onclick="goPage('${key}',${page-1})">‹ Prev</button>`;
-  for(let i=Math.max(1,page-2);i<=Math.min(pages,page+2);i++){html+=`<button class="pag-btn${i===page?' active':''}" onclick="goPage('${key}',${i})">${i}</button>`;}
-  if(page<pages)html+=`<button class="pag-btn" onclick="goPage('${key}',${page+1})">Next ›</button>`;
-  html+=`<span class="pag-info">Showing ${start+1}–${Math.min(start+PER_PAGE,total)} of ${total}</span>`;
-  pag.innerHTML=html;
-}
-function goPage(key,page){G.pages[key]=page;if(key==='pur')renderPurchases();else if(key==='sal')renderSales();}
-
-/* ── Populate dropdowns ── */
-function populateDropdowns(){
-  const {purchases,sales}=G;
-  const purItems=[...new Set(purchases.map(r=>r.item||'').filter(Boolean))].sort();
-  const purSups=[...new Set(purchases.map(r=>r.supplier||'').filter(Boolean))].sort();
-  const salItems=[...new Set(sales.map(r=>r.item||'').filter(Boolean))].sort();
-  const allMKs=[...new Set([...purchases,...sales].map(r=>mk(r.date)).filter(Boolean))].sort();
-
-  const fillEl=(id,prefix,opts)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=prefix+opts;};
-  fillEl('purProductFilter','<option value="">All products</option>',purItems.map(i=>`<option value="${i}">${i}</option>`).join(''));
-  fillEl('purSupplierFilter','<option value="">All suppliers</option>',purSups.map(i=>`<option value="${i}">${i}</option>`).join(''));
-  fillEl('salProductFilter','<option value="">All products</option>',salItems.map(i=>`<option value="${i}">${i}</option>`).join(''));
-  fillEl('purMonthFilter','<option value="">All months</option>',allMKs.map(m=>`<option value="${m}">${fmtMK(m)}</option>`).join(''));
-  fillEl('salMonthFilter','<option value="">All months</option>',allMKs.map(m=>`<option value="${m}">${fmtMK(m)}</option>`).join(''));
-}
-
-/* ── Clear filters ── */
-function clearStockFilters(){document.getElementById('stockCatFilter').value='';document.getElementById('stockStatusFilter').value='';document.getElementById('stockSearch').value='';renderStockDetail();}
-function clearPurFilters(){['purProductFilter','purSupplierFilter','purCatFilter','purMonthFilter'].forEach(id=>document.getElementById(id).value='');document.getElementById('purSearch').value='';G.pages.pur=1;renderPurchases();}
-function clearSalFilters(){['salProductFilter','salCatFilter','salMonthFilter'].forEach(id=>document.getElementById(id).value='');document.getElementById('salSearch').value='';G.pages.sal=1;renderSales();}
-
-/* ── Get / sort rows ── */
 function applySort(rows,key,field,isNum){
-  const dir=G.sortState[key];if(!dir)return rows;
-  return [...rows].sort((a,b)=>{let av=a[field]||'',bv=b[field]||'';if(isNum){av=parseFloat(av)||0;bv=parseFloat(bv)||0;}else{av=av.toLowerCase();bv=bv.toLowerCase();}return av>bv?1:-1;});
+  const s=SS[key];if(!s||!s.startsWith(field))return rows;
+  const asc=s.endsWith('-a');
+  return[...rows].sort((a,b)=>{
+    let av=a[field]||'',bv=b[field]||'';
+    if(isNum){av=parseFloat(av)||0;bv=parseFloat(bv)||0;}else{av=av.toLowerCase();bv=bv.toLowerCase();}
+    return asc?(av>bv?1:av<bv?-1:0):(av<bv?1:av>bv?-1:0);
+  });
 }
 
-/* ── Render stock detail ── */
-function renderStockDetail(){
-  let rows=[...G.allProducts];
-  const cat=document.getElementById('stockCatFilter').value;
-  const status=document.getElementById('stockStatusFilter').value;
-  const search=(document.getElementById('stockSearch').value||'').toLowerCase();
+/* ─ Pagination ─ */
+function paginate(rows,key,bodyId,pagId,rowFn){
+  const p=PG[key]||1,tot=rows.length,pages=Math.max(1,Math.ceil(tot/PER));
+  const s=(p-1)*PER;
+  document.getElementById(bodyId).innerHTML=rows.slice(s,s+PER).map(rowFn).join('')||`<tr><td colspan="10" class="norow">No rows match</td></tr>`;
+  const pagEl=document.getElementById(pagId);if(!pagEl)return;
+  let h='';
+  if(p>1)h+=`<button class="pb" onclick="PG.${key}=${p-1};render${key.charAt(0).toUpperCase()+key.slice(1)}()">‹</button>`;
+  for(let i=Math.max(1,p-2);i<=Math.min(pages,p+2);i++)h+=`<button class="pb${i===p?' on':''}" onclick="PG.${key}=${i};render${key.charAt(0).toUpperCase()+key.slice(1)}()">${i}</button>`;
+  if(p<pages)h+=`<button class="pb" onclick="PG.${key}=${p+1};render${key.charAt(0).toUpperCase()+key.slice(1)}()">›</button>`;
+  h+=`<span class="pi">Showing ${s+1}–${Math.min(s+PER,tot)} of ${tot}</span>`;
+  pagEl.innerHTML=h;
+}
+
+/* ─ Render stock detail ─ */
+function renderDetail(){
+  let rows=[...D.all];
+  const cat=document.getElementById('fCat').value;
+  const stat=document.getElementById('fStat').value;
+  const srch=(document.getElementById('fSrch').value||'').toLowerCase();
   if(cat)rows=rows.filter(p=>p.cat===cat);
-  if(status)rows=rows.filter(p=>{const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'low':'ok');return s===status;});
-  if(search)rows=rows.filter(p=>p.dn.toLowerCase().includes(search));
-  const sk=G.sortState.stockDetail;
-  if(sk){const[f,d]=sk.split('-');const numFields=['open','inQ','usedQ','rem','minS'];rows=applySort(rows,'stockDetail',f,numFields.includes(f));}
-  setText('stockResultCount',rows.length+' products');
-  const tgc=c=>c==='grain'?'ta':c==='flour'?'tg':'tb';
-  const stC=p=>p.rem<=0?'tr2':(p.minS>0&&p.rem<=p.minS?'ta':'tg');
-  const stT=p=>p.rem<=0?'Out of stock':(p.minS>0&&p.rem<=p.minS?'Running low':'In stock');
-  document.getElementById('stockDetailBody').innerHTML=rows.length?rows.map(p=>`<tr><td class="prod">${p.dn}</td><td><span class="tag ${tgc(p.cat)}">${p.cat}</span></td><td class="num">${p.open} ${p.unit}</td><td class="ng">+${p.inQ} ${p.unit}</td><td class="nr">−${p.usedQ} ${p.unit}</td><td class="num" style="font-weight:600">${Math.max(0,Math.round(p.rem))} ${p.unit}</td><td class="num" style="color:var(--hint)">${p.minS>0?p.minS+' '+p.unit:'—'}</td><td><span class="tag ${stC(p)}">${stT(p)}</span></td></tr>`).join(''):`<tr><td colspan="8" class="no-rows">No products match</td></tr>`;
+  if(stat)rows=rows.filter(p=>{const s=p.rem<=0?'out':(p.minS>0&&p.rem<=p.minS?'lw':'ok');return s===stat;});
+  if(srch)rows=rows.filter(p=>p.dn.toLowerCase().includes(srch));
+  rows=applySort(rows,'det',SS.det?.split('-')[0]||'',SS.det?.split('-')[0]&&['open','inQ','usedQ','rem','minS'].includes(SS.det.split('-')[0]));
+  st('rcDet',rows.length+' products');
+  const tc=c=>c==='grain'?'ta':c==='flour'?'tg':'tb';
+  const sc2=p=>p.rem<=0?'tr':(p.minS>0&&p.rem<=p.minS?'ta':'tg');
+  const st2=p=>p.rem<=0?'Out of stock':(p.minS>0&&p.rem<=p.minS?'Running low':'In stock');
+  document.getElementById('detBody').innerHTML=rows.length?rows.map(p=>`<tr>
+    <td class="prod">${p.dn}</td><td><span class="tag ${tc(p.cat)}">${p.cat}</span></td>
+    <td class="num">${p.open} ${p.unit}</td><td class="ng">+${p.inQ} ${p.unit}</td>
+    <td class="nr">−${p.usedQ} ${p.unit}</td>
+    <td class="num" style="font-weight:600">${Math.max(0,R(p.rem))} ${p.unit}</td>
+    <td class="num" style="color:var(--hi)">${p.minS>0?p.minS+' '+p.unit:'—'}</td>
+    <td><span class="tag ${sc2(p)}">${st2(p)}</span></td>
+  </tr>`).join(''):`<tr><td colspan="8" class="norow">No products match</td></tr>`;
 }
 
-/* ── Render purchases ── */
-function renderPurchases(){
-  let rows=[...G.purchases];
-  const prod=document.getElementById('purProductFilter').value;
-  const sup=document.getElementById('purSupplierFilter').value;
-  const cat=document.getElementById('purCatFilter').value;
-  const month=document.getElementById('purMonthFilter').value;
-  const search=(document.getElementById('purSearch').value||'').toLowerCase();
+/* ─ Render purchases ─ */
+function renderPur(){
+  let rows=[...D.pur];
+  const prod=document.getElementById('pProd').value;
+  const sup=document.getElementById('pSup').value;
+  const cat=document.getElementById('pCat').value;
+  const mon=document.getElementById('pMon').value;
+  const srch=(document.getElementById('pSrch').value||'').toLowerCase();
   if(prod)rows=rows.filter(r=>r.item===prod);
   if(sup)rows=rows.filter(r=>r.supplier===sup);
   if(cat)rows=rows.filter(r=>(r.category||'').toLowerCase()===cat);
-  if(month)rows=rows.filter(r=>mk(r.date)===month);
-  if(search)rows=rows.filter(r=>(r.item+r.supplier+r.category).toLowerCase().includes(search));
-  const sk=G.sortState.pur;
-  if(sk){const[f,d]=sk.split('-');rows=applySort(rows,'pur',f,['quantity','unitprice','total'].includes(f));if(d==='desc')rows.reverse();}
-  setText('purCount',rows.length+' rows · R'+Math.round(rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0)).toLocaleString()+' total');
+  if(mon)rows=rows.filter(r=>mkey(r.date)===mon);
+  if(srch)rows=rows.filter(r=>(r.item+r.supplier+r.category).toLowerCase().includes(srch));
+  const sk=SS.pur;if(sk){const[f]=sk.split('-');rows=applySort(rows,'pur',f,['quantity','unitprice','total'].includes(f));}
+  const tot=rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+  st('rcPur',rows.length+' rows · R'+R(tot).toLocaleString());
 
-  // Mini charts from filtered data
+  /* Mini charts */
   const pm={};rows.forEach(r=>{const k=r.item||'?';pm[k]=(pm[k]||0)+(parseFloat(r.total)||0);});
   const pg=Object.entries(pm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('purProdChart','bar',pg.map(x=>x[0]),[{data:pg.map(x=>Math.round(x[1])),backgroundColor:pg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
   const sm={};rows.forEach(r=>{const k=r.supplier||'?';sm[k]=(sm[k]||0)+(parseFloat(r.total)||0);});
   const sg=Object.entries(sm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('purSupChart','bar',sg.map(x=>x[0]),[{data:sg.map(x=>Math.round(x[1])),backgroundColor:sg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
+  const pid='sp-finance-purchases';
+  qChart(pid,'cPProd','bar',pg.map(x=>x[0]),[{data:pg.map(x=>R(x[1])),backgroundColor:pg.map((_,i)=>COLS[i%COLS.length]),borderRadius:3,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
+  qChart(pid,'cPSup','bar',sg.map(x=>x[0]),[{data:sg.map(x=>R(x[1])),backgroundColor:sg.map((_,i)=>COLS[i%COLS.length]),borderRadius:3,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
 
-  renderPage(rows,'purBody','purPag',r=>`<tr><td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td><td><span class="tag ta">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td><td>${r.supplier||'—'}</td></tr>`,'pur');
+  paginate(rows,'pur','purBody','purPag',r=>`<tr>
+    <td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td>
+    <td><span class="tag ta">${r.category||'—'}</span></td>
+    <td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td>
+    <td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td>
+    <td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td>
+    <td>${r.supplier||'—'}</td>
+  </tr>`);
 }
 
-/* ── Render sales ── */
-function renderSales(){
-  let rows=[...G.sales];
-  const prod=document.getElementById('salProductFilter').value;
-  const cat=document.getElementById('salCatFilter').value;
-  const month=document.getElementById('salMonthFilter').value;
-  const search=(document.getElementById('salSearch').value||'').toLowerCase();
+/* ─ Render sales ─ */
+function renderSal(){
+  let rows=[...D.sal];
+  const prod=document.getElementById('sProd').value;
+  const cat=document.getElementById('sCat').value;
+  const mon=document.getElementById('sMon').value;
+  const srch=(document.getElementById('sSrch').value||'').toLowerCase();
   if(prod)rows=rows.filter(r=>r.item===prod);
   if(cat)rows=rows.filter(r=>(r.category||'').toLowerCase()===cat);
-  if(month)rows=rows.filter(r=>mk(r.date)===month);
-  if(search)rows=rows.filter(r=>(r.item+r.category).toLowerCase().includes(search));
-  const sk=G.sortState.sal;
-  if(sk){const[f,d]=sk.split('-');rows=applySort(rows,'sal',f,['quantity','unitprice','total'].includes(f));if(d==='desc')rows.reverse();}
-  setText('salCount',rows.length+' rows · R'+Math.round(rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0)).toLocaleString()+' revenue');
+  if(mon)rows=rows.filter(r=>mkey(r.date)===mon);
+  if(srch)rows=rows.filter(r=>(r.item+r.category).toLowerCase().includes(srch));
+  const sk=SS.sal;if(sk){const[f]=sk.split('-');rows=applySort(rows,'sal',f,['quantity','unitprice','total'].includes(f));}
+  const tot=rows.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+  st('rcSal',rows.length+' rows · R'+R(tot).toLocaleString()+' revenue');
 
   const pm={};rows.forEach(r=>{const k=r.item||'?';pm[k]=(pm[k]||0)+(parseFloat(r.total)||0);});
   const pg=Object.entries(pm).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  bChart('salProdChart','bar',pg.map(x=>x[0]),[{data:pg.map(x=>Math.round(x[1])),backgroundColor:pg.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:3,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
   const cm={};rows.forEach(r=>{const k=r.category||'Other';cm[k]=(cm[k]||0)+(parseFloat(r.total)||0);});
   const cg=Object.entries(cm).sort((a,b)=>b[1]-a[1]);
-  bChart('salCatChart2','doughnut',cg.map(x=>x[0]),[{data:cg.map(x=>Math.round(x[1])),backgroundColor:cg.map((_,i)=>COLORS[i%COLORS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%',scales:{}});
+  const pid='sp-finance-sales';
+  qChart(pid,'cSProd','bar',pg.map(x=>x[0]),[{data:pg.map(x=>R(x[1])),backgroundColor:pg.map((_,i)=>COLS[i%COLS.length]),borderRadius:3,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
+  qChart(pid,'cSCat2','doughnut',cg.map(x=>x[0]),[{data:cg.map(x=>R(x[1])),backgroundColor:cg.map((_,i)=>COLS[i%COLS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%'});
 
-  renderPage(rows,'salBody','salPag',r=>`<tr><td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td><td><span class="tag tg">${r.category||'—'}</span></td><td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td><td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td><td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td></tr>`,'sal');
+  paginate(rows,'sal','salBody','salPag',r=>`<tr>
+    <td>${r.date||'—'}</td><td class="prod">${r.item||'—'}</td>
+    <td><span class="tag tg">${r.category||'—'}</span></td>
+    <td class="num">${r.quantity||'—'}</td><td>${r.unit||'—'}</td>
+    <td class="num">R ${parseFloat(r.unitprice||r.unit_price||0).toFixed(2)}</td>
+    <td class="num">R ${parseFloat(r.total||0).toLocaleString()}</td>
+  </tr>`);
 }
 
-/* ── MAIN LOAD ── */
+/* ─ Clear filters ─ */
+function clrPur(){['pProd','pSup','pCat','pMon'].forEach(id=>document.getElementById(id).value='');document.getElementById('pSrch').value='';PG.pur=1;renderPur();}
+function clrSal(){['sProd','sCat','sMon'].forEach(id=>document.getElementById(id).value='');document.getElementById('sSrch').value='';PG.sal=1;renderSal();}
+
+/* ─ MAIN LOAD ─ */
 async function loadData(){
-  document.getElementById('loader').classList.remove('hidden');
-  setText('statusLabel','loading');
-  document.getElementById('errorBar').style.display='none';
+  document.getElementById('ldr').classList.remove('gone');
+  st('sLabel','loading');
+  document.getElementById('errBar').style.display='none';
   try{
-    const[P,S,M,O]=await Promise.all([fetchCSV(URLS.purchases),fetchCSV(URLS.sales),fetchCSV(URLS.milling),fetchCSV(URLS.opening)]);
-    G.purchases=P||[];G.sales=S||[];G.milling=M||[];G.opening=O||[];
+    const[P,S,M,O]=await Promise.all([get(URLS.purchases),get(URLS.sales),get(URLS.milling),get(URLS.opening)]);
+    D.pur=P||[];D.sal=S||[];D.mil=M||[];D.opn=O||[];
 
     /* Opening stock map */
-    const openMap={};
-    G.opening.forEach(r=>{const k=(r.product||'').trim().toLowerCase();if(!k||k.startsWith('—'))return;openMap[k]={qty:parseFloat(r.openingstock||r.opening_stock||0),unit:r.unit||'kg',min:parseFloat(r.minstock||r.min_stock||0),category:(r.category||'').toLowerCase()};});
+    const opnMap={};
+    D.opn.forEach(r=>{const k=(r.product||'').trim().toLowerCase();if(!k||k.startsWith('—'))return;
+      opnMap[k]={qty:parseFloat(r.openingstock||r.opening_stock||0),unit:r.unit||'kg',min:parseFloat(r.minstock||r.min_stock||0),cat:(r.category||'').toLowerCase()};
+    });
 
     /* Tallies */
-    const buyMap={},sellMap={},milledGrain={},milledFlour={};
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!buyMap[k])buyMap[k]={qty:0,unit:r.unit||'kg',category:r.category||''};buyMap[k].qty+=q;});
-    G.sales.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!sellMap[k])sellMap[k]={qty:0,unit:r.unit||'kg'};sellMap[k].qty+=q;});
+    const buyMap={},selMap={},mGrain={},mFlour={};
+    D.pur.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!buyMap[k])buyMap[k]={qty:0,unit:r.unit||'kg',cat:r.category||''};buyMap[k].qty+=q;});
+    D.sal.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const q=parseFloat(r.quantity||0);if(!selMap[k])selMap[k]={qty:0,unit:r.unit||'kg'};selMap[k].qty+=q;});
     const seen=new Set();
-    G.milling.forEach(r=>{const gk=(r.grainin||r.grain_in||'').trim().toLowerCase();const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const qI=parseFloat(r.qtyin||r.qty_in||0);const qO=parseFloat(r.qtyout||r.qty_out||0);const d=gk+qI+(r.date||'');if(seen.has(d))return;seen.add(d);if(gk)milledGrain[gk]=(milledGrain[gk]||0)+qI;if(fk)milledFlour[fk]=(milledFlour[fk]||0)+qO;});
+    D.mil.forEach(r=>{const gk=(r.grainin||r.grain_in||'').trim().toLowerCase();const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const qI=parseFloat(r.qtyin||r.qty_in||0);const qO=parseFloat(r.qtyout||r.qty_out||0);const dk=gk+qI+(r.date||'');if(seen.has(dk))return;seen.add(dk);if(gk)mGrain[gk]=(mGrain[gk]||0)+qI;if(fk)mFlour[fk]=(mFlour[fk]||0)+qO;});
 
     /* Build products */
-    const allKeys=new Set([...Object.keys(openMap),...Object.keys(buyMap),...Object.keys(sellMap),...Object.keys(milledGrain),...Object.keys(milledFlour)]);
-    G.grainP=[];G.flourP=[];G.grocP=[];
-    allKeys.forEach(key=>{
-      const open=openMap[key]?.qty||0;const unit=openMap[key]?.unit||buyMap[key]?.unit||'kg';const minS=openMap[key]?.min||0;
-      let cat=(openMap[key]?.category||buyMap[key]?.category||'').toLowerCase();
-      const dn=key.replace(/\b\w/g,c=>c.toUpperCase());
-      if(!cat){if(milledGrain[key]||['wheat','maize','chickpea','sorghum','rice'].some(g=>key.includes(g)&&!key.includes('flour')))cat='grain';else if(key.includes('flour'))cat='flour';else cat='grocery';}
-      const bought=buyMap[key]?.qty||0;const soldD=sellMap[key]?.qty||0;const mIn=milledGrain[key]||0;const mOut=milledFlour[key]||0;
-      const p={key,dn,unit,open,minS,cat};
-      if(cat==='grain'){p.inQ=bought;p.usedQ=mIn+soldD;p.rem=open+bought-mIn-soldD;G.grainP.push(p);}
-      else if(cat==='flour'){p.inQ=mOut;p.usedQ=soldD;p.rem=open+mOut-soldD;G.flourP.push(p);}
-      else{p.inQ=bought;p.usedQ=soldD;p.rem=open+bought-soldD;G.grocP.push(p);}
+    const keys=new Set([...Object.keys(opnMap),...Object.keys(buyMap),...Object.keys(selMap),...Object.keys(mGrain),...Object.keys(mFlour)]);
+    D.grP=[];D.flP=[];D.grO=[];
+    keys.forEach(k=>{
+      const open=opnMap[k]?.qty||0;const unit=opnMap[k]?.unit||buyMap[k]?.unit||'kg';const minS=opnMap[k]?.min||0;
+      let cat=(opnMap[k]?.cat||buyMap[k]?.cat||'').toLowerCase();
+      const dn=k.replace(/\b\w/g,c=>c.toUpperCase());
+      if(!cat){if(mGrain[k]||['wheat','maize','chickpea','sorghum','rice'].some(g=>k.includes(g)&&!k.includes('flour')))cat='grain';else if(k.includes('flour'))cat='flour';else cat='grocery';}
+      const bought=buyMap[k]?.qty||0,soldD=selMap[k]?.qty||0,mIn=mGrain[k]||0,mOut=mFlour[k]||0;
+      const p={key:k,dn,unit,open,minS,cat};
+      if(cat==='grain'){p.inQ=bought;p.usedQ=mIn+soldD;p.rem=open+bought-mIn-soldD;D.grP.push(p);}
+      else if(cat==='flour'){p.inQ=mOut;p.usedQ=soldD;p.rem=open+mOut-soldD;D.flP.push(p);}
+      else{p.inQ=bought;p.usedQ=soldD;p.rem=open+bought-soldD;D.grO.push(p);}
     });
-    G.allProducts=[...G.grainP,...G.flourP,...G.grocP];
+    D.all=[...D.grP,...D.flP,...D.grO];
 
     /* Stock KPIs */
-    const all=G.allProducts;
-    setText('kTotal',all.length);setText('kOk',all.filter(p=>p.rem>(p.minS||0)).length);
-    setText('kLow',all.filter(p=>p.rem>0&&p.minS>0&&p.rem<=p.minS).length);setText('kOut',all.filter(p=>p.rem<=0).length);
-    setText('kGrainIn',Object.values(milledGrain).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
-    setText('kGrainMilled',Object.values(milledFlour).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
+    st('kTot',D.all.length);st('kOk',D.all.filter(p=>p.rem>(p.minS||0)).length);
+    st('kLw',D.all.filter(p=>p.rem>0&&p.minS>0&&p.rem<=p.minS).length);st('kOut',D.all.filter(p=>p.rem<=0).length);
+    st('kGIn',Object.values(mGrain).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
+    st('kGMill',Object.values(mFlour).reduce((a,b)=>a+b,0).toFixed(0)+' kg');
 
     /* Stock cards */
-    const rc=(arr,id)=>{document.getElementById(id).innerHTML=arr.length?arr.map(p=>sc(p)).join(''):'<div style="color:var(--hint);font-size:12px;font-family:var(--mono)">None</div>';};
-    rc(G.grainP,'grainCards');rc(G.flourP,'flourCards');rc(G.grocP,'groceryCards');
+    const rc=(a,id)=>{document.getElementById(id).innerHTML=a.length?a.map(p=>sCard(p)).join(''):'<div style="color:var(--hi);font-size:12px;font-family:var(--mono)">None</div>';};
+    rc(D.grP,'grainCards');rc(D.flP,'flourCards');rc(D.grO,'grocCards');
 
-    /* Stock overview charts */
-    bChart('grainChart','bar',G.grainP.map(p=>p.dn),[{label:'Bought',data:G.grainP.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Used',data:G.grainP.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:G.grainP.map(p=>Math.max(0,p.rem)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
-    bChart('grocChart','bar',G.grocP.map(p=>p.dn),[{label:'Bought',data:G.grocP.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},{label:'Sold',data:G.grocP.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},{label:'Remaining',data:G.grocP.map(p=>Math.max(0,p.rem)),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}]);
+    /* Stock overview charts — these panels are visible on load */
+    drawChart('cGrain','bar',D.grP.map(p=>p.dn),[
+      {label:'Bought',data:D.grP.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},
+      {label:'Used',data:D.grP.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},
+      {label:'Remaining',data:D.grP.map(p=>Math.max(0,R(p.rem))),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}
+    ]);
+    drawChart('cGroc','bar',D.grO.map(p=>p.dn),[
+      {label:'Bought',data:D.grO.map(p=>p.inQ),backgroundColor:'rgba(37,99,168,0.7)',borderRadius:3},
+      {label:'Sold',data:D.grO.map(p=>p.usedQ),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:3},
+      {label:'Remaining',data:D.grO.map(p=>Math.max(0,R(p.rem))),backgroundColor:'rgba(22,134,90,0.7)',borderRadius:3}
+    ]);
 
-    /* Stock detail table */
-    renderStockDetail();
+    /* Stock detail */
+    renderDetail();
+
+    /* Months */
+    D.months=[...new Set([...D.pur,...D.sal,...D.mil].map(r=>mkey(r.date)).filter(Boolean))].sort();
 
     /* Populate dropdowns */
-    populateDropdowns();
+    const purItems=[...new Set(D.pur.map(r=>r.item||'').filter(Boolean))].sort();
+    const purSups=[...new Set(D.pur.map(r=>r.supplier||'').filter(Boolean))].sort();
+    const salItems=[...new Set(D.sal.map(r=>r.item||'').filter(Boolean))].sort();
+    const setOpts=(id,prefix,items)=>{document.getElementById(id).innerHTML=prefix+items.map(i=>`<option value="${i}">${i}</option>`).join('');};
+    setOpts('pProd','<option value="">All products</option>',purItems);
+    setOpts('pSup','<option value="">All suppliers</option>',purSups);
+    setOpts('sProd','<option value="">All products</option>',salItems);
+    setOpts('pMon','<option value="">All months</option>',D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
+    setOpts('sMon','<option value="">All months</option>',D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join(''));
+    // Fix: last two setOpts pass pre-built HTML, so override directly
+    document.getElementById('pMon').innerHTML='<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join('');
+    document.getElementById('sMon').innerHTML='<option value="">All months</option>'+D.months.map(m=>`<option value="${m}">${fmk(m)}</option>`).join('');
 
-    /* Purchases & Sales tables */
-    renderPurchases();renderSales();
+    renderPur();renderSal();
 
-    /* ── MONTHLY DATA ── */
-    const allMKs=[...new Set([...G.purchases,...G.sales,...G.milling].map(r=>mk(r.date)).filter(Boolean))].sort();
+    /* ─ MONTHLY STOCK CHARTS (queued — panel hidden) ─ */
+    const gKeys=D.grP.map(p=>p.key);
+    const mGD={};gKeys.forEach(k=>{mGD[k]={};D.months.forEach(m=>mGD[k][m]=0);});
+    D.pur.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mkey(r.date);if(gKeys.includes(k)&&m)mGD[k][m]=(mGD[k][m]||0)+(parseFloat(r.quantity)||0);});
+    const gDS=gKeys.map((k,i)=>({label:D.grP.find(p=>p.key===k)?.dn||k,data:D.months.map(m=>mGD[k][m]||0),backgroundColor:COLS[i%COLS.length]+'bb',borderRadius:3}));
+    document.getElementById('lgMGrain').innerHTML=gKeys.map((k,i)=>`<span><span class="ld" style="background:${COLS[i%COLS.length]}"></span>${D.grP.find(p=>p.key===k)?.dn||k}</span>`).join('');
+    qChart('sp-stock-monthly','cMGrain','bar',D.months.map(fmk),gDS);
 
-    /* Monthly stock chart — grain bought per month per product */
-    const grainKeys=G.grainP.map(p=>p.key);
-    const mGrainData={};
-    grainKeys.forEach(k=>{mGrainData[k]={};allMKs.forEach(m=>mGrainData[k][m]=0);});
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mk(r.date);if(grainKeys.includes(k)&&m)mGrainData[k][m]=(mGrainData[k][m]||0)+(parseFloat(r.quantity)||0);});
-    const grainDatasets=grainKeys.map((k,i)=>({label:G.grainP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mGrainData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthGrainChart','bar',allMKs.map(fmtMK),grainDatasets);
-    document.getElementById('monthGrainLeg').innerHTML=grainKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.grainP.find(p=>p.key===k)?.dn||k}</span>`).join('');
-
-    /* Monthly flour produced */
-    const flourKeys=G.flourP.map(p=>p.key);
-    const mFlourData={};
-    flourKeys.forEach(k=>{mFlourData[k]={};allMKs.forEach(m=>mFlourData[k][m]=0);});
+    const fKeys=D.flP.map(p=>p.key);
+    const mFD={};fKeys.forEach(k=>{mFD[k]={};D.months.forEach(m=>mFD[k][m]=0);});
     const seen2=new Set();
-    G.milling.forEach(r=>{const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const m=mk(r.date);const qO=parseFloat(r.qtyout||r.qty_out||0);const d=fk+qO+(r.date||'');if(seen2.has(d))return;seen2.add(d);if(flourKeys.includes(fk)&&m)mFlourData[fk][m]=(mFlourData[fk][m]||0)+qO;});
-    const flourDatasets=flourKeys.map((k,i)=>({label:G.flourP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mFlourData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthFlourChart','bar',allMKs.map(fmtMK),flourDatasets);
-    document.getElementById('monthFlourLeg').innerHTML=flourKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.flourP.find(p=>p.key===k)?.dn||k}</span>`).join('');
+    D.mil.forEach(r=>{const fk=(r.flourout||r.flour_out||'').trim().toLowerCase();const m=mkey(r.date);const qO=parseFloat(r.qtyout||r.qty_out||0);const dk=fk+qO+(r.date||'');if(seen2.has(dk))return;seen2.add(dk);if(fKeys.includes(fk)&&m)mFD[fk][m]=(mFD[fk][m]||0)+qO;});
+    const fDS=fKeys.map((k,i)=>({label:D.flP.find(p=>p.key===k)?.dn||k,data:D.months.map(m=>mFD[k][m]||0),backgroundColor:COLS[i%COLS.length]+'bb',borderRadius:3}));
+    document.getElementById('lgMFlour').innerHTML=fKeys.map((k,i)=>`<span><span class="ld" style="background:${COLS[i%COLS.length]}"></span>${D.flP.find(p=>p.key===k)?.dn||k}</span>`).join('');
+    qChart('sp-stock-monthly','cMFlour','bar',D.months.map(fmk),fDS);
 
-    /* Monthly grocery bought */
-    const grocKeys=G.grocP.map(p=>p.key);
-    const mGrocData={};
-    grocKeys.forEach(k=>{mGrocData[k]={};allMKs.forEach(m=>mGrocData[k][m]=0);});
-    G.purchases.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mk(r.date);if(grocKeys.includes(k)&&m)mGrocData[k][m]=(mGrocData[k][m]||0)+(parseFloat(r.quantity)||0);});
-    const grocDatasets=grocKeys.map((k,i)=>({label:G.grocP.find(p=>p.key===k)?.dn||k,data:allMKs.map(m=>mGrocData[k][m]||0),backgroundColor:COLORS[i%COLORS.length]+'bb',borderRadius:3}));
-    bChart('monthGrocChart','bar',allMKs.map(fmtMK),grocDatasets);
-    document.getElementById('monthGrocLeg').innerHTML=grocKeys.map((k,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${G.grocP.find(p=>p.key===k)?.dn||k}</span>`).join('');
+    const oKeys=D.grO.map(p=>p.key);
+    const mOD={};oKeys.forEach(k=>{mOD[k]={};D.months.forEach(m=>mOD[k][m]=0);});
+    D.pur.forEach(r=>{const k=(r.item||'').trim().toLowerCase();const m=mkey(r.date);if(oKeys.includes(k)&&m)mOD[k][m]=(mOD[k][m]||0)+(parseFloat(r.quantity)||0);});
+    const oDS=oKeys.map((k,i)=>({label:D.grO.find(p=>p.key===k)?.dn||k,data:D.months.map(m=>mOD[k][m]||0),backgroundColor:COLS[i%COLS.length]+'bb',borderRadius:3}));
+    document.getElementById('lgMGroc').innerHTML=oKeys.map((k,i)=>`<span><span class="ld" style="background:${COLS[i%COLS.length]}"></span>${D.grO.find(p=>p.key===k)?.dn||k}</span>`).join('');
+    qChart('sp-stock-monthly','cMGroc','bar',D.months.map(fmk),oDS);
 
-    /* Monthly stock quantity table */
-    document.getElementById('monthStockTable').innerHTML=`<table>
+    /* Monthly stock table */
+    document.getElementById('mStockTbl').innerHTML=`<table>
       <thead><tr><th>Month</th><th>Grain bought (kg)</th><th>Grain milled (kg)</th><th>Flour produced (kg)</th><th>Grocery bought</th><th>Purchase rows</th></tr></thead>
-      <tbody>${allMKs.map(m=>{
-        const gb=G.purchases.filter(r=>mk(r.date)===m&&(r.category||'').toLowerCase()==='grain').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
-        const gml=[...new Set(G.milling.filter(r=>mk(r.date)===m).map(r=>r.date+(r.grainin||r.grain_in||'')+(r.qtyin||r.qty_in||'')))].map(k=>{const r=G.milling.find(x=>x.date+(x.grainin||x.grain_in||'')+(x.qtyin||x.qty_in||'')==k);return r?parseFloat(r.qtyin||r.qty_in||0):0;}).reduce((a,b)=>a+b,0);
-        const fp=[...new Set(G.milling.filter(r=>mk(r.date)===m).map(r=>r.date+(r.grainin||r.grain_in||'')+(r.qtyin||r.qty_in||'')))].map(k=>{const r=G.milling.find(x=>x.date+(x.grainin||x.grain_in||'')+(x.qtyin||x.qty_in||'')==k);return r?parseFloat(r.qtyout||r.qty_out||0):0;}).reduce((a,b)=>a+b,0);
-        const grb=G.purchases.filter(r=>mk(r.date)===m&&(r.category||'').toLowerCase()==='grocery').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
-        const po=G.purchases.filter(r=>mk(r.date)===m).length;
-        return`<tr><td class="prod">${fmtMK(m)}</td><td class="ng">${gb} kg</td><td class="num">${gml.toFixed(0)} kg</td><td class="num">${fp.toFixed(0)} kg</td><td class="num">${grb} kg/L</td><td class="num">${po}</td></tr>`;
+      <tbody>${D.months.map(m=>{
+        const gb=D.pur.filter(r=>mkey(r.date)===m&&(r.category||'').toLowerCase()==='grain').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
+        const gml=D.mil.filter(r=>mkey(r.date)===m).reduce((s,r)=>s+(parseFloat(r.qtyin||r.qty_in||0)),0);
+        const fp=D.mil.filter(r=>mkey(r.date)===m).reduce((s,r)=>s+(parseFloat(r.qtyout||r.qty_out||0)),0);
+        const grb=D.pur.filter(r=>mkey(r.date)===m&&(r.category||'').toLowerCase()==='grocery').reduce((s,r)=>s+(parseFloat(r.quantity)||0),0);
+        const po=D.pur.filter(r=>mkey(r.date)===m).length;
+        return`<tr><td class="prod">${fmk(m)}</td><td class="ng">${R(gb)} kg</td><td class="num">${R(gml)} kg</td><td class="num">${R(fp)} kg</td><td class="num">${R(grb)}</td><td class="num">${po}</td></tr>`;
       }).join('')}</tbody></table>`;
 
-    /* ── FINANCE ── */
-    const totalSpend=G.purchases.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
-    const totalRev=G.sales.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
-    const profit=totalRev-totalSpend;
-    const margin=totalRev>0?((profit/totalRev)*100).toFixed(1):0;
-    const mpairs=G.milling.filter(r=>parseFloat(r.qtyin||r.qty_in||0)>0&&parseFloat(r.qtyout||r.qty_out||0)>0);
-    const avgY=mpairs.length?(mpairs.reduce((s,r)=>{const qi=parseFloat(r.qtyin||r.qty_in||0);const qo=parseFloat(r.qtyout||r.qty_out||0);return s+(qi>0?(qo/qi)*100:0);},0)/mpairs.length).toFixed(1):'—';
+    /* ─ FINANCE ─ */
+    const totSpd=D.pur.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+    const totRev=D.sal.reduce((s,r)=>s+(parseFloat(r.total)||0),0);
+    const pft=totRev-totSpd;const mgn=totRev>0?((pft/totRev)*100).toFixed(1):0;
+    const mps=D.mil.filter(r=>parseFloat(r.qtyin||r.qty_in||0)>0&&parseFloat(r.qtyout||r.qty_out||0)>0);
+    const avgY=mps.length?(mps.reduce((s,r)=>{const qi=parseFloat(r.qtyin||r.qty_in||0);const qo=parseFloat(r.qtyout||r.qty_out||0);return s+(qi>0?(qo/qi)*100:0);},0)/mps.length).toFixed(1):'—';
 
-    setText('fRev','R '+totalRev.toLocaleString());setText('fRevSub',G.sales.length+' sales orders');
-    setText('fSpend','R '+totalSpend.toLocaleString());setText('fSpendSub',G.purchases.length+' purchase orders');
-    setText('fProfit',(profit>=0?'+':'')+'R '+Math.abs(profit).toLocaleString());setText('fMargin',margin+'% gross margin');
-    setText('fYield',avgY+'%');setText('fYieldSub',mpairs.length+' batches');
-    setText('fPO',G.purchases.length);setText('fSO',G.sales.length);
+    st('fRev','R '+R(totRev).toLocaleString());st('fRevS',D.sal.length+' sales orders');
+    st('fSpd','R '+R(totSpd).toLocaleString());st('fSpdS',D.pur.length+' purchase orders');
+    st('fPft',(pft>=0?'+':'')+'R '+Math.abs(R(pft)).toLocaleString());st('fMgn',mgn+'% gross margin');
+    st('fYld',avgY+'%');st('fYldS',mps.length+' batches');
+    st('fPO',D.pur.length);st('fSO',D.sal.length);
 
-    /* Finance overview charts */
-    const supMap={};G.purchases.forEach(r=>{const k=r.supplier||'Unknown';supMap[k]=(supMap[k]||0)+(parseFloat(r.total)||0);});
-    const supG=Object.entries(supMap).sort((a,b)=>b[1]-a[1]);
-    document.getElementById('supLeg').innerHTML=supG.map((x,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${x[0]}</span>`).join('');
-    bChart('supChart','bar',supG.map(x=>x[0]),[{data:supG.map(x=>Math.round(x[1])),backgroundColor:supG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:11},callback:v=>'R'+v.toLocaleString()}}}});
+    /* Finance charts — queued for hidden panel */
+    const supM={};D.pur.forEach(r=>{const k=r.supplier||'Unknown';supM[k]=(supM[k]||0)+(parseFloat(r.total)||0);});
+    const supG=Object.entries(supM).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('lgSup').innerHTML=supG.map((x,i)=>`<span><span class="ld" style="background:${COLS[i%COLS.length]}"></span>${x[0]}</span>`).join('');
+    qChart('sp-finance-overview','cSup','bar',supG.map(x=>x[0]),[{data:supG.map(x=>R(x[1])),backgroundColor:supG.map((_,i)=>COLS[i%COLS.length]),borderRadius:4,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
 
-    const catMap={};G.sales.forEach(r=>{const k=r.category||'Other';catMap[k]=(catMap[k]||0)+(parseFloat(r.total)||0);});
-    const catG=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
-    document.getElementById('saleCatLeg').innerHTML=catG.map((x,i)=>`<span><span class="ld" style="background:${COLORS[i%COLORS.length]}"></span>${x[0]} R${Math.round(x[1]).toLocaleString()}</span>`).join('');
-    bChart('saleCatChart','doughnut',catG.map(x=>x[0]),[{data:catG.map(x=>Math.round(x[1])),backgroundColor:catG.map((_,i)=>COLORS[i%COLORS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%',scales:{}});
+    const catM={};D.sal.forEach(r=>{const k=r.category||'Other';catM[k]=(catM[k]||0)+(parseFloat(r.total)||0);});
+    const catG=Object.entries(catM).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('lgSCat').innerHTML=catG.map((x,i)=>`<span><span class="ld" style="background:${COLS[i%COLS.length]}"></span>${x[0]} R${R(x[1]).toLocaleString()}</span>`).join('');
+    qChart('sp-finance-overview','cSCat','doughnut',catG.map(x=>x[0]),[{data:catG.map(x=>R(x[1])),backgroundColor:catG.map((_,i)=>COLS[i%COLS.length]),borderWidth:0,hoverOffset:5}],{cutout:'55%'});
 
-    const revMap={};G.sales.forEach(r=>{const k=r.item||'?';revMap[k]=(revMap[k]||0)+(parseFloat(r.total)||0);});
-    const revG=Object.entries(revMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-    bChart('topRevChart','bar',revG.map(x=>x[0]),[{data:revG.map(x=>Math.round(x[1])),backgroundColor:revG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
+    const revM={};D.sal.forEach(r=>{const k=r.item||'?';revM[k]=(revM[k]||0)+(parseFloat(r.total)||0);});
+    const revG=Object.entries(revM).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    qChart('sp-finance-overview','cTRev','bar',revG.map(x=>x[0]),[{data:revG.map(x=>R(x[1])),backgroundColor:revG.map((_,i)=>COLS[i%COLS.length]),borderRadius:4,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
 
-    const spMap={};G.purchases.forEach(r=>{const k=r.item||'?';spMap[k]=(spMap[k]||0)+(parseFloat(r.total)||0);});
-    const spG=Object.entries(spMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
-    bChart('topSpendChart','bar',spG.map(x=>x[0]),[{data:spG.map(x=>Math.round(x[1])),backgroundColor:spG.map((_,i)=>COLORS[i%COLORS.length]),borderRadius:4,borderSkipped:false}],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:10},callback:v=>'R'+v.toLocaleString()}}}});
+    const spdM={};D.pur.forEach(r=>{const k=r.item||'?';spdM[k]=(spdM[k]||0)+(parseFloat(r.total)||0);});
+    const spdG=Object.entries(spdM).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    qChart('sp-finance-overview','cTSpd','bar',spdG.map(x=>x[0]),[{data:spdG.map(x=>R(x[1])),backgroundColor:spdG.map((_,i)=>COLS[i%COLS.length]),borderRadius:4,borderSkipped:false}],{yTick:{callback:v=>'R'+v.toLocaleString()}});
 
     /* Monthly money chart */
-    const mRev={},mSpend={};
-    G.sales.forEach(r=>{const m=mk(r.date);if(m)mRev[m]=(mRev[m]||0)+(parseFloat(r.total)||0);});
-    G.purchases.forEach(r=>{const m=mk(r.date);if(m)mSpend[m]=(mSpend[m]||0)+(parseFloat(r.total)||0);});
-    bChart('monthMoneyChart','bar',allMKs.map(fmtMK),[
-      {label:'Revenue',data:allMKs.map(m=>Math.round(mRev[m]||0)),backgroundColor:'rgba(37,99,168,0.75)',borderRadius:4},
-      {label:'Spend',data:allMKs.map(m=>Math.round(mSpend[m]||0)),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:4},
-      {label:'Profit',data:allMKs.map(m=>Math.round((mRev[m]||0)-(mSpend[m]||0))),backgroundColor:'rgba(22,134,90,0.75)',borderRadius:4},
-    ],{scales:{x:{grid:{display:false},ticks:{color:'#ababA3',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#ababA3',font:{size:11},callback:v=>'R'+v.toLocaleString()}}}});
+    const mRev={},mSpd={};
+    D.sal.forEach(r=>{const m=mkey(r.date);if(m)mRev[m]=(mRev[m]||0)+(parseFloat(r.total)||0);});
+    D.pur.forEach(r=>{const m=mkey(r.date);if(m)mSpd[m]=(mSpd[m]||0)+(parseFloat(r.total)||0);});
+    qChart('sp-finance-monthly','cMMoney','bar',D.months.map(fmk),[
+      {label:'Revenue',data:D.months.map(m=>R(mRev[m]||0)),backgroundColor:'rgba(37,99,168,0.75)',borderRadius:4},
+      {label:'Spend',data:D.months.map(m=>R(mSpd[m]||0)),backgroundColor:'rgba(224,82,82,0.65)',borderRadius:4},
+      {label:'Profit',data:D.months.map(m=>R((mRev[m]||0)-(mSpd[m]||0))),backgroundColor:'rgba(22,134,90,0.75)',borderRadius:4},
+    ],{yTick:{callback:v=>'R'+v.toLocaleString()}});
 
     /* Monthly finance table */
-    document.getElementById('monthFinanceTable').innerHTML=`<table>
-      <thead><tr><th>Month</th><th>Revenue (R)</th><th>Spend (R)</th><th>Profit (R)</th><th>Margin %</th><th>Sales</th><th>Purchases</th></tr></thead>
-      <tbody>${allMKs.map(m=>{
-        const rev=Math.round(mRev[m]||0);const spd=Math.round(mSpend[m]||0);const pft=rev-spd;const mgn=rev>0?((pft/rev)*100).toFixed(1):0;
-        return`<tr><td class="prod">${fmtMK(m)}</td><td class="ng">R ${rev.toLocaleString()}</td><td class="nr">R ${spd.toLocaleString()}</td><td class="num" style="font-weight:600;color:${pft>=0?'var(--green)':'var(--red)'}">${pft>=0?'+':''}R ${Math.abs(pft).toLocaleString()}</td><td class="num">${mgn}%</td><td class="num">${G.sales.filter(r=>mk(r.date)===m).length}</td><td class="num">${G.purchases.filter(r=>mk(r.date)===m).length}</td></tr>`;
+    document.getElementById('mFinTbl').innerHTML=`<table>
+      <thead><tr><th>Month</th><th>Revenue (R)</th><th>Spend (R)</th><th>Profit (R)</th><th>Margin</th><th>Sales</th><th>Purchases</th></tr></thead>
+      <tbody>${D.months.map(m=>{
+        const rev=R(mRev[m]||0),spd=R(mSpd[m]||0),p2=rev-spd,mg=rev>0?((p2/rev)*100).toFixed(1):0;
+        return`<tr><td class="prod">${fmk(m)}</td><td class="ng">R ${rev.toLocaleString()}</td><td class="nr">R ${spd.toLocaleString()}</td>
+        <td class="num" style="font-weight:600;color:${p2>=0?'var(--gr)':'var(--rd)'}">${p2>=0?'+':''}R ${Math.abs(p2).toLocaleString()}</td>
+        <td class="num">${mg}%</td><td class="num">${D.sal.filter(r=>mkey(r.date)===m).length}</td><td class="num">${D.pur.filter(r=>mkey(r.date)===m).length}</td></tr>`;
       }).join('')}
-      <tr style="background:var(--surface2);font-weight:600"><td class="prod">TOTAL</td><td class="ng">R ${Math.round(totalRev).toLocaleString()}</td><td class="nr">R ${Math.round(totalSpend).toLocaleString()}</td><td class="num" style="color:var(--green)">+R ${Math.round(profit).toLocaleString()}</td><td class="num">${margin}%</td><td class="num">${G.sales.length}</td><td class="num">${G.purchases.length}</td></tr>
+      <tr class="tot"><td class="prod">TOTAL</td><td class="ng">R ${R(totRev).toLocaleString()}</td><td class="nr">R ${R(totSpd).toLocaleString()}</td>
+      <td class="num" style="color:var(--gr)">+R ${R(pft).toLocaleString()}</td><td class="num">${mgn}%</td><td class="num">${D.sal.length}</td><td class="num">${D.pur.length}</td></tr>
       </tbody></table>`;
 
-    setText('statusLabel','live');
-    setText('last-updated','updated '+new Date().toLocaleTimeString());
-  }catch(err){
-    console.error(err);
-    const b=document.getElementById('errorBar');b.textContent='⚠ '+err.message;b.style.display='block';
-    setText('statusLabel','error');
+    st('sLabel','live');st('last-upd','updated '+new Date().toLocaleTimeString());
+  }catch(e){
+    console.error(e);
+    const b=document.getElementById('errBar');b.textContent='⚠ '+e.message;b.style.display='block';
+    st('sLabel','error');
   }
-  document.getElementById('loader').classList.add('hidden');
+  document.getElementById('ldr').classList.add('gone');
 }
 loadData();
 </script>
