@@ -354,7 +354,20 @@ function csv(txt){
   const h=rows[0].map(x=>x.replace(/[^a-zA-Z0-9_]/g,'').toLowerCase());
   return rows.slice(1).filter(r=>r.some(c=>c!=='')).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]||''])));
 }
-async function get(url){const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return csv(await r.text());}
+async function get(url){
+  /* Try direct first, fall back to CORS proxy if blocked */
+  try{
+    const r=await fetch(url,{mode:'cors'});
+    if(r.ok){const t=await r.text();if(t.trim().length>10)return csv(t);}
+  }catch(e){}
+  /* Fallback: use allorigins CORS proxy */
+  const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
+  const r2=await fetch(proxy);
+  if(!r2.ok)throw new Error('HTTP '+r2.status);
+  const j=await r2.json();
+  if(!j.contents)throw new Error('No data from proxy');
+  return csv(j.contents);
+}
 function mkey(d){if(!d)return null;let m,y;if(d.includes('/')){const p=d.split('/');if(p.length>=3){m=+p[1];y=+p[2];}}else if(d.includes('-')){const p=d.split('-');if(p.length>=3){y=+p[0];m=+p[1];}}if(!m||!y||isNaN(m)||isNaN(y))return null;return y+'-'+String(m).padStart(2,'0');}
 function fmk(k){if(!k)return'?';const[y,m]=k.split('-');return MN[+m-1]+' '+y;}
 function st(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
@@ -762,7 +775,9 @@ async function loadData(){
     st('sLabel','live');st('last-upd','updated '+new Date().toLocaleTimeString());
   }catch(e){
     console.error(e);
-    const b=document.getElementById('errBar');b.textContent='⚠ '+e.message;b.style.display='block';
+    const b=document.getElementById('errBar');
+    b.textContent='⚠ Data fetch failed: '+e.message+' — Try clicking Refresh, or check your internet connection.';
+    b.style.display='block';
     st('sLabel','error');
   }
   document.getElementById('ldr').classList.add('gone');
