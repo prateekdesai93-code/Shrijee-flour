@@ -608,15 +608,20 @@ async function loadData(){
         date = r.timestamp.includes(' ') ? r.timestamp.split(' ')[0] : r.timestamp.split('T')[0];
       }
 
-      /* Item — Google Forms saved it as "Column 2" → becomes "column2" */
-      const item = fv(r,'column2','item','col2','column 2','itemname','product');
+      /* Item — now correctly named "Item" in sheet, was "Column 2" before */
+      const item = fv(r,'item','column2','col2','column 2','itemname','product');
 
       const cat   = fv(r,'category','cat');
       const unit  = fv(r,'unit','units');
       const up    = fv(r,'unitprice','unitprice','price');
       const total = fv(r,'total','totalamount','amount','totalr');
-      const qty   = fv(r,'quantity','qty','quntity','quantiy');
+      let qty     = fv(r,'quantity','qty','quntity','quantiy');
       const cust  = fv(r,'customer','supplier','buyer');
+
+      /* If quantity is missing but total and unitprice exist, calculate it */
+      if((!qty||qty==='0'||qty==='—')&&total&&up&&parseFloat(up)>0){
+        qty = String(Math.round(parseFloat(total)/parseFloat(up)));
+      }
 
       return {date, item, category:cat, quantity:qty, unit, unitprice:up, total, supplier:cust};
     }).filter(r=>r.item);
