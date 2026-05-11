@@ -582,35 +582,78 @@ async function loadData(){
     D.pur=P||[];
     D.opn=O||[];
 
-    /* Normalise Sales form responses — map form column names to sheet column names */
-    const sfNorm=(SF||[]).map(r=>({
-      date: r.date||'',
-      item: r.item||'',
-      category: r.category||'',
-      quantity: r.quantity||'',
-      unit: r.unit||'',
-      unitprice: r.unitprice||r['unitprice']||r['unit price']||r['unitprice']||'',
-      total: r.total||'',
-      supplier: r.customer||r.supplier||''
-    })).filter(r=>r.item&&r.date);
+    /* DEBUG — log raw keys from form responses so we can see column names */
+    if(SF&&SF.length>0){console.log('SALES FORM raw keys:',Object.keys(SF[0]));console.log('SALES FORM first row:',SF[0]);}else{console.log('SALES FORM: empty or failed');}
+    if(MF&&MF.length>0){console.log('MILLING FORM raw keys:',Object.keys(MF[0]));console.log('MILLING FORM first row:',MF[0]);}else{console.log('MILLING FORM: empty or failed');}
 
-    /* Normalise Milling form responses — map form column names to sheet column names */
-    const mfNorm=(MF||[]).map(r=>({
-      date: r.date||'',
-      grainin: r['grain in']||r.grainin||r['grain_in']||'',
-      qtyin: r['qty in']||r.qtyin||r['qty_in']||'',
-      flourout: r['flour out']||r.flourout||r['flour_out']||'',
-      qtyout: r['qty out']||r.qtyout||r['qty_out']||''
-    })).filter(r=>r.grainin&&r.date);
+    /* Normalise Sales form responses — map form column names to sheet column names */
+    /* Helper: find value from row by trying multiple key variants */
+    function fv(r,...keys){for(const k of keys){if(r[k]!==undefined&&r[k]!=='')return r[k];}return '';}
+
+    /* ── Sales Form responses ──
+       Actual columns from sheet (after CSV parser lowercases & strips spaces):
+       timestamp | date | column2 | category | unit | unitprice | total | quantity | customer
+       NOTE: Item is in 'column2', Date may be empty for old rows (use timestamp instead)
+       NOTE: Quantity and Total column order may vary
+    */
+    const sfNorm=(SF||[]).map(r=>{
+      /* EXACT column mapping from your Sales Form Responses 2 sheet:
+         Timestamp | Date | Column 2 | Category | Unit | Unit Price | Total | Quantity | Customer
+         CSV parser lowercases+strips spaces: timestamp|date|column2|category|unit|unitprice|total|quantity|customer */
+
+      /* Date — use Date column if filled, else extract date from Timestamp */
+      let date = fv(r,'date');
+      if(!date && r.timestamp){
+        /* Timestamp format: "10/05/2026 13:25:59" — take date part before space */
+        date = r.timestamp.includes(' ') ? r.timestamp.split(' ')[0] : r.timestamp.split('T')[0];
+      }
+
+      /* Item — Google Forms saved it as "Column 2" → becomes "column2" */
+      const item = fv(r,'column2','item','col2','column 2','itemname','product');
+
+      const cat   = fv(r,'category','cat');
+      const unit  = fv(r,'unit','units');
+      const up    = fv(r,'unitprice','unitprice','price');
+      const total = fv(r,'total','totalamount','amount','totalr');
+      const qty   = fv(r,'quantity','qty','quntity','quantiy');
+      const cust  = fv(r,'customer','supplier','buyer');
+
+      return {date, item, category:cat, quantity:qty, unit, unitprice:up, total, supplier:cust};
+    }).filter(r=>r.item);
+
+    /* ── Milling Form responses ──
+       Actual columns: timestamp | date | grain in | qty in | flour out | qty out | date | column7
+       After CSV parse: timestamp | date | grainin | qtyin | flourout | qtyout | date | column7
+    */
+    const mfNorm=(MF||[]).map(r=>{
+      let date=fv(r,'date');
+      if(!date&&r.timestamp){date=r.timestamp.split(' ')[0]||r.timestamp.split('T')[0]||'';}
+
+      const gi=fv(r,'grainin','grain in','graintype','grain');
+      const qi=fv(r,'qtyin','qty in','quantityin','kgin');
+      const fo=fv(r,'flourout','flour out','flour','flourtype');
+      const qo=fv(r,'qtyout','qty out','quantityout','kgout');
+      return{date,grainin:gi,qtyin:qi,flourout:fo,qtyout:qo};
+    }).filter(r=>r.grainin&&(r.date||r.timestamp));
 
     /* Merge: original sheet rows + form responses (deduplicate by date+item+qty) */
+    /* Merge original sheet + form responses, deduplicate */
     const salAll=[...(S||[]),...sfNorm];
     const salSeen=new Set();
-    D.sal=salAll.filter(r=>{const k=(r.date||'')+(r.item||'')+(r.quantity||'');if(salSeen.has(k))return false;salSeen.add(k);return true;});
+    D.sal=salAll.filter(r=>{
+      const k=(r.date||r.timestamp||'').slice(0,10)+'|'+(r.item||'').toLowerCase()+'|'+(r.quantity||r.qty||'');
+      if(salSeen.has(k))return false;salSeen.add(k);return true;
+    });
 
     const milAll=[...(M||[]),...mfNorm];
     const milSeen=new Set();
-    D.mil=milAll.filter(r=>{const k=(r.date||'')+(r.grainin||r.grain_in||'')+(r.qtyin||r.qty_in||'');if(milSeen.has(k))return false;milSeen.add(k);return true;});
+    D.mil=milAll.filter(r=>{
+      const k=(r.date||r.timestamp||'').slice(0,10)+'|'+(r.grainin||r.grain_in||'').toLowerCase()+'|'+(r.qtyin||r.qty_in||'');
+      if(milSeen.has(k))return false;milSeen.add(k);return true;
+    });
+    
+    console.log('Sales total rows (sheet+form):',D.sal.length,'| Form rows:',sfNorm.length);
+    console.log('Milling total rows (sheet+form):',D.mil.length,'| Form rows:',mfNorm.length);
 
     /* Opening stock map */
     const opnMap={};
