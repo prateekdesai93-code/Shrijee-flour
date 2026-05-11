@@ -614,13 +614,34 @@ async function loadData(){
       const cat   = fv(r,'category','cat');
       const unit  = fv(r,'unit','units');
       const up    = fv(r,'unitprice','unitprice','price');
-      const total = fv(r,'total','totalamount','amount','totalr');
-      let qty     = fv(r,'quantity','qty','quntity','quantiy');
-      const cust  = fv(r,'customer','supplier','buyer');
+      let total = fv(r,'total','totalamount','amount','totalr');
+      let qty   = fv(r,'quantity','qty','quntity','quantiy');
+      const cust= fv(r,'customer','supplier','buyer');
 
-      /* If quantity is missing but total and unitprice exist, calculate it */
-      if((!qty||qty==='0'||qty==='—')&&total&&up&&parseFloat(up)>0){
-        qty = String(Math.round(parseFloat(total)/parseFloat(up)));
+      const qNum = parseFloat(qty)||0;
+      const tNum = parseFloat(total)||0;
+      const pNum = parseFloat(up)||0;
+
+      /* Smart fix: if qty missing but total & price exist → qty = total / price */
+      if((!qNum) && tNum>0 && pNum>0){
+        qty   = String(Math.round(tNum/pNum));
+        /* total stays as-is */
+      }
+      /* If total missing but qty & price exist → total = qty * price */
+      if((!tNum) && qNum>0 && pNum>0){
+        total = String(Math.round(qNum*pNum));
+      }
+      /* If both total & qty filled but total looks like qty (total < price)
+         then swap them — common form data entry mistake */
+      if(tNum>0 && qNum>0 && pNum>0 && tNum < pNum && qNum >= pNum){
+        /* total and qty swapped — fix it */
+        const tmp=total; total=qty; qty=tmp;
+      }
+      /* If total is suspiciously small (less than unit price) and qty is blank
+         assume the "total" field actually contains quantity */
+      if(tNum>0 && pNum>0 && tNum<pNum && !qNum){
+        qty   = String(tNum);
+        total = String(Math.round(tNum*pNum));
       }
 
       return {date, item, category:cat, quantity:qty, unit, unitprice:up, total, supplier:cust};
