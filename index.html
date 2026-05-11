@@ -335,7 +335,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--tx);min-height:100
 const URLS={
   purchases:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1150334603&single=true&output=csv',
   sales:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=0&single=true&output=csv',
+  salesForm:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=363647371&single=true&output=csv',
   milling:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1053164568&single=true&output=csv',
+  millingForm:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=323138649&single=true&output=csv',
   opening:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6AWel3eAjsBpa8_H8r9fK0ChEhx9VQaEw3mmD9C8HTUnxVHoDVxrKEwqHXbA3iIErnd8SSRf4BQSP/pub?gid=1102474552&single=true&output=csv',
 };
 const COLS=['#2563a8','#16865a','#b55a10','#8b36a8','#a83250','#5a7a20','#0f7a8a','#8a7020','#a06030','#205a6a'];
@@ -556,8 +558,46 @@ async function loadData(){
   st('sLabel','loading');
   document.getElementById('errBar').style.display='none';
   try{
-    const[P,S,M,O]=await Promise.all([get(URLS.purchases),get(URLS.sales),get(URLS.milling),get(URLS.opening)]);
-    D.pur=P||[];D.sal=S||[];D.mil=M||[];D.opn=O||[];
+    const[P,S,SF,M,MF,O]=await Promise.all([
+      get(URLS.purchases),
+      get(URLS.sales),
+      get(URLS.salesForm).catch(()=>[]),
+      get(URLS.milling),
+      get(URLS.millingForm).catch(()=>[]),
+      get(URLS.opening)
+    ]);
+    D.pur=P||[];
+    D.opn=O||[];
+
+    /* Normalise Sales form responses — map form column names to sheet column names */
+    const sfNorm=(SF||[]).map(r=>({
+      date: r.date||'',
+      item: r.item||'',
+      category: r.category||'',
+      quantity: r.quantity||'',
+      unit: r.unit||'',
+      unitprice: r.unitprice||r['unitprice']||r['unit price']||r['unitprice']||'',
+      total: r.total||'',
+      supplier: r.customer||r.supplier||''
+    })).filter(r=>r.item&&r.date);
+
+    /* Normalise Milling form responses — map form column names to sheet column names */
+    const mfNorm=(MF||[]).map(r=>({
+      date: r.date||'',
+      grainin: r['grain in']||r.grainin||r['grain_in']||'',
+      qtyin: r['qty in']||r.qtyin||r['qty_in']||'',
+      flourout: r['flour out']||r.flourout||r['flour_out']||'',
+      qtyout: r['qty out']||r.qtyout||r['qty_out']||''
+    })).filter(r=>r.grainin&&r.date);
+
+    /* Merge: original sheet rows + form responses (deduplicate by date+item+qty) */
+    const salAll=[...(S||[]),...sfNorm];
+    const salSeen=new Set();
+    D.sal=salAll.filter(r=>{const k=(r.date||'')+(r.item||'')+(r.quantity||'');if(salSeen.has(k))return false;salSeen.add(k);return true;});
+
+    const milAll=[...(M||[]),...mfNorm];
+    const milSeen=new Set();
+    D.mil=milAll.filter(r=>{const k=(r.date||'')+(r.grainin||r.grain_in||'')+(r.qtyin||r.qty_in||'');if(milSeen.has(k))return false;milSeen.add(k);return true;});
 
     /* Opening stock map */
     const opnMap={};
